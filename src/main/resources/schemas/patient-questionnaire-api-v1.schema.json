@@ -57,9 +57,14 @@
         "requestBody": {
           "required": true,
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/UpsertQuestionnaireRequestBody"
+              },
+              "examples": {
+                "UpsertQuestionnaireRequestBody": {
+                  "$ref": "#/components/examples/UpsertQuestionnaireRequestBody"
+                }
               }
             }
           }
@@ -229,9 +234,14 @@
         "requestBody": {
           "required": true,
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/UpsertQuestionnaireRequestBody"
+              },
+              "examples": {
+                "UpsertQuestionnaireRequestBody": {
+                  "$ref": "#/components/examples/UpsertQuestionnaireRequestBody"
+                }
               }
             }
           }
@@ -526,7 +536,7 @@
           },
           "file": {
             "type": "string",
-            "format": "binary"
+            "description": "ID of the file that contains the questionnaire JSON"
           }
         },
         "required": [
@@ -615,28 +625,31 @@
       }
     },
     "examples": {
-      "QuestionnaireConfiguration": {
+      "UpsertQuestionnaireRequestBody": {
         "summary": "Example request body for creating a questionnaire that is available to take any time for six months",
         "value": {
-          "name": {
-            "ehrOrderable": "BD: (Breast Daily) Symptoms",
-            "providerFacing": "Daily Breast Cancer Symptoms Questionnaire",
-            "patientFacing": "Breast Cancer Symptoms Questionnaire"
-          },
-          "type": "SYMPTOM",
-          "group": "9f20974e-eba4-4f6f-935b-061b8240577e",
-          "triagingParty": "67163dcf-9473-405e-9aaf-4627e6c478b6",
-          "timing": {
-            "startDelay": {
-              "duration": 3,
-              "durationUnit": "d"
+          "configuration": {
+            "name": {
+              "ehrOrderable": "BD: (Breast Daily) Symptoms",
+              "providerFacing": "Daily Breast Cancer Symptoms Questionnaire",
+              "patientFacing": "Breast Cancer Symptoms Questionnaire"
             },
-            "repeat": {
-              "count": 6,
-              "period": 1,
-              "periodUnit": "mo"
+            "type": "SYMPTOM",
+            "group": "9f20974e-eba4-4f6f-935b-061b8240577e",
+            "triagingParty": "67163dcf-9473-405e-9aaf-4627e6c478b6",
+            "timing": {
+              "startDelay": {
+                "duration": 3,
+                "durationUnit": "d"
+              },
+              "repeat": {
+                "count": 6,
+                "period": 1,
+                "periodUnit": "mo"
+              }
             }
-          }
+          },
+          "file": "eac587fc-6f18-41ea-a320-46ae13a0046c"
         }
       },
       "UpsertQuestionnaireResponse": {
