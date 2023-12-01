@@ -26,6 +26,10 @@
     {
       "name": "Admin",
       "description": "Endpoints used by the admin console"
+    },
+    {
+      "name": "Patient",
+      "description": "Endpoints used by the patient apps"
     }
   ],
   "paths": {
@@ -310,6 +314,104 @@
           }
         }
       }
+    },
+    "/tenants/{tenantId}/patients/{patientId}/questionnaires" : {
+      "get": {
+        "tags": [
+          "Patient"
+        ],
+        "description": "Fetch questionnaires for a patient",
+        "summary": "Fetch Patient Questionnaires",
+        "operationId": "fetchPatientQuestionnaires",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tenantId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the tenant for the current patient",
+            "example": "ca41ec2f-621d-4b7d-93e6-38ec50854b5e"
+          },
+          {
+            "in": "path",
+            "name": "patientId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The UDP ID of the current patient",
+            "example": "018c275e-c378-7c4a-a112-157e4c0e4cb5"
+          },
+          {
+            "in": "query",
+            "name": "questionnaireIds",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "list of questionnaire ids being requested",
+            "example": [
+              "7f574040-e8b4-4c70-b2e5-dfa48d0b5455",
+              "a5fc620d-ca7d-497d-9d09-a8a7a6d51139"
+            ],
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FetchPatientQuestionnairesResponseBody"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "NotFoundExample": {
+                    "$ref": "#/components/examples/NotFoundException"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tenants/{tenantId}/patients/{patientId}/questionnaire-responses": {
+      "post": {
+        "tags": [
+          "Patient"
+        ],
+        "responses": {
+
+        }
+      }
     }
   },
   "components": {
@@ -577,6 +679,17 @@
             }
           }
         ]
+      },
+      "FetchPatientQuestionnairesResponseBody": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FHIR_Questionnaire"
+            }
+          }
+        }
       },
       "Error": {
         "type": "object",
