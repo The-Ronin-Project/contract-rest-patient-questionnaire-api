@@ -732,7 +732,7 @@
                 "type": "object",
                 "properties": {
                   "valueBoolean":  {
-                    "type": "string"
+                    "type": "boolean"
                   },
                   "valueDate": {
                     "type": "string",
