@@ -685,6 +685,12 @@
           },
           "questionnaire": {
             "type": "string"
+          },
+          "item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItem"
+            }
           }
         }
       },
