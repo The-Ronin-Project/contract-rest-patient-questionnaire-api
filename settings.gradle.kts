@@ -1,4 +1,4 @@
-rootProject.name = "ronin-contract-rest-template"
+rootProject.name = "patient-questionnaire-api-v1"
 
 pluginManagement {
     repositories {
