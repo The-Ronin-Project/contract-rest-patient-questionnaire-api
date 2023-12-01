@@ -768,9 +768,16 @@
                   }
                 }
               }
-            }
+            },
+            "required": [
+              "value"
+            ]
           }
-        }
+        },
+        "required": [
+          "linkId",
+          "answer"
+        ]
       },
       "FHIR_QuestionnaireItem": {
         "type": "object",
