@@ -770,6 +770,17 @@
                     "type":"string"
                   }
                 }
+              },
+              "extension": {
+                "type": "object",
+                "properties": {
+                  "ordinalValue": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "ordinalValue"
+                ]
               }
             },
             "required": [
