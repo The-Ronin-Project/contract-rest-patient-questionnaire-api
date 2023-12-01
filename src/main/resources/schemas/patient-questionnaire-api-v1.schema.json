@@ -664,7 +664,18 @@
               "$ref": "#/components/schemas/FHIR_QuestionnaireItem"
             }
           }
-        }
+        },
+        "required": [
+          "id",
+          "identifier",
+          "version",
+          "name",
+          "title",
+          "status",
+          "experimental",
+          "date",
+          "item"
+        ]
       },
       "FHIR_QuestionnaireResponse": {
         "type": "object",
@@ -831,7 +842,12 @@
                   }
                 }
               }
-            }
+            },
+            "required": [
+              "question",
+              "operator",
+              "answer"
+            ]
           },
           "answerOption": {
             "type": "array",
@@ -859,10 +875,20 @@
                     }
                   }
                 }
-              }
+              },
+              "required": [
+                "value"
+              ]
             }
           }
-        }
+        },
+        "required": [
+          "linkId",
+          "text",
+          "type",
+          "enableWhen",
+          "answerOption"
+        ]
       }
     },
     "examples": {
