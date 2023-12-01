@@ -622,6 +622,247 @@
             "description": "A human readable message that describes the specific failure"
           }
         }
+      },
+      "FHIR_Questionnaire": {
+        "type": "object",
+        "description": "FHIR representation of a questionnaire",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "identifier": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FHIR_QuestionnaireIdentifier"
+            }
+          },
+          "version": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/FHIR_QuestionnaireStatus"
+          },
+          "experimental": {
+            "type": "boolean"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FHIR_QuestionnaireItem"
+            }
+          }
+        }
+      },
+      "FHIR_QuestionnaireResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "questionnaire": {
+            "type": "string"
+          }
+        }
+      },
+      "FHIR_QuestionnaireIdentifier": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "object",
+            "properties": {
+              "system": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "FHIR_QuestionnaireStatus": {
+        "type": "string",
+        "enum": [
+          "draft",
+          "active",
+          "retired",
+          "unknown"
+        ]
+      },
+      "FHIR_QuestionnaireResponseItem": {
+        "type": "object",
+        "properties": {
+          "linkId": {
+            "type": "string"
+          },
+          "answer": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "object",
+                "properties": {
+                  "valueBoolean":  {
+                    "type": "string"
+                  },
+                  "valueDate": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "valueDateTime":  {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "valueDecimal":  {
+                    "type": "number"
+                  },
+                  "valueInteger": {
+                    "type": "integer"
+                  },
+                  "valueString":  {
+                    "type": "string"
+                  },
+                  "valueCoding": {
+                    "type": "string"
+                  },
+                  "valueUri":  {
+                    "type": "string"
+                  },
+                  "valueQuantity": {
+                    "type": "number"
+                  },
+                  "valueAttachment":  {
+                    "type": "string"
+                  },
+                  "valueReference": {
+                    "type":"string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "FHIR_QuestionnaireItem": {
+        "type": "object",
+        "properties": {
+          "linkId": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "group",
+              "boolean",
+              "decimal",
+              "integer",
+              "date",
+              "dateTime",
+              "choice"
+            ]
+          },
+          "enableWhen": {
+            "type": "object",
+            "properties": {
+              "question": {
+                "type": "string"
+              },
+              "operator": {
+                "type": "string",
+                "enum": [
+                  "exists",
+                  "=",
+                  "!=",
+                  ">",
+                  "<",
+                  ">=",
+                  "<="
+                ]
+              },
+              "answer": {
+                "type": "object",
+                "properties": {
+                  "answerBoolean": {
+                    "type": "boolean"
+                  },
+                  "answerDecimal": {
+                    "type": "number"
+                  },
+                  "answerInteger": {
+                    "type": "integer"
+                  },
+                  "answerDate": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "answerDateTime": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "answerTime": {
+                    "type": "string"
+                  },
+                  "answerString": {
+                    "type": "string"
+                  },
+                  "answerCoding": {
+                    "type": "string"
+                  },
+                  "answerQuantity": {
+                    "type": "string"
+                  },
+                  "answerReference": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "answerOption": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "object",
+                  "properties": {
+                    "valueInteger": {
+                      "type": "integer"
+                    },
+                    "valueDate": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "valueTime": {
+                      "type": "string"
+                    },
+                    "valueString": {
+                      "type": "string"
+                    },
+                    "valueReference": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "examples": {
