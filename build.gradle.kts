@@ -1,3 +1,5 @@
+group = "com.projectronin.rest.contract"
+
 plugins {
-    alias(roningradle.plugins.ronin.json.contract)
+    alias(roningradle.plugins.openapi.contract)
 }

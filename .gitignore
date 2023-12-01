@@ -1,11 +1,8 @@
 docs/
 build/
-v*/version
-codecov/
-
-*.iml
-
-.gradle
-!gradle/wrapper/gradle-wrapper.jar
-.idea/
+/.idea/
+gen/
+.gradle/
 .dependencies/
+
+!gradle/wrapper/gradle-wrapper.jar

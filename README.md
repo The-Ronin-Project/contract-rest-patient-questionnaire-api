@@ -1,79 +1,71 @@
-# contract project name here
+# Template Project for REST Contracts
 
-This project holds json contract (e.g. events, messaging, json storage, redis cache, etc.).  See the `ronin-contract-json-tooling` repository for more information.
+This repo contains an example of a REST contract repository, to be used as a template repository in GitHub.
 
-To use this plugin, include the following in your plugins section of the Gradle build file:
+# Tools
 
-## Layout
+See [ronin-contract-rest-tooling](https://github.com/projectronin/ronin-gradle/blob/main/gradle-plugins/ronin-contract-openapi-plugin) for more information about the tooling and how it works.
 
-This plugin makes several assumptions about the format of the consuming project.
+# Usage
 
-* The project will have only a single version of the schema to process
-* The schema files will be located in `src/main/resources/schemas`, and only primary schema files will be located in that directory.
-* Schema files will be named `{name}.schema.json`
-* Schema files referenced in those main schema files will be in a subdirectory of `src/main/resources/schemas`
-* Versioning will be done based on tags.  E.g. `v1.0.0`
+## Project setup
 
-The plugin will, when the normal gradle tasks are run (e.g. `build` or `assemble` or `publishToMavenLocal`), run the normal lifecycle tasks.  It will download schema dependencies, create a
-tar file of the schema contents, publish that tar file to a maven repo, etc.  It will also generate a java library from the schema using jsonschema2pojo.  Both the tar and the jar file with
-the java classes will be published to maven under the indicated version.  The artifact id of the published artifact will _also_ have a version suffix (without this you couldn't consume
-more than one version of the dependency in a project).
+The project looks like this:
 
-## Tasks
+```
+├── .github                                    GitHub workflows
+├── .gitignore                                 Generally applicable ignores
+├── build.gradle.kts                           Gradle build script
+├── settings.gradle.kts                        Gradle build settings script
+└── src/main/openapi
+    └── <project-name>.json
+```
 
-### testContracts
+Change the `rootProject.name` value in [settings.gradle.kts](settings.gradle.kts) to reflect what you want your deployed artifact ID to be.
 
-The `testContracts` (or just `check`) task will validate the project's schemas and test them against any provided example files.  Examples must be located in `src/test/resources/examples`.  If there
-is only a single primary schema file, then all examples will be tested against it.  If there are multiple primary schema files, the main name of that schema file is assumed to prefix
-applicable examples.
+Replace [ronin-contract-rest-template.json](src/main/openapi/ronin-contract-rest-template.json) with your OpenAPI spec.  You may break up using references to other local files so long as they are
+contained inside the `src/main/openapi` directory, but you should put them in sub-folders (e.g. `src/main/openapi/schemas/<schema-name>.json`).  Ignore the `info/version` value of your spec, as it
+will be replaced during the build process.
 
-For example, for this layout, all examples are tested against the listed schema.
+The plugin outputs five artifacts:
+- a tar.gz file that contains the compiled schemas
+- a .json copy of the schema
+- a .yaml copy of the schema
+- a .jar file with the compiled schema and compiled kotlin classes
+- a -sources.jar file with the source files
 
-    .
-    ├── src/main/resources/schemas
-    │   └── my-schema-v1.schema.json
-    ├── src/test/resources/examples
-    │   ├── example1.json
-    │   └── example2.json
+### Dependencies
 
-But in this example, `my-schema-example.json` is tested against `my-schema-v2.schema.json`, and `my-other-schema-example1.json` and `my-other-schema-example2.json` are tested
-against `my-other-schema-v2.schema.json`.
-
-    .
-    ├── src/main/resources/schemas
-    │   ├── my-other-schema-v2.schema.json
-    │   └── my-schema-v2.schema.json
-    ├── src/test/resources/examples
-    │   ├── my-other-schema-example1.json
-    │   ├── my-other-schema-example2.json
-    │   └── my-schema-example.json
-
-### generateContractDocs
-
-The `generateContractDocs` task uses the Docker image built by the parent project to generate documentation for all schemas
-in a `docs` folder within each version folder.
-
-### clean
-
-Deletes all project outputs and temporary files
-
-### createSchemaTar
-
-Run when `assemble` is used, creates a tar file with just the schemas.
-
-### downloadSchemaDependencies
-
-Downloads schema dependencies.  See below
-
-# Dependencies
-
-You may use other schema files as dependencies of this one.  In your `build.gradle.kts` file, you can do something like the following:
+If your contract depends on _other_ contracts, you can reference them as project dependencies.  Make entries in your build.gradle.kts file like this:
 
 ```kotlin
 dependencies {
-    schemaDependency("com.projectronin.contract.json:<some artifact id>-v<some major version>:<some version>:schemas@tar.gz")
+    openapi("<dependency group id>:<dependency artifact id>:<dependency version>")
 }
 ```
 
-When you do this, and then run `./gradlew downloadSchemaDependencies`, the named dependencies are downloaded and unzipped under `src/main/resources/schemas/.dependencies/<artifactid>`.  You
-can then reference those schemas from yours, and they schemas and final classes will be included in the final jar/tar.
+When you run the commands described below, these dependencies will be downloaded and placed in the `src/main/openapi/.dependencies` directory .  If they
+are archives, they'll be unzipped, and you can reference the dependent contracts, schemas, etc. directly by path from inside your OpenAPI schema.
+
+## Running
+
+In general, run:
+
+`gradle <COMMAND> <ARGUMENTS>`
+
+Available commands are mostly general gradle commands.  Important ones are:
+
+`check`: Verifies the contract using spectral tooling, making sure it's a valid contract.
+
+`downloadApiDependencies`: downloads any API dependencies as specified in the `Dependencies` section above.
+
+`build`: Runs `check`, generates schema documentation, and generates simple combined schema files.
+
+`clean`: removes all generated files
+
+`assemble`: Assembles the schema into deployable archives.
+
+`publishToMavenLocal`: publishes all outputs to the local maven repo (e.g. `$HOME/.m2/repository`).  If you are using the docker image, it will try and
+copy files in and out of the host's repository directory so they can be used for builds later on the host.
+
+`publish`: publishes all outputs to the remote Ronin maven repository.
