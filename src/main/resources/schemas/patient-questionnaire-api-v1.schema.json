@@ -651,9 +651,6 @@
           "status": {
             "$ref": "#/components/schemas/FHIR_QuestionnaireStatus"
           },
-          "experimental": {
-            "type": "boolean"
-          },
           "date": {
             "type": "string",
             "format": "date-time"
@@ -667,6 +664,7 @@
         },
         "required": [
           "id",
+          "url",
           "identifier",
           "version",
           "name",
@@ -692,7 +690,12 @@
               "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItem"
             }
           }
-        }
+        },
+        "required": [
+          "id",
+          "questionnaire",
+          "item"
+        ]
       },
       "FHIR_QuestionnaireIdentifier": {
         "type": "object",
