@@ -633,7 +633,7 @@
           },
           "url": {
             "type": "string",
-            "description": ""
+            "description": "Location of the questionnaire"
           },
           "identifier": {
             "type": "array",
@@ -825,41 +825,7 @@
                   ]
                 },
                 "answer": {
-                  "type": "object",
-                  "properties": {
-                    "answerBoolean": {
-                      "type": "boolean"
-                    },
-                    "answerDecimal": {
-                      "type": "number"
-                    },
-                    "answerInteger": {
-                      "type": "integer"
-                    },
-                    "answerDate": {
-                      "type": "string",
-                      "format": "date"
-                    },
-                    "answerDateTime": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "answerTime": {
-                      "type": "string"
-                    },
-                    "answerString": {
-                      "type": "string"
-                    },
-                    "answerCoding": {
-                      "type": "string"
-                    },
-                    "answerQuantity": {
-                      "type": "string"
-                    },
-                    "answerReference": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/FHIR_TypedValues"
                 }
               },
               "required": [
