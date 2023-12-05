@@ -336,8 +336,8 @@
               "type": "string"
             },
             "required": true,
-            "description": "The ID of the tenant for the current patient",
-            "example": "ca41ec2f-621d-4b7d-93e6-38ec50854b5e"
+            "description": "The ID of the tenant for the current tenant",
+            "example": "1xrekpx5"
           },
           {
             "in": "path",
@@ -475,8 +475,8 @@
               "type": "string"
             },
             "required": true,
-            "description": "The ID of the tenant for the current patient",
-            "example": "ca41ec2f-621d-4b7d-93e6-38ec50854b5e"
+            "description": "The ID of the tenant for the current tenant",
+            "example": "1xrekpx5"
           },
           {
             "in": "path",
@@ -608,8 +608,8 @@
               "type": "string"
             },
             "required": true,
-            "description": "The ID of the tenant for the current patient",
-            "example": "ca41ec2f-621d-4b7d-93e6-38ec50854b5e"
+            "description": "The ID of the tenant for the current tenant",
+            "example": "1xrekpx5"
           },
           {
             "in": "path",
