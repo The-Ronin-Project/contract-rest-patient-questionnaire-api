@@ -1197,7 +1197,7 @@
                   "properties": {
                     "extension": {
                       "type": "array",
-                      "description": "General-purpose object for extending the definition of a FHIR model. For Ronin questionnaires, the primary (and possible only) use will be capturing the \"ordinalValue\", which will represent the alert level of an answer",
+                      "description": "General-purpose object for extending the definition of a FHIR model. For Ronin questionnaires, the primary (and possible only) use will be capturing the \"valueDecimal\", which will represent the alert level of an answer",
                       "items": {
                         "type": "object",
                         "properties": {
@@ -1211,7 +1211,7 @@
                           }
                         },
                         "required": [
-                          "ordinalValue"
+                          "valueDecimal"
                         ]
                       }
                     }
@@ -1607,22 +1607,29 @@
           "questionnaireResponseItems": [
             {
               "linkId": "item-1",
-              "answer": {
-                "value": {
-                  "valueBoolean": true
+              "answer": [
+                {
+                  "valueBoolean": true,
+                  "extension": [
+                    {
+                      "valueDecimal": 1
+                    }
+                  ]
                 }
-              }
+              ]
             },
             {
               "linkId": "item-2",
-              "answer": {
-                "value": {
-                  "valueString": "some-string"
-                },
-                "extension": {
-                  "ordinalValue": 1
+              "answer": [
+                {
+                  "valueString": "some-string",
+                  "extension": [
+                    {
+                      "valueDecimal": 2
+                    }
+                  ]
                 }
-              }
+              ]
             }
           ]
         }
@@ -1636,22 +1643,29 @@
             "item": [
               {
                 "linkId": "item-1",
-                "answer": {
-                  "value": {
-                    "valueBoolean": true
+                "answer": [
+                  {
+                    "valueBoolean": true,
+                    "extension": [
+                      {
+                        "valueDecimal": 1
+                      }
+                    ]
                   }
-                }
+                ]
               },
               {
                 "linkId": "item-2",
-                "answer": {
-                  "value": {
-                    "valueString": "some-string"
-                  },
-                  "extension": {
-                    "ordinalValue": 1
-                  }
-                }
+                "answer": [
+                    {
+                      "valueString": "some-string",
+                      "extension": [
+                        {
+                          "valueDecimal": 2
+                        }
+                      ]
+                    }
+                ]
               }
             ]
           }
