@@ -628,32 +628,38 @@
         "description": "FHIR representation of a questionnaire",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "description": "UUID with the tenant ID as a prefix"
           },
           "url": {
-            "type": "string"
+            "type": "string",
+            "description": "Location of the questionnaire"
           },
           "identifier": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/FHIR_QuestionnaireIdentifier"
-            }
+            },
+            "description": "List of associated identities. Will primarily (and possibly only) be used for the tenant ID"
           },
           "version": {
             "type": "number"
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "Computer-friendly name for the questionnaire"
           },
           "title": {
-            "type": "string"
+            "type": "string",
+            "description": "Human-friendly name for the questionnaire"
           },
           "status": {
             "$ref": "#/components/schemas/FHIR_QuestionnaireStatus"
           },
           "date": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "description": "Last revision date"
           },
           "item": {
             "type": "array",
@@ -677,12 +683,15 @@
       },
       "FHIR_QuestionnaireResponse": {
         "type": "object",
+        "description": "FHIR representation of a questionnaire response",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "description": "UUID with the tenant ID as a prefix"
           },
           "questionnaire": {
-            "type": "string"
+            "type": "string",
+            "description": "The ID associated Questionnaire"
           },
           "item": {
             "type": "array",
@@ -700,16 +709,13 @@
       "FHIR_QuestionnaireIdentifier": {
         "type": "object",
         "properties": {
-          "type": {
-            "type": "object",
-            "properties": {
-              "system": {
-                "type": "string"
-              },
-              "value": {
-                "type": "string"
-              }
-            }
+          "system": {
+            "type": "string",
+            "description": "Identifier for the identifier type. Eg, whether this is a tenant, provider, patient, etc"
+          },
+          "value": {
+            "type": "string",
+            "description": "Value of the identity. Eg, the tenant ID"
           }
         }
       },
@@ -724,68 +730,44 @@
       },
       "FHIR_QuestionnaireResponseItem": {
         "type": "object",
+        "description": "FHIR representation of an answer in a questionnaire response",
         "properties": {
           "linkId": {
-            "type": "string"
+            "type": "string",
+            "description": "Globally unique ID of the question"
           },
           "answer": {
-            "type": "object",
-            "properties": {
-              "value": {
-                "type": "object",
-                "properties": {
-                  "valueBoolean":  {
-                    "type": "boolean"
-                  },
-                  "valueDate": {
-                    "type": "string",
-                    "format": "date"
-                  },
-                  "valueDateTime":  {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "valueDecimal":  {
-                    "type": "number"
-                  },
-                  "valueInteger": {
-                    "type": "integer"
-                  },
-                  "valueString":  {
-                    "type": "string"
-                  },
-                  "valueCoding": {
-                    "type": "string"
-                  },
-                  "valueUri":  {
-                    "type": "string"
-                  },
-                  "valueQuantity": {
-                    "type": "number"
-                  },
-                  "valueAttachment":  {
-                    "type": "string"
-                  },
-                  "valueReference": {
-                    "type":"string"
+            "type": "array",
+            "items": {
+              "allOf": [
+                { "$ref": "#/components/schemas/FHIR_TypedValues" },
+                {
+                  "type": "object",
+                  "properties": {
+                    "extension": {
+                      "type": "array",
+                      "description": "General-purpose object for extending the definition of a FHIR model. For Ronin questionnaires, the primary (and possible only) use will be capturing the \"ordinalValue\", which will represent the alert level of an answer",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string",
+                            "description": "Identifier for the extension type"
+                          },
+                          "valueDecimal": {
+                            "type": "number",
+                            "description": "Used to capture the alert-level of the answer"
+                          }
+                        },
+                        "required": [
+                          "ordinalValue"
+                        ]
+                      }
+                    }
                   }
                 }
-              },
-              "extension": {
-                "type": "object",
-                "properties": {
-                  "ordinalValue": {
-                    "type": "number"
-                  }
-                },
-                "required": [
-                  "ordinalValue"
-                ]
-              }
-            },
-            "required": [
-              "value"
-            ]
+              ]
+            }
           }
         },
         "required": [
@@ -795,12 +777,15 @@
       },
       "FHIR_QuestionnaireItem": {
         "type": "object",
+        "description": "FHIR representation of a question in a questionnaire",
         "properties": {
           "linkId": {
-            "type": "string"
+            "type": "string",
+            "description": "Globally unique ID of the question"
           },
           "text": {
-            "type": "string"
+            "type": "string",
+            "description": "Value to be displayed to the user"
           },
           "type": {
             "type": "string",
@@ -814,108 +799,130 @@
               "choice"
             ]
           },
+          "repeats": {
+            "type": "boolean",
+            "description": "Whether multiple answers can be selected. Typical multiple-choice questions would have `type: choice` and `repeats: true`. Defaults to `false`"
+          },
           "enableWhen": {
-            "type": "object",
-            "properties": {
-              "question": {
-                "type": "string"
-              },
-              "operator": {
-                "type": "string",
-                "enum": [
-                  "exists",
-                  "=",
-                  "!=",
-                  ">",
-                  "<",
-                  ">=",
-                  "<="
-                ]
-              },
-              "answer": {
-                "type": "object",
-                "properties": {
-                  "answerBoolean": {
-                    "type": "boolean"
-                  },
-                  "answerDecimal": {
-                    "type": "number"
-                  },
-                  "answerInteger": {
-                    "type": "integer"
-                  },
-                  "answerDate": {
-                    "type": "string",
-                    "format": "date"
-                  },
-                  "answerDateTime": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "answerTime": {
-                    "type": "string"
-                  },
-                  "answerString": {
-                    "type": "string"
-                  },
-                  "answerCoding": {
-                    "type": "string"
-                  },
-                  "answerQuantity": {
-                    "type": "string"
-                  },
-                  "answerReference": {
-                    "type": "string"
-                  }
+            "type": "array",
+            "description": "Mechanism for enabling/disabling a question based on a predicate.\n Eg, given the the object `{ \"question\": 123, \"operator\": \"=\", \"Hello\" }`, this question would only be presented if the question with the ID `123` had the answer \"Hello\" ",
+            "items": {
+              "type": "object",
+              "properties": {
+                "question": {
+                  "type": "string"
+                },
+                "operator": {
+                  "type": "string",
+                  "enum": [
+                    "exists",
+                    "=",
+                    "!=",
+                    ">",
+                    "<",
+                    ">=",
+                    "<="
+                  ]
+                },
+                "answer": {
+                  "$ref": "#/components/schemas/FHIR_TypedValues"
                 }
-              }
-            },
-            "required": [
-              "question",
-              "operator",
-              "answer"
+              },
+              "required": [
+                "question",
+                "operator",
+                "answer"
+              ]
+            }
+          },
+          "enableBehavior": {
+            "type": "string",
+            "description": "How to handle multiple `enableWhen` predicates - whether all or any of them must be true. This value must be present if multiple `enableWhen` values are present",
+            "enum": [
+              "any",
+              "all"
             ]
           },
           "answerOption": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "value": {
+              "allOf": [
+                { "$ref": "#/components/schemas/FHIR_TypedValues" },
+                {
                   "type": "object",
                   "properties": {
-                    "valueInteger": {
-                      "type": "integer"
-                    },
-                    "valueDate": {
-                      "type": "string",
-                      "format": "date"
-                    },
-                    "valueTime": {
-                      "type": "string"
-                    },
-                    "valueString": {
-                      "type": "string"
-                    },
-                    "valueReference": {
-                      "type": "string"
+                    "initialSelected": {
+                      "type": "boolean",
+                      "description": "Whether this answer should be selected by default"
                     }
                   }
                 }
-              },
-              "required": [
-                "value"
               ]
+            }
+          },
+          "initial": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FHIR_TypedValues"
+            }
+          },
+          "readOnly": {
+            "type": "boolean"
+          },
+          "item": {
+            "type": "array",
+            "description": "Used to support nested items when `type == group`",
+            "items": {
+              "$ref": "#/components/schemas/FHIR_QuestionnaireItem"
             }
           }
         },
         "required": [
           "linkId",
           "text",
-          "type",
-          "enableWhen",
-          "answerOption"
+          "type"
         ]
+      },
+      "FHIR_TypedValues": {
+        "type": "object",
+        "description": "Possible values to be used based on the type of answer being provided",
+        "properties": {
+          "valueInteger": {
+            "type": "integer"
+          },
+          "valueDecimal": {
+            "type": "number"
+          },
+          "valueDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "valueDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "valueString": {
+            "type": "string"
+          },
+          "valueCoding": {
+            "type": "object",
+            "description": "Used for single and multiple-choice questions, as we can use the `system` and `code` values to find the correct value set, and value within the value set",
+            "properties": {
+              "system": {
+                "type": "string",
+                "description": "Value pointing to the value set"
+              },
+              "code": {
+                "type": "string",
+                "description": "Computer-friendly representation of the answer option"
+              },
+              "display": {
+                "type": "string",
+                "description": "Human-friendly representation of the answer option"
+              }
+            }
+          }
+        }
       }
     },
     "examples": {
@@ -1049,6 +1056,77 @@
                 "uploadedBy": "Lynda Johnson",
                 "url": "https://ico.ronin.io/questionnaires/psj-lung-cancer-symptoms-questionnaire.json"
               }
+            }
+          ]
+        }
+      },
+      "FHIR_QuestionnaireExample": {
+        "description": "Example of a FHIR questionnaire",
+        "value": {
+          "id": "1xrekpx5-9b93f927-b4ec-45c1-9d02-97a9f838b871",
+          "url": "https://projectronin.io/questionnaires/9b93f927-b4ec-45c1-9d02-97a9f838b871",
+          "identifier": [
+            {
+              "system": "http://projectronin.com/id/tenantId",
+              "value": "1xrekpx5"
+            }
+          ],
+          "version": 1.0,
+          "name": "psj-breast-cancer-symptoms",
+          "title": "PSJ Breast Cancer Symptoms",
+          "status": "active",
+          "date": "2023-12-01T08:34:73.13Z",
+          "item": [
+            {
+              "linkId": "90791038-d987-46d5-b8bd-a80d3f2a8579",
+              "text": "How many cups of water are you drinking?",
+              "type": "choice",
+              "answerOption": [
+                {
+                  "value": {
+                    "valueString": "None"
+                  }
+                },
+                {
+                  "value": {
+                    "valueString": "At least one"
+                  }
+                },
+                {
+                  "value": {
+                    "valueString": "Two or more"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "FHIR_QuestionnaireResponseExample": {
+        "description": "Example of a FHIR questionnaire response",
+        "value": {
+          "id": "e94b25aa-1ff6-42e2-b252-a50227336c8f",
+          "questionnaire": "9b93f927-b4ec-45c1-9d02-97a9f838b871",
+          "item": [
+            {
+              "linkId": "90791038-d987-46d5-b8bd-a80d3f2a8579",
+              "answerOption": [
+                {
+                  "value": {
+                    "valueString": "None"
+                  }
+                },
+                {
+                  "value": {
+                    "valueString": "At least one"
+                  }
+                },
+                {
+                  "value": {
+                    "valueString": "Two or more"
+                  }
+                }
+              ]
             }
           ]
         }
