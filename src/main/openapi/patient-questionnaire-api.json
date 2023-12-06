@@ -637,11 +637,11 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreatePatientQuestionnaireResponseRequestBody"
+                "$ref": "#/components/schemas/FHIR_QuestionnaireResponse"
               },
               "examples": {
-                "CreatePatientQuestionnaireResponseRequest": {
-                  "$ref": "#/components/examples/CreatePatientQuestionnaireResponseRequest"
+                "FHIR_QuestionnaireResponseExample": {
+                  "$ref": "#/components/examples/FHIR_QuestionnaireResponseExample"
                 }
               }
             }
@@ -1721,7 +1721,7 @@
           "item": [
             {
               "linkId": "90791038-d987-46d5-b8bd-a80d3f2a8579",
-              "answerOption": [
+              "answer": [
                 {
                   "value": {
                     "valueString": "None"
