@@ -648,8 +648,8 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Successful operation",
+          "201": {
+            "description": "Successfully Created",
             "content": {
               "application/json": {
                 "schema": {
