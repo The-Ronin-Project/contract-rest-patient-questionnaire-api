@@ -83,7 +83,7 @@
                 },
                 "examples": {
                   "CreateQuestionnaireResponse": {
-                    "$ref": "#/components/examples/UpsertQuestionnaireResponse"
+                    "$ref": "#/components/examples/UpsertQuestionnaireResponseBody"
                   }
                 }
               }
@@ -167,8 +167,8 @@
                   "$ref": "#/components/schemas/FetchQuestionnairesResponseBody"
                 },
                 "examples": {
-                  "FetchQuestionnairesResponse": {
-                    "$ref": "#/components/examples/FetchQuestionnairesResponse"
+                  "FetchQuestionnairesResponseBody": {
+                    "$ref": "#/components/examples/FetchQuestionnairesResponseBody"
                   }
                 }
               }
@@ -191,7 +191,7 @@
                 },
                 "examples": {
                   "NotFoundExample": {
-                    "$ref": "#/components/examples/NotFoundException"
+                    "$ref": "#/components/examples/NotFoundExceptionResponseBody"
                   }
                 }
               }
@@ -259,8 +259,8 @@
                   "$ref": "#/components/schemas/UpsertQuestionnaireResponseBody"
                 },
                 "examples": {
-                  "UpsertQuestionnaireResponse": {
-                    "$ref": "#/components/examples/UpsertQuestionnaireResponse"
+                  "UpsertQuestionnaireResponseBody": {
+                    "$ref": "#/components/examples/UpsertQuestionnaireResponseBody"
                   }
                 }
               }
@@ -306,7 +306,7 @@
                 },
                 "examples": {
                   "NotFoundExample": {
-                    "$ref": "#/components/examples/NotFoundException"
+                    "$ref": "#/components/examples/NotFoundExceptionResponseBody"
                   }
                 }
               }
@@ -315,7 +315,7 @@
         }
       }
     },
-    "/tenants/{tenantId}/patients/{patientId}/questionnaires" : {
+    "/tenants/{tenantId}/patients/{patientId}/questionnaires": {
       "get": {
         "tags": [
           "Patient"
@@ -422,7 +422,7 @@
                 },
                 "examples": {
                   "ForbiddenExample": {
-                    "$ref": "#/components/examples/ForbiddenException"
+                    "$ref": "#/components/examples/ForbiddenExceptionResponseBody"
                   }
                 }
               }
@@ -445,7 +445,7 @@
                 },
                 "examples": {
                   "NotFoundExample": {
-                    "$ref": "#/components/examples/NotFoundException"
+                    "$ref": "#/components/examples/NotFoundExceptionResponseBody"
                   }
                 }
               }
@@ -454,7 +454,7 @@
         }
       }
     },
-    "/tenants/{tenantId}/patients/{patientId}/questionnaires/{questionnaireId}" : {
+    "/tenants/{tenantId}/patients/{patientId}/questionnaires/{questionnaireId}": {
       "get": {
         "tags": [
           "Patient"
@@ -555,7 +555,7 @@
                 },
                 "examples": {
                   "ForbiddenExample": {
-                    "$ref": "#/components/examples/ForbiddenException"
+                    "$ref": "#/components/examples/ForbiddenExceptionResponseBody"
                   }
                 }
               }
@@ -578,7 +578,7 @@
                 },
                 "examples": {
                   "NotFoundExample": {
-                    "$ref": "#/components/examples/NotFoundException"
+                    "$ref": "#/components/examples/NotFoundExceptionResponseBody"
                   }
                 }
               }
@@ -703,7 +703,7 @@
                 },
                 "examples": {
                   "ForbiddenExample": {
-                    "$ref": "#/components/examples/ForbiddenException"
+                    "$ref": "#/components/examples/ForbiddenExceptionResponseBody"
                   }
                 }
               }
@@ -757,97 +757,49 @@
             "type": "string",
             "description": "ID of the questionnaire group that the questionnaire belongs to"
           },
-          "triagingParty": {
-            "type": "string",
-            "description": "Group that will handle triaging alerts from this questionnaire"
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "SYMPTOM"
-            ],
-            "description": "The \"type\" of questionnaire. Used to filter out questionnaires that are not relevant to a given use case (eg, only need \"SYMPTOM\" questionnaires on the clinician dashboard)"
+          "providers": {
+            "type": "array",
+            "description": "List of provider's and their associated triaging party. This will contain all the providers who can assign this questionnaire",
+            "items": {
+              "type": "object",
+              "properties": {
+                "providerId": {
+                  "type": "string"
+                },
+                "triagingParty": {
+                  "type": "string"
+                }
+              }
+            }
           },
           "timing": {
             "type": "object",
             "properties": {
-              "startDelay": {
-                "description": "Period of time between the starting trigger and the time that it is available to the patient. Available immediately after trigger if omitted",
-                "type": "object",
-                "properties": {
-                  "duration": {
-                    "type": "integer",
-                    "description": "Number of `<durationUUit>`s between starting trigger and availability"
-                  },
-                  "durationUnit": {
-                    "$ref": "#/components/schemas/DurationUnit"
-                  }
-                },
-                "required": [
-                  "duration",
-                  "durationUnit"
-                ]
-              },
-              "endDelay": {
-                "description": "Period of time between the ending trigger and the time that it is available to the patient. Unavailable immediately after trigger if omitted",
-                "type": "object",
-                "properties": {
-                  "duration": {
-                    "type": "integer",
-                    "description": "Number of `<durationUnit>`s between ending trigger and availability"
-                  },
-                  "durationUnit": {
-                    "$ref": "#/components/schemas/DurationUnit"
-                  }
-                },
-                "required": [
-                  "duration",
-                  "durationUnit"
-                ]
-              },
               "repeat": {
                 "description": "See FHIR `Timing -> repeat` object for inspiration https://www.hl7.org/fhir/datatypes.html#Timing\n",
                 "type": "object",
                 "properties": {
-                  "count": {
-                    "type": "integer",
-                    "description": "Number of times to repeat the period. If omitted, the questionnaire will have no pre-set end date"
-                  },
-                  "period": {
-                    "type": "number",
-                    "description": "Default value for the number of `<periodUnit>`s that the questionnaire will be available to the patient"
-                  },
-                  "periodUnit": {
-                    "type": "string",
-                    "description": "Defines the unit for the `period` value. eg, if `period` is `2` and `periodUnit` is `m`, the default duration for the questionnaire will be 2 months. Values taken from FHIR time units value set. See https://build.fhir.org/valueset-units-of-time.html#definition.",
-                    "enum": [
-                      "d",
-                      "wk",
-                      "mo",
-                      "a"
+                  "boundsDuration": {
+                    "type": "object",
+                    "description": "Defines how long a questionnaire will be assigned",
+                    "properties": {
+                      "value": {
+                        "type": "number",
+                        "description": "Number of `code`s that make up the duration. Eg, `value: 6` and `code: \"mo\"` means a duration of 6 months"
+                      },
+                      "code": {
+                        "$ref": "#/components/schemas/DurationUnit"
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "code"
                     ]
-                  },
-                  "frequency": {
-                    "type": "integer",
-                    "description": "Number of times questionnaire is available within the period. No frequency limit is set when this is omitted"
-                  },
-                  "dayOfWeek": {
-                    "type": "array",
-                    "description": "Days of the week that the questionnaire should be available. Defaults to all days in the week when this is omitted",
-                    "items": {
-                      "type": "string",
-                      "enum": [
-                        "mon",
-                        "tue",
-                        "wed",
-                        "thu",
-                        "fri",
-                        "sat",
-                        "sun"
-                      ]
-                    }
                   }
-                }
+                },
+                "required": [
+                  "boundsDuration"
+                ],
               }
             },
             "required": [
@@ -857,7 +809,6 @@
         },
         "required": [
           "name",
-          "type",
           "timing"
         ]
       },
@@ -979,7 +930,7 @@
           }
         ]
       },
-      "FetchPatientQuestionnairesResponseBody" : {
+      "FetchPatientQuestionnairesResponseBody": {
         "type": "object",
         "properties": {
           "data": {
@@ -1177,7 +1128,9 @@
             "type": "array",
             "items": {
               "allOf": [
-                { "$ref": "#/components/schemas/FHIR_TypedValues" },
+                {
+                  "$ref": "#/components/schemas/FHIR_TypedValues"
+                },
                 {
                   "type": "object",
                   "properties": {
@@ -1284,7 +1237,9 @@
             "type": "array",
             "items": {
               "allOf": [
-                { "$ref": "#/components/schemas/FHIR_TypedValues" },
+                {
+                  "$ref": "#/components/schemas/FHIR_TypedValues"
+                },
                 {
                   "type": "object",
                   "properties": {
@@ -1341,6 +1296,9 @@
           "valueString": {
             "type": "string"
           },
+          "valueBoolean": {
+            "type": "boolean"
+          },
           "valueCoding": {
             "type": "object",
             "description": "Used for single and multiple-choice questions, as we can use the `system` and `code` values to find the correct value set, and value within the value set",
@@ -1372,30 +1330,39 @@
               "providerFacing": "Daily Breast Cancer Symptoms Questionnaire",
               "patientFacing": "Breast Cancer Symptoms Questionnaire"
             },
-            "type": "SYMPTOM",
             "group": "9f20974e-eba4-4f6f-935b-061b8240577e",
-            "triagingParty": "67163dcf-9473-405e-9aaf-4627e6c478b6",
-            "timing": {
-              "startDelay": {
-                "duration": 3,
-                "durationUnit": "d"
+            "providers": [
+              {
+                "providerId": "68376d82-0b88-42a7-8ded-b46271aeff5e",
+                "triagingParty": "67163dcf-9473-405e-9aaf-4627e6c478b6"
               },
+              {
+                "providerId": "d1b6ac31-9396-490a-ac71-379c3c623461",
+                "triagingParty": "52807447-5949-408d-ab8e-e5457b631e8d"
+              },
+              {
+                "providerId": "f7944f46-c385-4d1c-a0da-50a758f7e1f8",
+                "triagingParty": "eb183794-4f0b-4922-92a7-dee9d2975235"
+              }
+            ],
+            "timing": {
               "repeat": {
-                "count": 6,
-                "period": 1,
-                "periodUnit": "mo"
+                "boundsDuration": {
+                  "value": 6,
+                  "code": "mo"
+                }
               }
             }
           },
           "file": "eac587fc-6f18-41ea-a320-46ae13a0046c"
         }
       },
-      "UpsertQuestionnaireResponse": {
+      "UpsertQuestionnaireResponseBody": {
         "summary": "Successful Create/Update",
         "value": {
           "data": {
             "id": "d78f8706-6e68-49b0-a57c-4a0f3aedb128",
-            "tenantId": "ca41ec2f-621d-4b7d-93e6-38ec50854b5e",
+            "tenantId": "1xrekpx5",
             "version": 1,
             "configuration": {
               "name": {
@@ -1403,18 +1370,27 @@
                 "providerFacing": "Daily Breast Cancer Symptoms Questionnaire",
                 "patientFacing": "Breast Cancer Symptoms Questionnaire"
               },
-              "type": "SYMPTOM",
               "group": "9f20974e-eba4-4f6f-935b-061b8240577e",
-              "triagingParty": "67163dcf-9473-405e-9aaf-4627e6c478b6",
-              "timing": {
-                "startDelay": {
-                  "duration": 3,
-                  "durationUnit": "d"
+              "providers": [
+                {
+                  "providerId": "68376d82-0b88-42a7-8ded-b46271aeff5e",
+                  "triagingParty": "67163dcf-9473-405e-9aaf-4627e6c478b6"
                 },
+                {
+                  "providerId": "d1b6ac31-9396-490a-ac71-379c3c623461",
+                  "triagingParty": "52807447-5949-408d-ab8e-e5457b631e8d"
+                },
+                {
+                  "providerId": "f7944f46-c385-4d1c-a0da-50a758f7e1f8",
+                  "triagingParty": "eb183794-4f0b-4922-92a7-dee9d2975235"
+                }
+              ],
+              "timing": {
                 "repeat": {
-                  "count": 6,
-                  "period": 1,
-                  "periodUnit": "mo"
+                  "boundsDuration": {
+                    "value": 6,
+                    "code": "mo"
+                  }
                 }
               }
             },
@@ -1427,7 +1403,7 @@
           }
         }
       },
-      "FetchQuestionnairesResponse": {
+      "FetchQuestionnairesResponseBody": {
         "summary": "Successful Fetch",
         "value": {
           "paging": {
@@ -1437,7 +1413,7 @@
           "data": [
             {
               "id": "d78f8706-6e68-49b0-a57c-4a0f3aedb128",
-              "tenantId": "ca41ec2f-621d-4b7d-93e6-38ec50854b5e",
+              "tenantId": "1xrekpx5",
               "version": 1,
               "configuration": {
                 "name": {
@@ -1445,31 +1421,40 @@
                   "providerFacing": "Daily Breast Cancer Symptoms Questionnaire",
                   "patientFacing": "Breast Cancer Symptoms Questionnaire"
                 },
-                "type": "SYMPTOM",
                 "group": "9f20974e-eba4-4f6f-935b-061b8240577e",
-                "triagingParty": "67163dcf-9473-405e-9aaf-4627e6c478b6",
-                "timing": {
-                  "startDelay": {
-                    "duration": 3,
-                    "durationUnit": "d"
+                "providers": [
+                  {
+                    "providerId": "68376d82-0b88-42a7-8ded-b46271aeff5e",
+                    "triagingParty": "67163dcf-9473-405e-9aaf-4627e6c478b6"
                   },
+                  {
+                    "providerId": "d1b6ac31-9396-490a-ac71-379c3c623461",
+                    "triagingParty": "52807447-5949-408d-ab8e-e5457b631e8d"
+                  },
+                  {
+                    "providerId": "f7944f46-c385-4d1c-a0da-50a758f7e1f8",
+                    "triagingParty": "eb183794-4f0b-4922-92a7-dee9d2975235"
+                  }
+                ],
+                "timing": {
                   "repeat": {
-                    "count": 6,
-                    "period": 1,
-                    "periodUnit": "mo"
+                    "boundsDuration": {
+                      "value": 6,
+                      "code": "mo"
+                    }
                   }
                 }
               },
               "file": {
                 "fileName": "psj-breast-cancer-symptoms-questionnaire.json",
-                "uploadedTimestamp": "2023-11-13T08:23:43.02Z",
+                "uploadedTimestamp": "2023-11-13T08:23:43.43Z",
                 "uploadedBy": "Lynda Johnson",
                 "url": "https://ico.ronin.io/questionnaires/psj-breast-cancer-symptoms-questionnaire.json"
               }
             },
             {
-              "id": "c45751b4-7b20-4e67-b607-0e1d5661301b",
-              "tenantId": "ca41ec2f-621d-4b7d-93e6-38ec50854b5e",
+              "id": "4d2c4a9d-f1d7-4b5b-8e0e-042184ec367e",
+              "tenantId": "1xrekpx5",
               "version": 1,
               "configuration": {
                 "name": {
@@ -1477,19 +1462,33 @@
                   "providerFacing": "Daily Lung Cancer Symptoms Questionnaire",
                   "patientFacing": "Lung Cancer Symptoms Questionnaire"
                 },
-                "type": "SYMPTOM",
-                "triagingParty": "67163dcf-9473-405e-9aaf-4627e6c478b6",
+                "group": "24254073-8ca7-4a8c-a31c-fa9cd4e6a893",
+                "providers": [
+                  {
+                    "providerId": "4b618a6e-071b-4ef9-bb74-38d2a972e2c8",
+                    "triagingParty": "9b66ad64-a5ae-4a60-9528-4de41615e3e6"
+                  },
+                  {
+                    "providerId": "3ea222b6-7231-4156-9186-0a548b5bc5b8",
+                    "triagingParty": "d19d5d61-34b4-413f-980a-dd84bb2b3f76"
+                  },
+                  {
+                    "providerId": "dcc0dd86-e79e-436f-964a-45261a6d0489",
+                    "triagingParty": "297f0c9c-6673-4def-940b-a8167e907255"
+                  }
+                ],
                 "timing": {
                   "repeat": {
-                    "count": 12,
-                    "period": 1,
-                    "periodUnit": "mo"
+                    "boundsDuration": {
+                      "value": 6,
+                      "code": "mo"
+                    }
                   }
                 }
               },
               "file": {
                 "fileName": "psj-lung-cancer-symptoms-questionnaire.json",
-                "uploadedTimestamp": "2023-19-25T06:53:17.02Z",
+                "uploadedTimestamp": "2023-12-17T10:45:23.04Z",
                 "uploadedBy": "Lynda Johnson",
                 "url": "https://ico.ronin.io/questionnaires/psj-lung-cancer-symptoms-questionnaire.json"
               }
@@ -1610,14 +1609,14 @@
               {
                 "linkId": "item-2",
                 "answer": [
-                    {
-                      "valueString": "some-string",
-                      "extension": [
-                        {
-                          "valueDecimal": 2
-                        }
-                      ]
-                    }
+                  {
+                    "valueString": "some-string",
+                    "extension": [
+                      {
+                        "valueDecimal": 2
+                      }
+                    ]
+                  }
                 ]
               }
             ]
@@ -1695,7 +1694,7 @@
           ]
         }
       },
-      "NotFoundException": {
+      "NotFoundExceptionResponseBody": {
         "summary": "Resource Not Found",
         "value": {
           "errors": [
@@ -1731,7 +1730,7 @@
           ]
         }
       },
-      "ForbiddenException": {
+      "ForbiddenExceptionResponseBody": {
         "summary": "Forbidden",
         "value": {
           "errors": [
