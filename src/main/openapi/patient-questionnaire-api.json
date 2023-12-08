@@ -799,7 +799,7 @@
                 },
                 "required": [
                   "boundsDuration"
-                ],
+                ]
               }
             },
             "required": [
