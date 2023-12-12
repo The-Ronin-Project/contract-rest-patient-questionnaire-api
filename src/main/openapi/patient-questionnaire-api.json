@@ -44,7 +44,7 @@
         ],
         "summary": "Create Questionnaire",
         "description": "Create a questionnaire for a tenant",
-        "operationId": "createQuestionnaire",
+        "operationId": "managementApi_createQuestionnaire",
         "security": [
           {
             "bearerAuth": []
@@ -124,7 +124,7 @@
         ],
         "description": "Fetch questionnaires for a single tenant",
         "summary": "Fetch Questionnaires",
-        "operationId": "fetchQuestionnaires",
+        "operationId": "managementApi_fetchQuestionnaires",
         "security": [
           {
             "bearerAuth": []
@@ -492,7 +492,7 @@
             "required": true,
             "description": "The UDP ID of the current patient",
             "example": "018c275e-c378-7c4a-a112-157e4c0e4cb5"
-          },
+          }
         ],
         "requestBody": {
           "required": true,
@@ -648,11 +648,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/QuestionnaireList_ResponseBody"
+                  "$ref": "#/components/schemas/Questionnaire_ResponseBody"
                 },
                 "examples": {
                   "QuestionnaireList_ResponseBody": {
-                    "$ref": "#/components/examples/QuestionnaireList_ResponseBody"
+                    "$ref": "#/components/examples/Questionnaire_ResponseBody"
                   }
                 }
               }
@@ -730,7 +730,7 @@
         }
       }
     },
-    "/tenants/{tenantId}/patients/{patientId}/questionnaires-responses": {
+    "/tenants/{tenantId}/patients/{patientId}/questionnaire-responses": {
       "post": {
         "tags": [
           "Patient"
@@ -896,6 +896,354 @@
         "responses": {
           "201": {
             "description": "Successfully Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpsertQuestionnaireResponse_ResponseBody"
+                },
+                "examples": {
+                  "UpsertQuestionnaireResponse_ResponseBody": {
+                    "$ref": "#/components/examples/UpsertQuestionnaireResponse_ResponseBody"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "BadRequestExample": {
+                    "$ref": "#/components/examples/BadRequestException_ResponseBody"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "ForbiddenExample": {
+                    "$ref": "#/components/examples/ForbiddenException_ResponseBody"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tenants/{tenantId}/patients/{patientId}/questionnaire-responses/{questionnaireResponseId}": {
+      "put": {
+        "tags": [
+          "Patient"
+        ],
+        "summary": "Update Questionnaire Response",
+        "description": "Update a questionnaire response for a patient",
+        "operationId": "updateQuestionnaireResponse",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tenantId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the tenant for the current tenant",
+            "example": "1xrekpx5"
+          },
+          {
+            "in": "path",
+            "name": "patientId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The UDP ID of the current patient",
+            "example": "018c275e-c378-7c4a-a112-157e4c0e4cb5"
+          },
+          {
+            "in": "path",
+            "name": "questionnaireResponseId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the questionnaire response",
+            "example": "272b6520-dc94-41a6-97ee-58e8baa6e267"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FHIR_QuestionnaireResponse"
+              },
+              "examples": {
+                "UpsertQuestionnaireResponse_RequestBody": {
+                  "$ref": "#/components/examples/UpsertQuestionnaireResponse_RequestBody"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpsertQuestionnaireResponse_ResponseBody"
+                },
+                "examples": {
+                  "UpsertQuestionnaireResponse_ResponseBody": {
+                    "$ref": "#/components/examples/UpsertQuestionnaireResponse_ResponseBody"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "BadRequestExample": {
+                    "$ref": "#/components/examples/BadRequestException_ResponseBody"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "ForbiddenExample": {
+                    "$ref": "#/components/examples/ForbiddenException_ResponseBody"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Clinician Dashboard"
+        ],
+        "summary": "Fetch Questionnaire Responses",
+        "description": "Fetch a patient's questionnaire responses",
+        "operationId": "fetchQuestionnaireResponse",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tenantId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the tenant for the current tenant",
+            "example": "1xrekpx5"
+          },
+          {
+            "in": "path",
+            "name": "patientId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The UDP ID of the current patient",
+            "example": "018c275e-c378-7c4a-a112-157e4c0e4cb5"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FHIR_QuestionnaireResponse"
+              },
+              "examples": {
+                "UpsertQuestionnaireResponse_RequestBody": {
+                  "$ref": "#/components/examples/UpsertQuestionnaireResponse_RequestBody"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpsertQuestionnaireResponse_ResponseBody"
+                },
+                "examples": {
+                  "UpsertQuestionnaireResponse_ResponseBody": {
+                    "$ref": "#/components/examples/UpsertQuestionnaireResponse_ResponseBody"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "BadRequestExample": {
+                    "$ref": "#/components/examples/BadRequestException_ResponseBody"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "ForbiddenExample": {
+                    "$ref": "#/components/examples/ForbiddenException_ResponseBody"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tenants/{tenantId}/patients/{patientId}/questionnaire-responses/{questionnaireResponseId}/complete": {
+      "patch": {
+        "tags": [
+          "Patient"
+        ],
+        "summary": "Complete Questionnaire Response",
+        "description": "Complete a questionnaire response for a patient",
+        "operationId": "completeQuestionnaireResponse",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tenantId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the tenant for the current tenant",
+            "example": "1xrekpx5"
+          },
+          {
+            "in": "path",
+            "name": "patientId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The UDP ID of the current patient",
+            "example": "018c275e-c378-7c4a-a112-157e4c0e4cb5"
+          },
+          {
+            "in": "path",
+            "name": "questionnaireResponseId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the questionnaire response",
+            "example": "272b6520-dc94-41a6-97ee-58e8baa6e267"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully Updated",
             "content": {
               "application/json": {
                 "schema": {
@@ -1159,17 +1507,6 @@
           "data"
         ]
       },
-      "FetchQuestionnaireResponses_ResponseBody": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireResponse"
-            }
-          }
-        }
-      },
       "UpsertQuestionnaireResponse_ResponseBody": {
         "type": "object",
         "properties": {
@@ -1242,6 +1579,15 @@
           "timing",
           "isAssigned"
         ]
+      },
+      "Questionnaire_ResponseBody": {
+        "description": "Response body when fetching a single questionnaire by ID",
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/FHIR_Questionnaire"
+          }
+        }
       },
       "QuestionnaireAssignment_RequestBody": {
         "description": "Request body used for assigning and un-assigning questionnaires to patients",
@@ -1498,31 +1844,34 @@
             "type": "array",
             "description": "Mechanism for enabling/disabling a question based on a predicate.\n Eg, given the the object `{ \"question\": 123, \"operator\": \"=\", \"Hello\" }`, this question would only be presented if the question with the ID `123` had the answer \"Hello\" ",
             "items": {
-              "type": "object",
-              "properties": {
-                "question": {
-                  "type": "string"
-                },
-                "operator": {
-                  "type": "string",
-                  "enum": [
-                    "exists",
-                    "=",
-                    "!=",
-                    ">",
-                    "<",
-                    ">=",
-                    "<="
+              "allOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "question": {
+                      "type": "string"
+                    },
+                    "operator": {
+                      "type": "string",
+                      "enum": [
+                        "exists",
+                        "=",
+                        "!=",
+                        ">",
+                        "<",
+                        ">=",
+                        "<="
+                      ]
+                    }
+                  },
+                  "required": [
+                    "question",
+                    "operator"
                   ]
                 },
-                "answer": {
+                {
                   "$ref": "#/components/schemas/FHIR_TypedValues"
                 }
-              },
-              "required": [
-                "question",
-                "operator",
-                "answer"
               ]
             }
           },
@@ -1894,6 +2243,81 @@
           ]
         }
       },
+      "Questionnaire_ResponseBody": {
+        "summary": "Qeustionnaire Response Body",
+        "value": {
+          "id": "d78f8706-6e68-49b0-a57c-4a0f3aedb128",
+          "url": "https://projectronin.io/questionnaires/d78f8706-6e68-49b0-a57c-4a0f3aedb128",
+          "identifier": [
+            {
+              "system": "http://projectronin.com/id/tenantId",
+              "value": "1xrekpx5"
+            }
+          ],
+          "version": "1.0",
+          "name": "psj-breast-daily",
+          "title": "PSJ - Daily Breast Cancer Survey",
+          "status": "active",
+          "date": "2023-12-12T08:45:12.012Z",
+          "item": [
+            {
+              "linkId": "e0673ad3-e023-4a46-82e1-5dfb1acb2d3d",
+              "text": "Are you nauseous?",
+              "type": "choice",
+              "repeats": false,
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "LA6568-5",
+                    "display": "Not at all"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA6569-3",
+                    "display": "Sometimes"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LA6569-2",
+                    "display": "Always"
+                  }
+                }
+              ]
+            },
+            {
+              "linkId": "c03ab475-8cc3-4579-9a7a-fd9ba5a0c4a7",
+              "text": "Are you dehydrated?",
+              "type": "choice",
+              "repeats": false,
+              "enableWhen": {
+                "question": "e0673ad3-e023-4a46-82e1-5dfb1acb2d3d",
+                "operator": "=",
+                "answerCoding": {
+                  "code": "LA6569-2",
+                  "display": "Always"
+                }
+              },
+              "enableBehavior": "all",
+              "answerOption": [
+                {
+                  "code": "LA6568-5",
+                  "display": "Not at all"
+                },
+                {
+                  "code": "LA6569-3",
+                  "display": "Sometimes"
+                },
+                {
+                  "code": "LA6569-2",
+                  "display": "Always"
+                }
+              ]
+            }
+          ]
+        }
+      },
       "UpsertQuestionnaireResponse_ResponseBody": {
         "summary": "Response body from creating or updating a questionnaire response",
         "value": {
@@ -1949,13 +2373,6 @@
               }
             ]
           }
-        }
-      },
-      "FetchQuestionnaireResponses_ResponseBody": {
-        "description": "Example of fetching patient questionnaire responses",
-        "value": {
-          "data": [
-          ]
         }
       },
       "UpsertQuestionnaireResponse_RequestBody": {
