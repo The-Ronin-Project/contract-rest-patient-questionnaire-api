@@ -322,8 +322,7 @@
     "/tenants/{tenantId}/patients/{patientId}/questionnaires": {
       "get": {
         "tags": [
-          "Patient",
-          "Clinician Dashboard"
+          "Patient"
         ],
         "description": "Fetch a list of questionnaires",
         "summary": "Fetch Patient Questionnaires",
@@ -846,8 +845,7 @@
       },
       "get": {
         "tags": [
-          "Patient",
-          "Clinician Dashboard"
+          "Patient"
         ],
         "summary": "Fetch Questionnaire Responses",
         "description": "Fetch a patient's questionnaire responses",
@@ -1781,30 +1779,8 @@
           "answerOption": {
             "type": "array",
             "items": {
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/FHIR_TypedValues"
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "initialSelected": {
-                      "type": "boolean",
-                      "description": "Whether this answer should be selected by default"
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          "initial": {
-            "type": "array",
-            "items": {
               "$ref": "#/components/schemas/FHIR_TypedValues"
             }
-          },
-          "readOnly": {
-            "type": "boolean"
           },
           "item": {
             "type": "array",
