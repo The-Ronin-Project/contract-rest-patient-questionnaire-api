@@ -1353,7 +1353,10 @@
               "paging": {
                 "$ref": "#/components/schemas/Paging"
               }
-            }
+            },
+            "required": [
+              "paging"
+            ]
           },
           {
             "type": "object",
@@ -1364,7 +1367,10 @@
                   "$ref": "#/components/schemas/ManagementApi_Questionnaire"
                 }
               }
-            }
+            },
+            "required": [
+              "data"
+            ]
           }
         ]
       },
@@ -1462,7 +1468,10 @@
           "data": {
             "$ref": "#/components/schemas/FHIR_Questionnaire"
           }
-        }
+        },
+        "required": [
+          "data"
+        ]
       },
       "QuestionnaireAssignment_RequestBody": {
         "description": "Request body used for assigning and un-assigning questionnaires to patients",
@@ -1498,7 +1507,10 @@
               "$ref": "#/components/schemas/FHIR_QuestionnaireResponse"
             }
           }
-        }
+        },
+        "required": [
+          "data"
+        ]
       },
       "Error": {
         "type": "object",
