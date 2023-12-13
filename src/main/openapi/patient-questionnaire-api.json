@@ -846,6 +846,7 @@
       },
       "get": {
         "tags": [
+          "Patient",
           "Clinician Dashboard"
         ],
         "summary": "Fetch Questionnaire Responses",
@@ -878,32 +879,17 @@
             "example": "018c275e-c378-7c4a-a112-157e4c0e4cb5"
           }
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/FHIR_QuestionnaireResponse"
-              },
-              "examples": {
-                "UpsertQuestionnaireResponse_RequestBody": {
-                  "$ref": "#/components/examples/UpsertQuestionnaireResponse_RequestBody"
-                }
-              }
-            }
-          }
-        },
         "responses": {
           "201": {
             "description": "Successfully Created",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UpsertQuestionnaireResponse_ResponseBody"
+                  "$ref": "#/components/schemas/QuestionnaireResponses_ResponseBody"
                 },
                 "examples": {
                   "UpsertQuestionnaireResponse_ResponseBody": {
-                    "$ref": "#/components/examples/UpsertQuestionnaireResponse_ResponseBody"
+                    "$ref": "#/components/examples/QuestionnaireResponses_ResponseBody"
                   }
                 }
               }
@@ -1021,119 +1007,6 @@
         "responses": {
           "200": {
             "description": "Successfully Updated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UpsertQuestionnaireResponse_ResponseBody"
-                },
-                "examples": {
-                  "UpsertQuestionnaireResponse_ResponseBody": {
-                    "$ref": "#/components/examples/UpsertQuestionnaireResponse_ResponseBody"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Error"
-                      }
-                    }
-                  }
-                },
-                "examples": {
-                  "BadRequestExample": {
-                    "$ref": "#/components/examples/BadRequestException_ResponseBody"
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Error"
-                      }
-                    }
-                  }
-                },
-                "examples": {
-                  "ForbiddenExample": {
-                    "$ref": "#/components/examples/ForbiddenException_ResponseBody"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Clinician Dashboard"
-        ],
-        "summary": "Fetch Questionnaire Responses",
-        "description": "Fetch a patient's questionnaire responses",
-        "operationId": "fetchQuestionnaireResponse",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "tenantId",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "The ID of the tenant for the current tenant",
-            "example": "1xrekpx5"
-          },
-          {
-            "in": "path",
-            "name": "patientId",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "The UDP ID of the current patient",
-            "example": "018c275e-c378-7c4a-a112-157e4c0e4cb5"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/FHIR_QuestionnaireResponse"
-              },
-              "examples": {
-                "UpsertQuestionnaireResponse_RequestBody": {
-                  "$ref": "#/components/examples/UpsertQuestionnaireResponse_RequestBody"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Successfully Created",
             "content": {
               "application/json": {
                 "schema": {
@@ -1613,6 +1486,18 @@
           "remove"
         ]
       },
+      "QuestionnaireResponses_ResponseBody": {
+        "description": "Response body containing a list of patient questionnaire responses",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FHIR_QuestionnaireResponse"
+            }
+          }
+        }
+      },
       "Error": {
         "type": "object",
         "properties": {
@@ -1727,6 +1612,16 @@
           "questionnaire": {
             "type": "string",
             "description": "The ID associated Questionnaire"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "in-progress",
+              "completed",
+              "amended",
+              "entered-in-error",
+              "stopped"
+            ]
           },
           "item": {
             "type": "array",
@@ -2244,7 +2139,7 @@
         }
       },
       "Questionnaire_ResponseBody": {
-        "summary": "Qeustionnaire Response Body",
+        "summary": "Questionnaire Response Body",
         "value": {
           "id": "d78f8706-6e68-49b0-a57c-4a0f3aedb128",
           "url": "https://projectronin.io/questionnaires/d78f8706-6e68-49b0-a57c-4a0f3aedb128",
@@ -2318,12 +2213,73 @@
           ]
         }
       },
+      "QuestionnaireResponses_ResponseBody": {
+        "summary": "Response body when fetching a patient questionnaire responses",
+        "value": {
+          "data": [
+            {
+              "id": "9d81ae65-00be-4243-aace-c23915d923d9",
+              "questionnaire": "d78f8706-6e68-49b0-a57c-4a0f3aedb128",
+              "status": "in-progress",
+              "item": [
+                {
+                  "linkId": "item-1",
+                  "answer": [
+                    {
+                      "valueBoolean": true,
+                      "extension": [
+                        {
+                          "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                          "valueDecimal": 1
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "linkId": "item-2",
+                  "answer": [
+                    {
+                      "valueString": "Sometimes",
+                      "extension": [
+                        {
+                          "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                          "valueDecimal": 2
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "linkId": "item-3",
+                  "answer": [
+                    {
+                      "valueCoding": {
+                        "system": "http://loinc.org",
+                        "code": "LA6568-5",
+                        "display": "Not at all"
+                      },
+                      "extension": [
+                        {
+                          "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                          "valueDecimal": 2
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
       "UpsertQuestionnaireResponse_ResponseBody": {
         "summary": "Response body from creating or updating a questionnaire response",
         "value": {
           "data": {
             "id": "9d81ae65-00be-4243-aace-c23915d923d9",
             "questionnaire": "d78f8706-6e68-49b0-a57c-4a0f3aedb128",
+            "status": "in-progress",
             "item": [
               {
                 "linkId": "item-1",
