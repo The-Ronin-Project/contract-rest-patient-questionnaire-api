@@ -34,6 +34,10 @@
     {
       "name": "Clinician Dashboard",
       "description": "Endpoints used by the provider on the clinician dashboard"
+    },
+    {
+      "name": "Common",
+      "description": "Endpoints used by both the clinician dashboard and the patient app"
     }
   ],
   "paths": {
@@ -322,7 +326,7 @@
     "/tenants/{tenantId}/patients/{patientId}/questionnaires": {
       "get": {
         "tags": [
-          "Patient"
+          "Common"
         ],
         "description": "Fetch a list of questionnaires",
         "summary": "Fetch Patient Questionnaires",
@@ -845,7 +849,7 @@
       },
       "get": {
         "tags": [
-          "Patient"
+          "Common"
         ],
         "summary": "Fetch Questionnaire Responses",
         "description": "Fetch a patient's questionnaire responses",
