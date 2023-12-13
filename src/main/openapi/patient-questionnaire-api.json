@@ -773,11 +773,11 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FHIR_QuestionnaireResponse"
+                "$ref": "#/components/schemas/CreateQuestionnaireResponse_RequestBody"
               },
               "examples": {
                 "UpsertQuestionnaireResponse_RequestBody": {
-                  "$ref": "#/components/examples/UpsertQuestionnaireResponse_RequestBody"
+                  "$ref": "#/components/examples/CreateQuestionnaireResponse_RequestBody"
                 }
               }
             }
@@ -1000,7 +1000,7 @@
               },
               "examples": {
                 "UpsertQuestionnaireResponse_RequestBody": {
-                  "$ref": "#/components/examples/UpsertQuestionnaireResponse_RequestBody"
+                  "$ref": "#/components/examples/UpdateQuestionnaireResponse_RequestBody"
                 }
               }
             }
@@ -1646,6 +1646,36 @@
         },
         "required": [
           "id",
+          "questionnaire",
+          "item"
+        ]
+      },
+      "CreateQuestionnaireResponse_RequestBody": {
+        "type": "object",
+        "description": "FHIR representation of a questionnaire response",
+        "properties": {
+          "questionnaire": {
+            "type": "string",
+            "description": "The ID associated Questionnaire"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "in-progress",
+              "completed",
+              "amended",
+              "entered-in-error",
+              "stopped"
+            ]
+          },
+          "item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItem"
+            }
+          }
+        },
+        "required": [
           "questionnaire",
           "item"
         ]
@@ -2323,8 +2353,49 @@
           }
         }
       },
-      "UpsertQuestionnaireResponse_RequestBody": {
-        "description": "Request body used to create/update a questionnaire response",
+      "CreateQuestionnaireResponse_RequestBody": {
+        "description": "Request body used to create a questionnaire response",
+        "value": {
+          "questionnaire": "9b93f927-b4ec-45c1-9d02-97a9f838b871",
+          "item": [
+            {
+              "linkId": "90791038-d987-46d5-b8bd-a80d3f2a8579",
+              "answer": [
+                {
+                  "valueString": "None"
+                }
+              ]
+            },
+            {
+              "linkId": "47dce865-eb6e-425e-a888-2510a040a24b",
+              "answer": [
+                {
+                  "valueCoding": {
+                    "system": "https://loinc.com",
+                    "code": "LA6568-5"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "system": "https://loinc.com",
+                    "code": "LA6563-8"
+                  }
+                }
+              ]
+            },
+            {
+              "linkId": "89345537-a810-475a-9c3d-f37095d4f62b",
+              "answer": [
+                {
+                  "valueBoolean": true
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "UpdateQuestionnaireResponse_RequestBody": {
+        "description": "Request body used to update a questionnaire response",
         "value": {
           "id": "e94b25aa-1ff6-42e2-b252-a50227336c8f",
           "questionnaire": "9b93f927-b4ec-45c1-9d02-97a9f838b871",
