@@ -1481,7 +1481,16 @@
             "type": "array",
             "description": "IDs of questionnaires that should be assigned",
             "items": {
-              "type": "string"
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "ID of the questionnaire"
+                },
+                "timing": {
+                  "$ref": "#/components/schemas/FHIR_Timing"
+                }
+              }
             }
           },
           "remove": {
@@ -1893,6 +1902,17 @@
             "description": "See FHIR `Timing -> repeat` object for inspiration https://www.hl7.org/fhir/datatypes.html#Timing\n",
             "type": "object",
             "properties": {
+              "frequency": {
+                "type": "integer",
+                "description": "Number of times to take the questionnaire per period"
+              },
+              "period": {
+                "type": "number",
+                "description": "The patient should take the questionnaire `frequency` times per period"
+              },
+              "periodUnit": {
+                "$ref": "#/components/schemas/DurationUnit"
+              },
               "boundsDuration": {
                 "type": "object",
                 "description": "Defines how long a questionnaire will be assigned",
@@ -2437,12 +2457,27 @@
         }
       },
       "QuestionnaireAssignment_RequestBody": {
-        "summary": "Questionnaire Assignment",
+        "summary": "Questionnaire Assignment - Once per week with a start and end date",
         "value": {
           "add": [
-            "36ca541a-13be-40c8-b32e-41362f1ac1b8"
+            {
+              "id": "36ca541a-13be-40c8-b32e-41362f1ac1b8",
+              "timing": {
+                "repeat": {
+                  "frequency": 1,
+                  "period": 1,
+                  "periodUnit": "wk",
+                  "boundsPeriod": {
+                    "start": "2023-12-13T09:00:00.00Z",
+                    "end": "2024-05-13T09:00:00.00Z"
+                  }
+                }
+              }
+            }
           ],
-          "remove": []
+          "remove": [
+            "a5251e20-8b35-4104-b640-aca57ec4c4c4"
+          ]
         }
       },
       "NotFoundException_ResponseBody": {
