@@ -1491,36 +1491,6 @@
           "isAssigned"
         ]
       },
-      "QuestionnaireTriageConfiguration": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "provider": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "id",
-                "name"
-              ]
-            },
-            "triagingParty": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "provider",
-            "triagingParty"
-          ]
-        }
-      },
       "Questionnaire_ResponseBody": {
         "description": "Response body when fetching a single questionnaire by ID",
         "type": "object",
@@ -2021,10 +1991,10 @@
         "value": {
           "configuration": {
             "name": {
-              "ehrOrderable": "BD: (Breast Daily) Symptoms",
               "providerFacing": "Daily Breast Cancer Symptoms Questionnaire",
               "patientFacing": "Breast Cancer Symptoms Questionnaire"
             },
+            "ehrOrderableId": "BD: (Breast Daily) Symptoms",
             "group": "9f20974e-eba4-4f6f-935b-061b8240577e",
             "triage": [
               {
@@ -2069,10 +2039,10 @@
             "version": 1,
             "configuration": {
               "name": {
-                "ehrOrderable": "BD: (Breast Daily) Symptoms",
                 "providerFacing": "Daily Breast Cancer Symptoms Questionnaire",
                 "patientFacing": "Breast Cancer Symptoms Questionnaire"
               },
+              "ehrOrderableId": "BD: (Breast Daily) Symptoms",
               "group": "9f20974e-eba4-4f6f-935b-061b8240577e",
               "triage": [
                 {
@@ -2177,10 +2147,10 @@
               "version": 1,
               "configuration": {
                 "name": {
-                  "ehrOrderable": "LD: (Lung Daily) Symptoms",
                   "providerFacing": "Daily Lung Cancer Symptoms Questionnaire",
                   "patientFacing": "Lung Cancer Symptoms Questionnaire"
                 },
+                "ehrOrderableId": "LD: (Lung Daily) Symptoms",
                 "group": "24254073-8ca7-4a8c-a31c-fa9cd4e6a893",
                 "triage": [
                   {
@@ -2299,75 +2269,6 @@
             "page": 0,
             "limit": 2
           },
-          "data": [
-            {
-              "id": "36ca541a-13be-40c8-b32e-41362f1ac1b8",
-              "name": "psj-breast-daily",
-              "title": "PSJ - Daily Breast Cancer Survey",
-              "triage": [
-                {
-                  "provider": {
-                    "id": "68376d82-0b88-42a7-8ded-b46271aeff5e",
-                    "name": "Joan Smith"
-                  },
-                  "triageGroup": {
-                    "id": "67163dcf-9473-405e-9aaf-4627e6c478b6",
-                    "name": "Group One"
-                  }
-                },
-                {
-                  "provider": {
-                    "id": "24eb629d-b962-4614-abb0-5d9914e311a6",
-                    "name": "Alex Brown"
-                  },
-                  "triageGroup": {
-                    "id": "a33c9c08-5341-463f-99f7-a35fb23f33ce",
-                    "name": "Group Two"
-                  }
-                }
-              ],
-              "timing": {
-                "repeat": {
-                  "boundsDuration": {
-                    "value": 6,
-                    "code": "mo"
-                  }
-                }
-              },
-              "isAssigned": false
-            },
-            {
-              "id": "36ca541a-13be-40c8-b32e-41362f1ac1b8",
-              "name": "psj-breast-daily",
-              "title": "PSJ - Daily Breast Cancer Survey",
-              "triage": [
-                {
-                  "provider": {
-                    "id": "68376d82-0b88-42a7-8ded-b46271aeff5e",
-                    "name": "Joan Smith"
-                  },
-                  "triageGroup": {
-                    "id": "67163dcf-9473-405e-9aaf-4627e6c478b6",
-                    "name": "Group One"
-                  }
-                }
-              ],
-              "timing": {
-                "repeat": {
-                  "boundsDuration": {
-                    "value": 6,
-                    "code": "mo"
-                  }
-                }
-              },
-              "isAssigned": true
-            }
-          ]
-        }
-      },
-      "PatientQuestionnaireList_ResponseBody": {
-        "summary": "Fetching Questionnaires as a Patient",
-        "value": {
           "data": [
             {
               "id": "36ca541a-13be-40c8-b32e-41362f1ac1b8",
