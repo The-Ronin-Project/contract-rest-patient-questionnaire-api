@@ -1276,11 +1276,11 @@
             "type": "string",
             "description": "The name of the file"
           },
-          "uploadedTimestamp": {
+          "selectedTimestamp": {
             "type": "string",
-            "description": "Date and time that the file was uploaded"
+            "description": "Date and time that the file was selected"
           },
-          "uploadedBy": {
+          "selectedBy": {
             "type": "string",
             "description": "User that uploaded the file"
           },
@@ -1291,8 +1291,8 @@
         },
         "required": [
           "fileName",
-          "uploadedTimestamp",
-          "uploadedBy",
+          "selectedTimestamp",
+          "selectedBy",
           "url"
         ]
       },
@@ -1307,21 +1307,23 @@
             "type": "string",
             "description": "ID of the tenant"
           },
-          "version": {
-            "type": "integer",
-            "description": "Version number of the questionnaire. Increments by one each time a questionnaire is updated"
-          },
           "configuration": {
             "$ref": "#/components/schemas/ManagementApi_QuestionnaireConfiguration"
           },
           "file": {
             "$ref": "#/components/schemas/ManagementApi_QuestionnaireFile"
+          },
+          "fileArchive": {
+            "description": "List of previously selected files",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ManagementApi_Questionnaire"
+            }
           }
         },
         "required": [
           "id",
           "tenantId",
-          "version",
           "configuration",
           "file"
         ]
@@ -1620,7 +1622,7 @@
             "description": "List of associated identities. Will primarily (and possibly only) be used for the tenant ID"
           },
           "version": {
-            "type": "number"
+            "type": "string"
           },
           "name": {
             "type": "string",
@@ -2036,7 +2038,6 @@
           "data": {
             "id": "d78f8706-6e68-49b0-a57c-4a0f3aedb128",
             "tenantId": "1xrekpx5",
-            "version": 1,
             "configuration": {
               "name": {
                 "providerFacing": "Daily Breast Cancer Symptoms Questionnaire",
@@ -2076,11 +2077,25 @@
               }
             },
             "file": {
-              "fileName": "psj-breast-cancer-symptoms-questionnaire.json",
-              "uploadedTimestamp": "2023-11-13T08:23:43.43Z",
-              "uploadedBy": "Lynda Johnson",
-              "url": "https://ico.ronin.io/questionnaires/psj-breast-cancer-symptoms-questionnaire.json"
-            }
+              "fileName": "psj-breast-cancer-symptoms-questionnaire-v3.json",
+              "selectedTimestamp": "2023-11-13T08:23:43.43Z",
+              "selectedBy": "Lynda Johnson",
+              "url": "https://ico.ronin.io/questionnaires/psj-breast-cancer-symptoms-questionnaire-v3.json"
+            },
+            "fileArchive": [
+              {
+                "fileName": "psj-breast-cancer-symptoms-questionnaire-v2.json",
+                "selectedTimestamp": "2023-11-01T03:16:27.12Z",
+                "selectedBy": "Lynda Johnson",
+                "url": "https://ico.ronin.io/questionnaires/psj-breast-cancer-symptoms-questionnaire-v2.json"
+              },
+              {
+                "fileName": "psj-breast-cancer-symptoms-questionnaire-v1.json",
+                "selectedTimestamp": "2023-06-07T00:13:58.51Z",
+                "selectedBy": "Brian Reynolds",
+                "url": "https://ico.ronin.io/questionnaires/psj-breast-cancer-symptoms-questionnaire-v1.json"
+              }
+            ]
           }
         }
       },
@@ -2095,7 +2110,6 @@
             {
               "id": "d78f8706-6e68-49b0-a57c-4a0f3aedb128",
               "tenantId": "1xrekpx5",
-              "version": 1,
               "configuration": {
                 "name": {
                   "providerFacing": "Daily Breast Cancer Symptoms Questionnaire",
@@ -2135,16 +2149,29 @@
                 }
               },
               "file": {
-                "fileName": "psj-breast-cancer-symptoms-questionnaire.json",
-                "uploadedTimestamp": "2023-11-13T08:23:43.43Z",
-                "uploadedBy": "Lynda Johnson",
-                "url": "https://ico.ronin.io/questionnaires/psj-breast-cancer-symptoms-questionnaire.json"
-              }
+                "fileName": "psj-breast-cancer-symptoms-questionnaire-v3.json",
+                "selectedTimestamp": "2023-11-13T08:23:43.43Z",
+                "selectedBy": "Lynda Johnson",
+                "url": "https://ico.ronin.io/questionnaires/psj-breast-cancer-symptoms-questionnaire-v3.json"
+              },
+              "fileArchive": [
+                {
+                  "fileName": "psj-breast-cancer-symptoms-questionnaire-v2.json",
+                  "selectedTimestamp": "2023-11-01T03:16:27.12Z",
+                  "selectedBy": "Lynda Johnson",
+                  "url": "https://ico.ronin.io/questionnaires/psj-breast-cancer-symptoms-questionnaire-v2.json"
+                },
+                {
+                  "fileName": "psj-breast-cancer-symptoms-questionnaire-v1.json",
+                  "selectedTimestamp": "2023-06-07T00:13:58.51Z",
+                  "selectedBy": "Brian Reynolds",
+                  "url": "https://ico.ronin.io/questionnaires/psj-breast-cancer-symptoms-questionnaire-v1.json"
+                }
+              ]
             },
             {
               "id": "4d2c4a9d-f1d7-4b5b-8e0e-042184ec367e",
               "tenantId": "1xrekpx5",
-              "version": 1,
               "configuration": {
                 "name": {
                   "providerFacing": "Daily Lung Cancer Symptoms Questionnaire",
@@ -2184,11 +2211,25 @@
                 }
               },
               "file": {
-                "fileName": "psj-lung-cancer-symptoms-questionnaire.json",
-                "uploadedTimestamp": "2023-12-17T10:45:23.04Z",
-                "uploadedBy": "Lynda Johnson",
+                "fileName": "psj-lung-cancer-symptoms-questionnaire-v1.json",
+                "selectedTimestamp": "2023-12-17T10:45:23.04Z",
+                "selectedBy": "Lynda Johnson",
                 "url": "https://ico.ronin.io/questionnaires/psj-lung-cancer-symptoms-questionnaire.json"
-              }
+              },
+              "fileArchive": [
+                {
+                  "fileName": "psj-lung-cancer-symptoms-questionnaire-v2.json",
+                  "selectedTimestamp": "2023-11-01T03:16:27.12Z",
+                  "selectedBy": "Lynda Johnson",
+                  "url": "https://ico.ronin.io/questionnaires/psj-lung-cancer-symptoms-questionnaire-v2.json"
+                },
+                {
+                  "fileName": "psj-lung-cancer-symptoms-questionnaire-v1.json",
+                  "selectedTimestamp": "2023-06-07T00:13:58.51Z",
+                  "selectedBy": "Brian Reynolds",
+                  "url": "https://ico.ronin.io/questionnaires/psj-lung-cancer-symptoms-questionnaire-v1.json"
+                }
+              ]
             }
           ]
         }
