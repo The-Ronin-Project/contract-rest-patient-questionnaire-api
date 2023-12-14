@@ -360,17 +360,37 @@
           {
             "in": "query",
             "name": "ids",
+            "description": "List of questionnaire ids to fetch. Required when the user is a patient",
             "schema": {
               "type": "array",
               "items": {
                 "type": "string"
               }
             },
-            "description": "List of questionnaire ids to fetch. Required when the user is a patient",
             "example": [
               "018c3b42-246a-7cc9-9f2b-2eb87cd110c8",
               "018c3b42-604d-7d26-8c92-4a276a58e56c"
             ],
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Paging param to control the number of questionnaires to get back. Required when user is a provider",
+            "example": 20,
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Zero-indexed page number. Required when user is a provider",
+            "example": 0,
             "required": false
           }
         ],
@@ -380,11 +400,14 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/QuestionnaireList_ResponseBody"
+                  "$ref": "#/components/schemas/FetchQuestionnaires_ResponseBody"
                 },
                 "examples": {
-                  "FetchQuestionnaires_ResponseBody": {
-                    "$ref": "#/components/examples/QuestionnaireList_ResponseBody"
+                  "ProviderFetchQuestionnaires_ResponseBody": {
+                    "$ref": "#/components/examples/ProviderFetchQuestionnaires_ResponseBody"
+                  },
+                  "PatientFetchQuestionnaires_ResponseBody": {
+                    "$ref": "#/components/examples/PatientFetchQuestionnaires_ResponseBody"
                   }
                 }
               }
@@ -642,7 +665,7 @@
                   "$ref": "#/components/schemas/Questionnaire_ResponseBody"
                 },
                 "examples": {
-                  "QuestionnaireList_ResponseBody": {
+                  "FetchQuestionnaires_ResponseBody": {
                     "$ref": "#/components/examples/Questionnaire_ResponseBody"
                   }
                 }
@@ -867,6 +890,26 @@
             "required": true,
             "description": "The UDP ID of the current patient",
             "example": "018c275e-c378-7c4a-a112-157e4c0e4cb5"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Paging param to control the number of questionnaires to get back",
+            "example": 20,
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Zero-indexed page number",
+            "example": 0,
+            "required": true
           }
         ],
         "responses": {
@@ -875,11 +918,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/QuestionnaireResponses_ResponseBody"
+                  "$ref": "#/components/schemas/FetchQuestionnaireResponses_ResponseBody"
                 },
                 "examples": {
                   "UpsertQuestionnaireResponse_ResponseBody": {
-                    "$ref": "#/components/examples/QuestionnaireResponses_ResponseBody"
+                    "$ref": "#/components/examples/FetchQuestionnaireResponses_ResponseBody"
                   }
                 }
               }
@@ -1215,7 +1258,7 @@
           },
           "triage": {
             "$ref": "#/components/schemas/ManagementApi_TriageConfiguration"
-          } ,
+          },
           "timing": {
             "$ref": "#/components/schemas/FHIR_Timing"
           }
@@ -1385,9 +1428,12 @@
           }
         ]
       },
-      "QuestionnaireList_ResponseBody": {
+      "FetchQuestionnaires_ResponseBody": {
         "type": "object",
         "properties": {
+          "paging": {
+            "$ref": "#/components/schemas/Paging"
+          },
           "data": {
             "type": "array",
             "items": {
@@ -1425,35 +1471,8 @@
             "type": "string",
             "description": "Human-friendly name for the questionnaire"
           },
-          "providers": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "provider": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "name"
-                  ]
-                },
-                "triagingParty": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "provider",
-                "triagingParty"
-              ]
-            }
+          "triage": {
+            "$ref": "#/components/schemas/ManagementApi_TriageConfiguration"
           },
           "timing": {
             "$ref": "#/components/schemas/FHIR_Timing"
@@ -1467,10 +1486,40 @@
           "id",
           "name",
           "title",
-          "providers",
+          "triage",
           "timing",
           "isAssigned"
         ]
+      },
+      "QuestionnaireTriageConfiguration": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "provider": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "name"
+              ]
+            },
+            "triagingParty": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "provider",
+            "triagingParty"
+          ]
+        }
       },
       "Questionnaire_ResponseBody": {
         "description": "Response body when fetching a single questionnaire by ID",
@@ -1517,10 +1566,13 @@
           "remove"
         ]
       },
-      "QuestionnaireResponses_ResponseBody": {
+      "FetchQuestionnaireResponses_ResponseBody": {
         "description": "Response body containing a list of patient questionnaire responses",
         "type": "object",
         "properties": {
+          "paging": {
+            "$ref": "#/components/schemas/Paging"
+          },
           "data": {
             "type": "array",
             "items": {
@@ -1529,6 +1581,7 @@
           }
         },
         "required": [
+          "paging",
           "data"
         ]
       },
@@ -2170,8 +2223,150 @@
           ]
         }
       },
-      "QuestionnaireList_ResponseBody": {
-        "summary": "successful fetch",
+      "PatientFetchQuestionnaires_ResponseBody": {
+        "summary": "Fetching Questionnaires as a Patient",
+        "value": {
+          "data": [
+            {
+              "id": "36ca541a-13be-40c8-b32e-41362f1ac1b8",
+              "name": "psj-breast-daily",
+              "title": "PSJ - Daily Breast Cancer Survey",
+              "triage": [
+                {
+                  "provider": {
+                    "id": "68376d82-0b88-42a7-8ded-b46271aeff5e",
+                    "name": "Joan Smith"
+                  },
+                  "triageGroup": {
+                    "id": "67163dcf-9473-405e-9aaf-4627e6c478b6",
+                    "name": "Group One"
+                  }
+                },
+                {
+                  "provider": {
+                    "id": "24eb629d-b962-4614-abb0-5d9914e311a6",
+                    "name": "Alex Brown"
+                  },
+                  "triageGroup": {
+                    "id": "a33c9c08-5341-463f-99f7-a35fb23f33ce",
+                    "name": "Group Two"
+                  }
+                }
+              ],
+              "timing": {
+                "repeat": {
+                  "boundsDuration": {
+                    "value": 6,
+                    "code": "mo"
+                  }
+                }
+              },
+              "isAssigned": false
+            },
+            {
+              "id": "36ca541a-13be-40c8-b32e-41362f1ac1b8",
+              "name": "psj-breast-daily",
+              "title": "PSJ - Daily Breast Cancer Survey",
+              "triage": [
+                {
+                  "provider": {
+                    "id": "68376d82-0b88-42a7-8ded-b46271aeff5e",
+                    "name": "Joan Smith"
+                  },
+                  "triageGroup": {
+                    "id": "67163dcf-9473-405e-9aaf-4627e6c478b6",
+                    "name": "Group One"
+                  }
+                }
+              ],
+              "timing": {
+                "repeat": {
+                  "boundsDuration": {
+                    "value": 6,
+                    "code": "mo"
+                  }
+                }
+              },
+              "isAssigned": true
+            }
+          ]
+        }
+      },
+      "ProviderFetchQuestionnaires_ResponseBody": {
+        "summary": "Fetching Questionnaires as a Provider",
+        "value": {
+          "paging": {
+            "page": 0,
+            "limit": 2
+          },
+          "data": [
+            {
+              "id": "36ca541a-13be-40c8-b32e-41362f1ac1b8",
+              "name": "psj-breast-daily",
+              "title": "PSJ - Daily Breast Cancer Survey",
+              "triage": [
+                {
+                  "provider": {
+                    "id": "68376d82-0b88-42a7-8ded-b46271aeff5e",
+                    "name": "Joan Smith"
+                  },
+                  "triageGroup": {
+                    "id": "67163dcf-9473-405e-9aaf-4627e6c478b6",
+                    "name": "Group One"
+                  }
+                },
+                {
+                  "provider": {
+                    "id": "24eb629d-b962-4614-abb0-5d9914e311a6",
+                    "name": "Alex Brown"
+                  },
+                  "triageGroup": {
+                    "id": "a33c9c08-5341-463f-99f7-a35fb23f33ce",
+                    "name": "Group Two"
+                  }
+                }
+              ],
+              "timing": {
+                "repeat": {
+                  "boundsDuration": {
+                    "value": 6,
+                    "code": "mo"
+                  }
+                }
+              },
+              "isAssigned": false
+            },
+            {
+              "id": "36ca541a-13be-40c8-b32e-41362f1ac1b8",
+              "name": "psj-breast-daily",
+              "title": "PSJ - Daily Breast Cancer Survey",
+              "triage": [
+                {
+                  "provider": {
+                    "id": "68376d82-0b88-42a7-8ded-b46271aeff5e",
+                    "name": "Joan Smith"
+                  },
+                  "triageGroup": {
+                    "id": "67163dcf-9473-405e-9aaf-4627e6c478b6",
+                    "name": "Group One"
+                  }
+                }
+              ],
+              "timing": {
+                "repeat": {
+                  "boundsDuration": {
+                    "value": 6,
+                    "code": "mo"
+                  }
+                }
+              },
+              "isAssigned": true
+            }
+          ]
+        }
+      },
+      "PatientQuestionnaireList_ResponseBody": {
+        "summary": "Fetching Questionnaires as a Patient",
         "value": {
           "data": [
             {
@@ -2314,9 +2509,13 @@
           ]
         }
       },
-      "QuestionnaireResponses_ResponseBody": {
+      "FetchQuestionnaireResponses_ResponseBody": {
         "summary": "Response body when fetching a patient questionnaire responses",
         "value": {
+          "paging": {
+            "page": 0,
+            "limit": 1
+          },
           "data": [
             {
               "id": "9d81ae65-00be-4243-aace-c23915d923d9",
