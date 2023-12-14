@@ -513,20 +513,8 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/QuestionnaireList_ResponseBody"
-                },
-                "examples": {
-                  "QuestionnaireList_ResponseBody": {
-                    "$ref": "#/components/examples/QuestionnaireList_ResponseBody"
-                  }
-                }
-              }
-            }
+          "204": {
+            "description": "Successful operation"
           },
           "400": {
             "description": "Bad Request",
@@ -1203,10 +1191,6 @@
           "name": {
             "type": "object",
             "properties": {
-              "ehrOrderable": {
-                "type": "string",
-                "description": "Value we will use as the key of the orderable in the EHR. This will be mapped to a unique ID in the Ronin system"
-              },
               "providerFacing": {
                 "type": "string",
                 "description": "Name of the questionnaire that the provider sees"
@@ -1217,36 +1201,28 @@
               }
             },
             "required": [
-              "ehrOrderable",
               "providerFacing",
               "patientFacing"
             ]
+          },
+          "ehrOrderableId": {
+            "type": "string",
+            "description": "Identifier of the orderable in the EHR"
           },
           "group": {
             "type": "string",
             "description": "ID of the questionnaire group that the questionnaire belongs to"
           },
-          "providers": {
-            "type": "array",
-            "description": "List of provider's and their associated triaging party. This will contain all the providers who can assign this questionnaire",
-            "items": {
-              "type": "object",
-              "properties": {
-                "providerId": {
-                  "type": "string"
-                },
-                "triagingParty": {
-                  "type": "string"
-                }
-              }
-            }
-          },
+          "triage": {
+            "$ref": "#/components/schemas/ManagementApi_TriageConfiguration"
+          } ,
           "timing": {
             "$ref": "#/components/schemas/FHIR_Timing"
           }
         },
         "required": [
           "name",
+          "triage",
           "timing"
         ]
       },
@@ -1344,6 +1320,41 @@
         "required": [
           "data"
         ]
+      },
+      "ManagementApi_TriageConfiguration": {
+        "type": "array",
+        "description": "List of provider's and their associated triaging party. This will contain all the providers who can assign this questionnaire",
+        "items": {
+          "type": "object",
+          "properties": {
+            "provider": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            },
+            "triageGroup": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": [
+            "provider",
+            "triageGroup"
+          ]
+        }
       },
       "ManagementApi_FetchQuestionnaires_ResponseBody": {
         "allOf": [
@@ -1962,18 +1973,26 @@
               "patientFacing": "Breast Cancer Symptoms Questionnaire"
             },
             "group": "9f20974e-eba4-4f6f-935b-061b8240577e",
-            "providers": [
+            "triage": [
               {
-                "providerId": "68376d82-0b88-42a7-8ded-b46271aeff5e",
-                "triagingParty": "67163dcf-9473-405e-9aaf-4627e6c478b6"
+                "provider": {
+                  "id": "68376d82-0b88-42a7-8ded-b46271aeff5e",
+                  "name": "Joan Smith"
+                },
+                "triageGroup": {
+                  "id": "67163dcf-9473-405e-9aaf-4627e6c478b6",
+                  "name": "Group One"
+                }
               },
               {
-                "providerId": "d1b6ac31-9396-490a-ac71-379c3c623461",
-                "triagingParty": "52807447-5949-408d-ab8e-e5457b631e8d"
-              },
-              {
-                "providerId": "f7944f46-c385-4d1c-a0da-50a758f7e1f8",
-                "triagingParty": "eb183794-4f0b-4922-92a7-dee9d2975235"
+                "provider": {
+                  "id": "24eb629d-b962-4614-abb0-5d9914e311a6",
+                  "name": "Alex Brown"
+                },
+                "triageGroup": {
+                  "id": "a33c9c08-5341-463f-99f7-a35fb23f33ce",
+                  "name": "Group Two"
+                }
               }
             ],
             "timing": {
@@ -2002,18 +2021,26 @@
                 "patientFacing": "Breast Cancer Symptoms Questionnaire"
               },
               "group": "9f20974e-eba4-4f6f-935b-061b8240577e",
-              "providers": [
+              "triage": [
                 {
-                  "providerId": "68376d82-0b88-42a7-8ded-b46271aeff5e",
-                  "triagingParty": "67163dcf-9473-405e-9aaf-4627e6c478b6"
+                  "provider": {
+                    "id": "68376d82-0b88-42a7-8ded-b46271aeff5e",
+                    "name": "Joan Smith"
+                  },
+                  "triageGroup": {
+                    "id": "67163dcf-9473-405e-9aaf-4627e6c478b6",
+                    "name": "Group One"
+                  }
                 },
                 {
-                  "providerId": "d1b6ac31-9396-490a-ac71-379c3c623461",
-                  "triagingParty": "52807447-5949-408d-ab8e-e5457b631e8d"
-                },
-                {
-                  "providerId": "f7944f46-c385-4d1c-a0da-50a758f7e1f8",
-                  "triagingParty": "eb183794-4f0b-4922-92a7-dee9d2975235"
+                  "provider": {
+                    "id": "24eb629d-b962-4614-abb0-5d9914e311a6",
+                    "name": "Alex Brown"
+                  },
+                  "triageGroup": {
+                    "id": "a33c9c08-5341-463f-99f7-a35fb23f33ce",
+                    "name": "Group Two"
+                  }
                 }
               ],
               "timing": {
@@ -2048,23 +2075,31 @@
               "version": 1,
               "configuration": {
                 "name": {
-                  "ehrOrderable": "BD: (Breast Daily) Symptoms",
                   "providerFacing": "Daily Breast Cancer Symptoms Questionnaire",
                   "patientFacing": "Breast Cancer Symptoms Questionnaire"
                 },
+                "ehrOrderableId": "BD: (Breast Daily) Symptoms",
                 "group": "9f20974e-eba4-4f6f-935b-061b8240577e",
-                "providers": [
+                "triage": [
                   {
-                    "providerId": "68376d82-0b88-42a7-8ded-b46271aeff5e",
-                    "triagingParty": "67163dcf-9473-405e-9aaf-4627e6c478b6"
+                    "provider": {
+                      "id": "68376d82-0b88-42a7-8ded-b46271aeff5e",
+                      "name": "Joan Smith"
+                    },
+                    "triageGroup": {
+                      "id": "67163dcf-9473-405e-9aaf-4627e6c478b6",
+                      "name": "Group One"
+                    }
                   },
                   {
-                    "providerId": "d1b6ac31-9396-490a-ac71-379c3c623461",
-                    "triagingParty": "52807447-5949-408d-ab8e-e5457b631e8d"
-                  },
-                  {
-                    "providerId": "f7944f46-c385-4d1c-a0da-50a758f7e1f8",
-                    "triagingParty": "eb183794-4f0b-4922-92a7-dee9d2975235"
+                    "provider": {
+                      "id": "24eb629d-b962-4614-abb0-5d9914e311a6",
+                      "name": "Alex Brown"
+                    },
+                    "triageGroup": {
+                      "id": "a33c9c08-5341-463f-99f7-a35fb23f33ce",
+                      "name": "Group Two"
+                    }
                   }
                 ],
                 "timing": {
@@ -2094,18 +2129,26 @@
                   "patientFacing": "Lung Cancer Symptoms Questionnaire"
                 },
                 "group": "24254073-8ca7-4a8c-a31c-fa9cd4e6a893",
-                "providers": [
+                "triage": [
                   {
-                    "providerId": "4b618a6e-071b-4ef9-bb74-38d2a972e2c8",
-                    "triagingParty": "9b66ad64-a5ae-4a60-9528-4de41615e3e6"
+                    "provider": {
+                      "id": "68376d82-0b88-42a7-8ded-b46271aeff5e",
+                      "name": "Joan Smith"
+                    },
+                    "triageGroup": {
+                      "id": "67163dcf-9473-405e-9aaf-4627e6c478b6",
+                      "name": "Group One"
+                    }
                   },
                   {
-                    "providerId": "3ea222b6-7231-4156-9186-0a548b5bc5b8",
-                    "triagingParty": "d19d5d61-34b4-413f-980a-dd84bb2b3f76"
-                  },
-                  {
-                    "providerId": "dcc0dd86-e79e-436f-964a-45261a6d0489",
-                    "triagingParty": "297f0c9c-6673-4def-940b-a8167e907255"
+                    "provider": {
+                      "id": "24eb629d-b962-4614-abb0-5d9914e311a6",
+                      "name": "Alex Brown"
+                    },
+                    "triageGroup": {
+                      "id": "a33c9c08-5341-463f-99f7-a35fb23f33ce",
+                      "name": "Group Two"
+                    }
                   }
                 ],
                 "timing": {
@@ -2135,13 +2178,26 @@
               "id": "36ca541a-13be-40c8-b32e-41362f1ac1b8",
               "name": "psj-breast-daily",
               "title": "PSJ - Daily Breast Cancer Survey",
-              "providers": [
+              "triage": [
                 {
                   "provider": {
-                    "id": "790e3f8a-a908-44ad-96df-7ae1f91ccbe4",
-                    "name": "Jane Brown"
+                    "id": "68376d82-0b88-42a7-8ded-b46271aeff5e",
+                    "name": "Joan Smith"
                   },
-                  "triagingParty": "58893af8-3687-4a5d-8dec-2591da7be8d9"
+                  "triageGroup": {
+                    "id": "67163dcf-9473-405e-9aaf-4627e6c478b6",
+                    "name": "Group One"
+                  }
+                },
+                {
+                  "provider": {
+                    "id": "24eb629d-b962-4614-abb0-5d9914e311a6",
+                    "name": "Alex Brown"
+                  },
+                  "triageGroup": {
+                    "id": "a33c9c08-5341-463f-99f7-a35fb23f33ce",
+                    "name": "Group Two"
+                  }
                 }
               ],
               "timing": {
@@ -2158,13 +2214,16 @@
               "id": "36ca541a-13be-40c8-b32e-41362f1ac1b8",
               "name": "psj-breast-daily",
               "title": "PSJ - Daily Breast Cancer Survey",
-              "providers": [
+              "triage": [
                 {
                   "provider": {
-                    "id": "790e3f8a-a908-44ad-96df-7ae1f91ccbe4",
-                    "name": "Jane Brown"
+                    "id": "68376d82-0b88-42a7-8ded-b46271aeff5e",
+                    "name": "Joan Smith"
                   },
-                  "triagingParty": "58893af8-3687-4a5d-8dec-2591da7be8d9"
+                  "triageGroup": {
+                    "id": "67163dcf-9473-405e-9aaf-4627e6c478b6",
+                    "name": "Group One"
+                  }
                 }
               ],
               "timing": {
