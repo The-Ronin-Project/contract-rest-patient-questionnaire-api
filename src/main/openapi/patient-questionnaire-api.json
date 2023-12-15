@@ -1278,6 +1278,7 @@
           },
           "selectedTimestamp": {
             "type": "string",
+            "format": "date-time",
             "description": "Date and time that the file was selected"
           },
           "selectedBy": {
