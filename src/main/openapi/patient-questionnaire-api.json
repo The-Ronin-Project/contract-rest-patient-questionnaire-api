@@ -1317,7 +1317,7 @@
             "description": "List of previously selected files",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ManagementApi_Questionnaire"
+              "$ref": "#/components/schemas/ManagementApi_QuestionnaireFile"
             }
           }
         },
