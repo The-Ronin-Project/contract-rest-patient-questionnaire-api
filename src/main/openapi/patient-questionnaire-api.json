@@ -1655,7 +1655,6 @@
           "name",
           "title",
           "status",
-          "experimental",
           "date",
           "item"
         ]
@@ -2425,27 +2424,37 @@
                 "text": "Are you dehydrated?",
                 "type": "choice",
                 "repeats": false,
-                "enableWhen": {
-                  "question": "e0673ad3-e023-4a46-82e1-5dfb1acb2d3d",
-                  "operator": "=",
-                  "answerCoding": {
-                    "code": "LA6569-2",
-                    "display": "Always"
+                "enableWhen": [
+                  {
+                    "question": "e0673ad3-e023-4a46-82e1-5dfb1acb2d3d",
+                    "operator": "=",
+                    "answerCoding": {
+                      "valueCoding": {
+                        "code": "LA6569-2",
+                        "display": "Always"
+                      }
+                    }
                   }
-                },
+                ],
                 "enableBehavior": "all",
                 "answerOption": [
                   {
-                    "code": "LA6568-5",
-                    "display": "Not at all"
+                    "valueCoding": {
+                      "code": "LA6568-5",
+                      "display": "Not at all"
+                    }
                   },
                   {
-                    "code": "LA6569-3",
-                    "display": "Sometimes"
+                    "valueCoding": {
+                      "code": "LA6569-3",
+                      "display": "Sometimes"
+                    }
                   },
                   {
-                    "code": "LA6569-2",
-                    "display": "Always"
+                    "valueCoding": {
+                      "code": "LA6569-2",
+                      "display": "Always"
+                    }
                   }
                 ]
               }
