@@ -1623,7 +1623,8 @@
             "description": "List of associated identities. Will primarily (and possibly only) be used for the tenant ID"
           },
           "version": {
-            "type": "string"
+            "type": "string",
+            "description": "The version of the questionnaire"
           },
           "name": {
             "type": "string",
@@ -1672,6 +1673,10 @@
             "type": "string",
             "description": "The ID associated Questionnaire"
           },
+          "version": {
+            "type": "string",
+            "description": "The version of the questionnaire"
+          },
           "status": {
             "type": "string",
             "enum": [
@@ -1692,6 +1697,7 @@
         "required": [
           "id",
           "questionnaire",
+          "version",
           "item"
         ]
       },
@@ -1702,6 +1708,10 @@
           "questionnaire": {
             "type": "string",
             "description": "The ID associated Questionnaire"
+          },
+          "version": {
+            "type": "string",
+            "description": "The version of the questionnaire"
           },
           "status": {
             "type": "string",
@@ -1722,6 +1732,7 @@
         },
         "required": [
           "questionnaire",
+          "version",
           "item"
         ]
       },
@@ -1755,6 +1766,12 @@
             "type": "string",
             "description": "Globally unique ID of the question"
           },
+          "item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItem"
+            }
+          },
           "answer": {
             "type": "array",
             "items": {
@@ -1767,7 +1784,7 @@
                   "properties": {
                     "extension": {
                       "type": "array",
-                      "description": "General-purpose object for extending the definition of a FHIR model. For Ronin questionnaires, the primary (and possible only) use will be capturing the \"valueDecimal\", which will represent the alert level of an answer",
+                      "description": "General-purpose object for extending the definition of a FHIR model. For Ronin questionnaires, the primary (and possible only) use will be capturing the \"valueDecimal\", which will represent the alert level of an answer. Is not present in requests, but should be present in responses",
                       "items": {
                         "type": "object",
                         "properties": {
@@ -1792,8 +1809,7 @@
           }
         },
         "required": [
-          "linkId",
-          "answer"
+          "linkId"
         ]
       },
       "FHIR_QuestionnaireItem": {
@@ -2474,6 +2490,7 @@
             {
               "id": "9d81ae65-00be-4243-aace-c23915d923d9",
               "questionnaire": "d78f8706-6e68-49b0-a57c-4a0f3aedb128",
+              "version": "1.0",
               "status": "in-progress",
               "item": [
                 {
@@ -2533,6 +2550,7 @@
           "data": {
             "id": "9d81ae65-00be-4243-aace-c23915d923d9",
             "questionnaire": "d78f8706-6e68-49b0-a57c-4a0f3aedb128",
+            "version": "1.0",
             "status": "in-progress",
             "item": [
               {
@@ -2565,17 +2583,22 @@
               },
               {
                 "linkId": "item-3",
-                "answer": [
+                "item": [
                   {
-                    "valueCoding": {
-                      "system": "http://loinc.org",
-                      "code": "LA6568-5",
-                      "display": "Not at all"
-                    },
-                    "extension": [
+                    "linkId": "item-3.1",
+                    "answer": [
                       {
-                        "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                        "valueDecimal": 2
+                        "valueCoding": {
+                          "system": "http://loinc.org",
+                          "code": "LA6568-5",
+                          "display": "Not at all"
+                        },
+                        "extension": [
+                          {
+                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                            "valueDecimal": 2
+                          }
+                        ]
                       }
                     ]
                   }
@@ -2589,6 +2612,7 @@
         "description": "Request body used to create a questionnaire response",
         "value": {
           "questionnaire": "9b93f927-b4ec-45c1-9d02-97a9f838b871",
+          "version": "1.0",
           "item": [
             {
               "linkId": "90791038-d987-46d5-b8bd-a80d3f2a8579",
@@ -2599,19 +2623,24 @@
               ]
             },
             {
-              "linkId": "47dce865-eb6e-425e-a888-2510a040a24b",
-              "answer": [
+              "linkId": "0641b674-065f-4c39-ad07-97a133b6cf89",
+              "item": [
                 {
-                  "valueCoding": {
-                    "system": "https://loinc.com",
-                    "code": "LA6568-5"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "system": "https://loinc.com",
-                    "code": "LA6563-8"
-                  }
+                  "linkId": "47dce865-eb6e-425e-a888-2510a040a24b",
+                  "answer": [
+                    {
+                      "valueCoding": {
+                        "system": "https://loinc.com",
+                        "code": "LA6568-5"
+                      }
+                    },
+                    {
+                      "valueCoding": {
+                        "system": "https://loinc.com",
+                        "code": "LA6563-8"
+                      }
+                    }
+                  ]
                 }
               ]
             },
@@ -2631,29 +2660,29 @@
         "value": {
           "id": "e94b25aa-1ff6-42e2-b252-a50227336c8f",
           "questionnaire": "9b93f927-b4ec-45c1-9d02-97a9f838b871",
+          "version": "1.0",
           "item": [
             {
               "linkId": "90791038-d987-46d5-b8bd-a80d3f2a8579",
               "answer": [
                 {
-                  "valueString": "None"
+                  "valueString": "All"
                 }
               ]
             },
             {
-              "linkId": "47dce865-eb6e-425e-a888-2510a040a24b",
-              "answer": [
+              "linkId": "0641b674-065f-4c39-ad07-97a133b6cf89",
+              "item": [
                 {
-                  "valueCoding": {
-                    "system": "https://loinc.com",
-                    "code": "LA6568-5"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "system": "https://loinc.com",
-                    "code": "LA6563-8"
-                  }
+                  "linkId": "47dce865-eb6e-425e-a888-2510a040a24b",
+                  "answer": [
+                    {
+                      "valueCoding": {
+                        "system": "https://loinc.com",
+                        "code": "LA6568-5"
+                      }
+                    }
+                  ]
                 }
               ]
             },
@@ -2661,7 +2690,7 @@
               "linkId": "89345537-a810-475a-9c3d-f37095d4f62b",
               "answer": [
                 {
-                  "valueBoolean": true
+                  "valueBoolean": false
                 }
               ]
             }
