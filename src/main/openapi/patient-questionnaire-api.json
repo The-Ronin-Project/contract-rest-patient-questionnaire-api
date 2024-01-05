@@ -1833,7 +1833,7 @@
           "item": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItem"
+              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItemWithExtension"
             }
           },
           "answer": {
