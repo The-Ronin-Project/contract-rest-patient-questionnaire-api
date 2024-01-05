@@ -1027,7 +1027,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FHIR_QuestionnaireResponse"
+                "$ref": "#/components/schemas/UpsertQuestionnaireResponse_RequestBody"
               },
               "examples": {
                 "UpsertQuestionnaireResponse_RequestBody": {
@@ -1690,12 +1690,51 @@
           "item": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItem"
+              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItemWithExtension"
             }
           }
         },
         "required": [
           "id",
+          "questionnaire",
+          "version",
+          "item"
+        ]
+      },
+      "UpsertQuestionnaireResponse_RequestBody": {
+        "type": "object",
+        "description": "FHIR representation of a questionnaire response",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "UUID with the tenant ID as a prefix"
+          },
+          "questionnaire": {
+            "type": "string",
+            "description": "The ID associated Questionnaire"
+          },
+          "version": {
+            "type": "string",
+            "description": "The version of the questionnaire"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "in-progress",
+              "completed",
+              "amended",
+              "entered-in-error",
+              "stopped"
+            ]
+          },
+          "item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItem"
+            }
+          }
+        },
+        "required": [
           "questionnaire",
           "version",
           "item"
@@ -1759,6 +1798,31 @@
         ]
       },
       "FHIR_QuestionnaireResponseItem": {
+        "type": "object",
+        "description": "FHIR representation of an answer in a questionnaire response",
+        "properties": {
+          "linkId": {
+            "type": "string",
+            "description": "Globally unique ID of the question"
+          },
+          "item": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItem"
+            }
+          },
+          "answer": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FHIR_TypedValues"
+            }
+          }
+        },
+        "required": [
+          "linkId"
+        ]
+      },
+      "FHIR_QuestionnaireResponseItemWithExtension": {
         "type": "object",
         "description": "FHIR representation of an answer in a questionnaire response",
         "properties": {
