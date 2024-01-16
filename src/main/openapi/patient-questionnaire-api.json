@@ -1523,7 +1523,8 @@
                 "timing": {
                   "$ref": "#/components/schemas/FHIR_Timing"
                 }
-              }
+              },
+              "required": ["id", "timing"]
             }
           },
           "remove": {
