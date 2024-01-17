@@ -2025,7 +2025,7 @@
         "value": {
           "data": {
             "id": "d78f8706-6e68-49b0-a57c-4a0f3aedb128",
-            "tenantId": "1xrekpx5",
+            "tenantId": "ronin",
             "configuration": {
               "name": {
                 "providerFacing": "Daily Breast Cancer Symptoms Questionnaire",
@@ -2097,7 +2097,7 @@
           "data": [
             {
               "id": "d78f8706-6e68-49b0-a57c-4a0f3aedb128",
-              "tenantId": "1xrekpx5",
+              "tenantId": "ronin",
               "configuration": {
                 "name": {
                   "providerFacing": "Daily Breast Cancer Symptoms Questionnaire",
@@ -2159,7 +2159,7 @@
             },
             {
               "id": "4d2c4a9d-f1d7-4b5b-8e0e-042184ec367e",
-              "tenantId": "1xrekpx5",
+              "tenantId": "ronin",
               "configuration": {
                 "name": {
                   "providerFacing": "Daily Lung Cancer Symptoms Questionnaire",
