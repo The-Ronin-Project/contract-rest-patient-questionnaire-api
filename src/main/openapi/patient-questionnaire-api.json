@@ -359,22 +359,6 @@
           },
           {
             "in": "query",
-            "name": "ids",
-            "description": "List of questionnaire ids to fetch. Required when the user is a patient",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "example": [
-              "018c3b42-246a-7cc9-9f2b-2eb87cd110c8",
-              "018c3b42-604d-7d26-8c92-4a276a58e56c"
-            ],
-            "required": false
-          },
-          {
-            "in": "query",
             "name": "limit",
             "schema": {
               "type": "integer"
@@ -403,11 +387,8 @@
                   "$ref": "#/components/schemas/FetchQuestionnaires_ResponseBody"
                 },
                 "examples": {
-                  "ProviderFetchQuestionnaires_ResponseBody": {
-                    "$ref": "#/components/examples/ProviderFetchQuestionnaires_ResponseBody"
-                  },
-                  "PatientFetchQuestionnaires_ResponseBody": {
-                    "$ref": "#/components/examples/PatientFetchQuestionnaires_ResponseBody"
+                  "FetchQuestionnaires_ResponseBody": {
+                    "$ref": "#/components/examples/FetchQuestionnaires_ResponseBody"
                   }
                 }
               }
@@ -1467,12 +1448,18 @@
             "type": "string"
           },
           "name": {
-            "type": "string",
-            "description": "Computer-friendly name for the questionnaire"
+            "type": "object",
+            "properties": {
+              "patientFacing": {
+                "type": "string"
+              },
+              "providerFacing": {
+                "type": "string"
+              }
+            }
           },
-          "title": {
-            "type": "string",
-            "description": "Human-friendly name for the questionnaire"
+          "group": {
+            "type": "string"
           },
           "triage": {
             "$ref": "#/components/schemas/ManagementApi_TriageConfiguration"
@@ -1488,7 +1475,7 @@
         "required": [
           "id",
           "name",
-          "title",
+          "group",
           "triage",
           "timing",
           "isAssigned"
@@ -2235,14 +2222,17 @@
           ]
         }
       },
-      "PatientFetchQuestionnaires_ResponseBody": {
+      "FetchQuestionnaires_ResponseBody": {
         "summary": "Fetching Questionnaires as a Patient",
         "value": {
           "data": [
             {
-              "id": "36ca541a-13be-40c8-b32e-41362f1ac1b8",
-              "name": "psj-breast-daily",
-              "title": "PSJ - Daily Breast Cancer Survey",
+              "id": "psj-breast-cancer-daily-survey",
+              "name": {
+                "patientFacing": "Daily Breast Cancer Survey",
+                "providerFacing": "PSJ - Daily Breast Cancer Survey"
+              },
+              "group": "Breast Chemotherapy Program",
               "triage": [
                 {
                   "provider": {
@@ -2276,46 +2266,12 @@
               "isAssigned": false
             },
             {
-              "id": "36ca541a-13be-40c8-b32e-41362f1ac1b8",
-              "name": "psj-breast-daily",
-              "title": "PSJ - Daily Breast Cancer Survey",
-              "triage": [
-                {
-                  "provider": {
-                    "id": "68376d82-0b88-42a7-8ded-b46271aeff5e",
-                    "name": "Joan Smith"
-                  },
-                  "triageGroup": {
-                    "id": "67163dcf-9473-405e-9aaf-4627e6c478b6",
-                    "name": "Group One"
-                  }
-                }
-              ],
-              "timing": {
-                "repeat": {
-                  "boundsDuration": {
-                    "value": 6,
-                    "code": "mo"
-                  }
-                }
+              "id": "psj-lung-cancer-daily-survey",
+              "name": {
+                "patientFacing": "Daily Lung Cancer Survey",
+                "providerFacing": "PSJ - Daily Lung Cancer Survey"
               },
-              "isAssigned": true
-            }
-          ]
-        }
-      },
-      "ProviderFetchQuestionnaires_ResponseBody": {
-        "summary": "Fetching Questionnaires as a Provider",
-        "value": {
-          "paging": {
-            "page": 0,
-            "limit": 2
-          },
-          "data": [
-            {
-              "id": "36ca541a-13be-40c8-b32e-41362f1ac1b8",
-              "name": "psj-breast-daily",
-              "title": "PSJ - Daily Breast Cancer Survey",
+              "group": "Lung Chemotherapy Program",
               "triage": [
                 {
                   "provider": {
@@ -2325,16 +2281,6 @@
                   "triageGroup": {
                     "id": "67163dcf-9473-405e-9aaf-4627e6c478b6",
                     "name": "Group One"
-                  }
-                },
-                {
-                  "provider": {
-                    "id": "24eb629d-b962-4614-abb0-5d9914e311a6",
-                    "name": "Alex Brown"
-                  },
-                  "triageGroup": {
-                    "id": "a33c9c08-5341-463f-99f7-a35fb23f33ce",
-                    "name": "Group Two"
                   }
                 }
               ],
@@ -2347,32 +2293,6 @@
                 }
               },
               "isAssigned": false
-            },
-            {
-              "id": "36ca541a-13be-40c8-b32e-41362f1ac1b8",
-              "name": "psj-breast-daily",
-              "title": "PSJ - Daily Breast Cancer Survey",
-              "triage": [
-                {
-                  "provider": {
-                    "id": "68376d82-0b88-42a7-8ded-b46271aeff5e",
-                    "name": "Joan Smith"
-                  },
-                  "triageGroup": {
-                    "id": "67163dcf-9473-405e-9aaf-4627e6c478b6",
-                    "name": "Group One"
-                  }
-                }
-              ],
-              "timing": {
-                "repeat": {
-                  "boundsDuration": {
-                    "value": 6,
-                    "code": "mo"
-                  }
-                }
-              },
-              "isAssigned": true
             }
           ]
         }
@@ -2396,7 +2316,7 @@
             "date": "2023-12-12T08:45:12.012Z",
             "item": [
               {
-                "linkId": "e0673ad3-e023-4a46-82e1-5dfb1acb2d3d",
+                "linkId": "0",
                 "text": "Are you nauseous?",
                 "type": "choice",
                 "repeats": false,
@@ -2422,7 +2342,7 @@
                 ]
               },
               {
-                "linkId": "c03ab475-8cc3-4579-9a7a-fd9ba5a0c4a7",
+                "linkId": "1",
                 "text": "Are you dehydrated?",
                 "type": "choice",
                 "repeats": false,
@@ -2478,7 +2398,7 @@
               "status": "in-progress",
               "item": [
                 {
-                  "linkId": "item-1",
+                  "linkId": "0",
                   "answer": [
                     {
                       "valueBoolean": true,
@@ -2492,7 +2412,7 @@
                   ]
                 },
                 {
-                  "linkId": "item-2",
+                  "linkId": "1",
                   "answer": [
                     {
                       "valueString": "Sometimes",
@@ -2506,7 +2426,7 @@
                   ]
                 },
                 {
-                  "linkId": "item-3",
+                  "linkId": "2",
                   "answer": [
                     {
                       "valueCoding": {
@@ -2537,7 +2457,7 @@
             "status": "in-progress",
             "item": [
               {
-                "linkId": "item-1",
+                "linkId": "0",
                 "answer": [
                   {
                     "valueBoolean": true,
@@ -2551,7 +2471,7 @@
                 ]
               },
               {
-                "linkId": "item-2",
+                "linkId": "1",
                 "answer": [
                   {
                     "valueString": "Sometimes",
@@ -2565,7 +2485,7 @@
                 ]
               },
               {
-                "linkId": "item-3",
+                "linkId": "2",
                 "answer": [
                   {
                     "valueCoding": {
@@ -2592,7 +2512,7 @@
           "questionnaire": "9b93f927-b4ec-45c1-9d02-97a9f838b871",
           "item": [
             {
-              "linkId": "90791038-d987-46d5-b8bd-a80d3f2a8579",
+              "linkId": "0",
               "answer": [
                 {
                   "valueString": "None"
@@ -2600,7 +2520,7 @@
               ]
             },
             {
-              "linkId": "47dce865-eb6e-425e-a888-2510a040a24b",
+              "linkId": "1",
               "answer": [
                 {
                   "valueCoding": {
@@ -2617,7 +2537,7 @@
               ]
             },
             {
-              "linkId": "89345537-a810-475a-9c3d-f37095d4f62b",
+              "linkId": "2",
               "answer": [
                 {
                   "valueBoolean": true
@@ -2634,7 +2554,7 @@
           "questionnaire": "9b93f927-b4ec-45c1-9d02-97a9f838b871",
           "item": [
             {
-              "linkId": "90791038-d987-46d5-b8bd-a80d3f2a8579",
+              "linkId": "0",
               "answer": [
                 {
                   "valueString": "None"
@@ -2642,7 +2562,7 @@
               ]
             },
             {
-              "linkId": "47dce865-eb6e-425e-a888-2510a040a24b",
+              "linkId": "1",
               "answer": [
                 {
                   "valueCoding": {
@@ -2659,7 +2579,7 @@
               ]
             },
             {
-              "linkId": "89345537-a810-475a-9c3d-f37095d4f62b",
+              "linkId": "2",
               "answer": [
                 {
                   "valueBoolean": true
