@@ -365,7 +365,7 @@
             },
             "description": "Paging param to control the number of questionnaires to get back. Required when user is a provider",
             "example": 20,
-            "required": false
+            "required": true
           },
           {
             "in": "query",
@@ -375,7 +375,7 @@
             },
             "description": "Zero-indexed page number. Required when user is a provider",
             "example": 0,
-            "required": false
+            "required": true
           }
         ],
         "responses": {
