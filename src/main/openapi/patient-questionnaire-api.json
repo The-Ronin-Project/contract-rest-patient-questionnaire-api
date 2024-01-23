@@ -1705,16 +1705,6 @@
             "type": "string",
             "description": "The version of the questionnaire"
           },
-          "status": {
-            "type": "string",
-            "enum": [
-              "in-progress",
-              "completed",
-              "amended",
-              "entered-in-error",
-              "stopped"
-            ]
-          },
           "item": {
             "type": "array",
             "items": {
@@ -1739,16 +1729,6 @@
           "version": {
             "type": "string",
             "description": "The version of the questionnaire"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "in-progress",
-              "completed",
-              "amended",
-              "entered-in-error",
-              "stopped"
-            ]
           },
           "item": {
             "type": "array",
