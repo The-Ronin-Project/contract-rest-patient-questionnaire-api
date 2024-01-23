@@ -387,8 +387,11 @@
                   "$ref": "#/components/schemas/FetchQuestionnaires_ResponseBody"
                 },
                 "examples": {
-                  "FetchQuestionnaires_ResponseBody": {
-                    "$ref": "#/components/examples/FetchQuestionnaires_ResponseBody"
+                  "Provider_FetchQuestionnaires_ResponseBody": {
+                    "$ref": "#/components/examples/Provider_FetchQuestionnaires_ResponseBody"
+                  },
+                  "Patient_FetchQuestionnaires_ResponseBody": {
+                    "$ref": "#/components/examples/Patient_FetchQuestionnaires_ResponseBody"
                   }
                 }
               }
@@ -646,7 +649,7 @@
                   "$ref": "#/components/schemas/Questionnaire_ResponseBody"
                 },
                 "examples": {
-                  "FetchQuestionnaires_ResponseBody": {
+                  "Provider_FetchQuestionnaires_ResponseBody": {
                     "$ref": "#/components/examples/Questionnaire_ResponseBody"
                   }
                 }
@@ -1477,8 +1480,7 @@
           "name",
           "group",
           "triage",
-          "timing",
-          "isAssigned"
+          "timing"
         ]
       },
       "Questionnaire_ResponseBody": {
@@ -2222,8 +2224,81 @@
           ]
         }
       },
-      "FetchQuestionnaires_ResponseBody": {
-        "summary": "Fetching Questionnaires as a Patient",
+      "Patient_FetchQuestionnaires_ResponseBody": {
+        "summary": "Fetching Questionnaires as a Patient (will omit \"isAssigned\" boolean)",
+        "value": {
+          "data": [
+            {
+              "id": "psj-breast-cancer-daily-survey",
+              "name": {
+                "patientFacing": "Daily Breast Cancer Survey",
+                "providerFacing": "PSJ - Daily Breast Cancer Survey"
+              },
+              "group": "Breast Chemotherapy Program",
+              "triage": [
+                {
+                  "provider": {
+                    "id": "68376d82-0b88-42a7-8ded-b46271aeff5e",
+                    "name": "Joan Smith"
+                  },
+                  "triageGroup": {
+                    "id": "67163dcf-9473-405e-9aaf-4627e6c478b6",
+                    "name": "Group One"
+                  }
+                },
+                {
+                  "provider": {
+                    "id": "24eb629d-b962-4614-abb0-5d9914e311a6",
+                    "name": "Alex Brown"
+                  },
+                  "triageGroup": {
+                    "id": "a33c9c08-5341-463f-99f7-a35fb23f33ce",
+                    "name": "Group Two"
+                  }
+                }
+              ],
+              "timing": {
+                "repeat": {
+                  "boundsDuration": {
+                    "value": 6,
+                    "code": "mo"
+                  }
+                }
+              }
+            },
+            {
+              "id": "psj-lung-cancer-daily-survey",
+              "name": {
+                "patientFacing": "Daily Lung Cancer Survey",
+                "providerFacing": "PSJ - Daily Lung Cancer Survey"
+              },
+              "group": "Lung Chemotherapy Program",
+              "triage": [
+                {
+                  "provider": {
+                    "id": "68376d82-0b88-42a7-8ded-b46271aeff5e",
+                    "name": "Joan Smith"
+                  },
+                  "triageGroup": {
+                    "id": "67163dcf-9473-405e-9aaf-4627e6c478b6",
+                    "name": "Group One"
+                  }
+                }
+              ],
+              "timing": {
+                "repeat": {
+                  "boundsDuration": {
+                    "value": 6,
+                    "code": "mo"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "Provider_FetchQuestionnaires_ResponseBody": {
+        "summary": "Fetching Questionnaires as a Provider (will include \"isAssigned\" boolean)",
         "value": {
           "data": [
             {
