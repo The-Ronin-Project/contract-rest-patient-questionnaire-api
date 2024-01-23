@@ -1472,7 +1472,7 @@
           },
           "isAssigned": {
             "type": "boolean",
-            "description": "Whether the patient has been assigned to take the questionnaire"
+            "description": "Whether the patient has been assigned to take the questionnaire. Only provided when the questionnaires are being fetched by a provider"
           }
         },
         "required": [
