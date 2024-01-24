@@ -359,6 +359,16 @@
           },
           {
             "in": "query",
+            "name": "includeAssignments",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Whether to include the `isAssigned` value. Including this value requires a call to another service, so it should only be included when absolutely required (eg, when the user is a provider). Defaults to `false`",
+            "example": false,
+            "required": false
+          },
+          {
+            "in": "query",
             "name": "limit",
             "schema": {
               "type": "integer"
@@ -387,11 +397,11 @@
                   "$ref": "#/components/schemas/FetchQuestionnaires_ResponseBody"
                 },
                 "examples": {
-                  "Provider_FetchQuestionnaires_ResponseBody": {
-                    "$ref": "#/components/examples/Provider_FetchQuestionnaires_ResponseBody"
+                  "FetchQuestionnaires_WithAssignments_ResponseBody": {
+                    "$ref": "#/components/examples/FetchQuestionnaires_WithAssignments_ResponseBody"
                   },
-                  "Patient_FetchQuestionnaires_ResponseBody": {
-                    "$ref": "#/components/examples/Patient_FetchQuestionnaires_ResponseBody"
+                  "FetchQuestionnaires_WithoutAssignments_ResponseBody": {
+                    "$ref": "#/components/examples/FetchQuestionnaires_WithoutAssignments_ResponseBody"
                   }
                 }
               }
@@ -649,7 +659,7 @@
                   "$ref": "#/components/schemas/Questionnaire_ResponseBody"
                 },
                 "examples": {
-                  "Provider_FetchQuestionnaires_ResponseBody": {
+                  "FetchQuestionnaires_WithAssignments_ResponseBody": {
                     "$ref": "#/components/examples/Questionnaire_ResponseBody"
                   }
                 }
@@ -1472,7 +1482,7 @@
           },
           "isAssigned": {
             "type": "boolean",
-            "description": "Whether the patient has been assigned to take the questionnaire. Only provided when the questionnaires are being fetched by a provider"
+            "description": "Whether the patient has been assigned to take the questionnaire. Only provided when the \"includeAssignments\" query param is set to \"true\""
           }
         },
         "required": [
@@ -2284,8 +2294,8 @@
           ]
         }
       },
-      "Patient_FetchQuestionnaires_ResponseBody": {
-        "summary": "Fetching Questionnaires as a Patient (will omit \"isAssigned\" boolean)",
+      "FetchQuestionnaires_WithoutAssignments_ResponseBody": {
+        "summary": "Fetching Questionnaires Without Assignments",
         "value": {
           "data": [
             {
@@ -2357,8 +2367,8 @@
           ]
         }
       },
-      "Provider_FetchQuestionnaires_ResponseBody": {
-        "summary": "Fetching Questionnaires as a Provider (will include \"isAssigned\" boolean)",
+      "FetchQuestionnaires_WithAssignments_ResponseBody": {
+        "summary": "Fetching Questionnaires With Assignments",
         "value": {
           "data": [
             {
