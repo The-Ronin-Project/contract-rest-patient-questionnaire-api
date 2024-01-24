@@ -1094,9 +1094,7 @@
             }
           }
         }
-      }
-    },
-    "/tenants/{tenantId}/patients/{patientId}/questionnaire-responses/{questionnaireResponseId}/complete": {
+      },
       "patch": {
         "tags": [
           "Patient"
@@ -1141,6 +1139,24 @@
             "example": "272b6520-dc94-41a6-97ee-58e8baa6e267"
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompleteQuestionnaireResponse_RequestBody"
+              },
+              "examples": {
+                "CompleteQuestionnaireResponse_RequestBody": {
+                  "description": "Request Body For Completing a Questionnaire Response",
+                  "value": {
+                    "status": "completed"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successfully Updated",
@@ -1441,6 +1457,17 @@
         "required": [
           "data"
         ]
+      },
+      "CompleteQuestionnaireResponse_RequestBody": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "completed"
+            ]
+          }
+        }
       },
       "UpsertQuestionnaireResponse_ResponseBody": {
         "type": "object",
