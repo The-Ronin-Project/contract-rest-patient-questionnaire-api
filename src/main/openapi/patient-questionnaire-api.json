@@ -1467,7 +1467,10 @@
               "completed"
             ]
           }
-        }
+        },
+        "required": [
+          "status"
+        ]
       },
       "UpsertQuestionnaireResponse_ResponseBody": {
         "type": "object",
