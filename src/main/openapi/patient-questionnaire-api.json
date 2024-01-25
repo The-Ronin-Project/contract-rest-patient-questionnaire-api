@@ -1978,10 +1978,6 @@
             "type": "object",
             "description": "Used for single and multiple-choice questions, as we can use the `system` and `code` values to find the correct value set, and value within the value set",
             "properties": {
-              "system": {
-                "type": "string",
-                "description": "Value pointing to the value set"
-              },
               "code": {
                 "type": "string",
                 "description": "Computer-friendly representation of the answer option"
