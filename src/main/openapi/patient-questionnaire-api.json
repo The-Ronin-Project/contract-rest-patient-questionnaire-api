@@ -1918,7 +1918,7 @@
                   ]
                 },
                 {
-                  "$ref": "#/components/schemas/FHIR_TypedValues"
+                  "$ref": "#/components/schemas/FHIR_TypedAnswers"
                 }
               ]
             }
@@ -1976,6 +1976,46 @@
             "type": "boolean"
           },
           "valueCoding": {
+            "type": "object",
+            "description": "Used for single and multiple-choice questions, as we can use the `system` and `code` values to find the correct value set, and value within the value set",
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "Computer-friendly representation of the answer option"
+              },
+              "display": {
+                "type": "string",
+                "description": "Human-friendly representation of the answer option"
+              }
+            }
+          }
+        }
+      },
+      "FHIR_TypedAnswers": {
+        "type": "object",
+        "description": "Possible values to be used based on the type of answer being provided",
+        "properties": {
+          "answerInteger": {
+            "type": "integer"
+          },
+          "answerDecimal": {
+            "type": "number"
+          },
+          "answerDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "answerDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "answerString": {
+            "type": "string"
+          },
+          "answerBoolean": {
+            "type": "boolean"
+          },
+          "answerCoding": {
             "type": "object",
             "description": "Used for single and multiple-choice questions, as we can use the `system` and `code` values to find the correct value set, and value within the value set",
             "properties": {
