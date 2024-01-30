@@ -1870,6 +1870,10 @@
             "type": "string",
             "description": "Globally unique ID of the question"
           },
+          "prefix": {
+            "type": "string",
+            "description": "Determines order of questionnaire items"
+          },
           "text": {
             "type": "string",
             "description": "Value to be displayed to the user"
@@ -1950,6 +1954,7 @@
         },
         "required": [
           "linkId",
+          "prefix",
           "type"
         ]
       },
@@ -2494,7 +2499,8 @@
             "status": "active",
             "item": [
               {
-                "linkId": "0",
+                "linkId": "Q1",
+                "prefix": "000",
                 "text": "Are you nauseous?",
                 "type": "choice",
                 "repeats": false,
@@ -2520,7 +2526,8 @@
                 ]
               },
               {
-                "linkId": "1",
+                "linkId": "Q2",
+                "prefix": "001",
                 "text": "Are you dehydrated?",
                 "type": "choice",
                 "repeats": false,
