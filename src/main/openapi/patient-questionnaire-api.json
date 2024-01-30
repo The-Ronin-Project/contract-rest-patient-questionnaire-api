@@ -1950,7 +1950,6 @@
         },
         "required": [
           "linkId",
-          "text",
           "type"
         ]
       },
