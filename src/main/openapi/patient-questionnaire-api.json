@@ -1982,7 +1982,6 @@
         },
         "required": [
           "linkId",
-          "prefix",
           "type"
         ]
       },
