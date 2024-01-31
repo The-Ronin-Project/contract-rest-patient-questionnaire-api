@@ -2011,7 +2011,7 @@
           },
           "valueCoding": {
             "type": "object",
-            "description": "Used for single and multiple-choice questions, as we can use the `system` and `code` values to find the correct value set, and value within the value set",
+            "description": "Used for single and multiple-choice questions",
             "properties": {
               "code": {
                 "type": "string",
@@ -2051,7 +2051,7 @@
           },
           "answerCoding": {
             "type": "object",
-            "description": "Used for single and multiple-choice questions, as we can use the `system` and `code` values to find the correct value set, and value within the value set",
+            "description": "Used for single and multiple-choice questions",
             "properties": {
               "code": {
                 "type": "string",
@@ -2698,7 +2698,6 @@
                   "answer": [
                     {
                       "valueCoding": {
-                        "system": "http://loinc.org",
                         "code": "LA6568-5",
                         "display": "Not at all"
                       },
@@ -2755,7 +2754,6 @@
                     "answer": [
                       {
                         "valueCoding": {
-                          "system": "http://loinc.org",
                           "code": "LA6568-5",
                           "display": "Not at all"
                         },
@@ -2796,13 +2794,11 @@
                   "answer": [
                     {
                       "valueCoding": {
-                        "system": "https://loinc.com",
                         "code": "LA6568-5"
                       }
                     },
                     {
                       "valueCoding": {
-                        "system": "https://loinc.com",
                         "code": "LA6563-8"
                       }
                     }
@@ -2844,7 +2840,6 @@
                   "answer": [
                     {
                       "valueCoding": {
-                        "system": "https://loinc.com",
                         "code": "LA6568-5"
                       }
                     }
