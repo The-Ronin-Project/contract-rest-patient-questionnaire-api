@@ -1825,35 +1825,26 @@
           "answer": {
             "type": "array",
             "items": {
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/FHIR_TypedValues"
+                "$ref": "#/components/schemas/FHIR_TypedValues"
+            }
+          },
+          "extension": {
+            "type": "array",
+            "description": "General-purpose object for extending the definition of a FHIR model. For Ronin questionnaires, the primary (and possible only) use will be capturing the \"valueDecimal\", which will represent the alert level of an answer. Is not present in requests, but should be present in responses",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "description": "Identifier for the extension type"
                 },
-                {
-                  "type": "object",
-                  "properties": {
-                    "extension": {
-                      "type": "array",
-                      "description": "General-purpose object for extending the definition of a FHIR model. For Ronin questionnaires, the primary (and possible only) use will be capturing the \"valueDecimal\", which will represent the alert level of an answer. Is not present in requests, but should be present in responses",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "url": {
-                            "type": "string",
-                            "description": "Identifier for the extension type"
-                          },
-                          "valueDecimal": {
-                            "type": "number",
-                            "description": "Used to capture the alert-level of the answer"
-                          }
-                        },
-                        "required": [
-                          "valueDecimal"
-                        ]
-                      }
-                    }
-                  }
+                "valueDecimal": {
+                  "type": "number",
+                  "description": "Used to capture the alert-level of the answer"
                 }
+              },
+              "required": [
+                "valueDecimal"
               ]
             }
           }
@@ -2587,13 +2578,13 @@
                   "linkId": "0",
                   "answer": [
                     {
-                      "valueBoolean": true,
-                      "extension": [
-                        {
-                          "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                          "valueDecimal": 1
-                        }
-                      ]
+                      "valueBoolean": true
+                    }
+                  ],
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                      "valueDecimal": 1
                     }
                   ]
                 },
@@ -2601,13 +2592,13 @@
                   "linkId": "1",
                   "answer": [
                     {
-                      "valueString": "Sometimes",
-                      "extension": [
-                        {
-                          "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                          "valueDecimal": 2
-                        }
-                      ]
+                      "valueString": "Sometimes"
+                    }
+                  ],
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                      "valueDecimal": 2
                     }
                   ]
                 },
@@ -2619,13 +2610,13 @@
                         "system": "http://loinc.org",
                         "code": "LA6568-5",
                         "display": "Not at all"
-                      },
-                      "extension": [
-                        {
-                          "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                          "valueDecimal": 2
-                        }
-                      ]
+                      }
+                    }
+                  ],
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                      "valueDecimal": 2
                     }
                   ]
                 }
@@ -2647,13 +2638,13 @@
                 "linkId": "0",
                 "answer": [
                   {
-                    "valueBoolean": true,
-                    "extension": [
-                      {
-                        "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                        "valueDecimal": 1
-                      }
-                    ]
+                    "valueBoolean": true
+                  }
+                ],
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                    "valueDecimal": 1
                   }
                 ]
               },
@@ -2661,13 +2652,13 @@
                 "linkId": "1",
                 "answer": [
                   {
-                    "valueString": "Sometimes",
-                    "extension": [
-                      {
-                        "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                        "valueDecimal": 2
-                      }
-                    ]
+                    "valueString": "Sometimes"
+                  }
+                ],
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                    "valueDecimal": 2
                   }
                 ]
               },
@@ -2682,13 +2673,13 @@
                           "system": "http://loinc.org",
                           "code": "LA6568-5",
                           "display": "Not at all"
-                        },
-                        "extension": [
-                          {
-                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                            "valueDecimal": 2
-                          }
-                        ]
+                        }
+                      }
+                    ],
+                    "extension": [
+                      {
+                        "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                        "valueDecimal": 2
                       }
                     ]
                   }
