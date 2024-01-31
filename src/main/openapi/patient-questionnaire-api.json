@@ -1553,7 +1553,10 @@
                   "$ref": "#/components/schemas/FHIR_Timing"
                 }
               },
-              "required": ["id", "timing"]
+              "required": [
+                "id",
+                "timing"
+              ]
             }
           },
           "remove": {
@@ -1667,6 +1670,42 @@
           "item"
         ]
       },
+      "FHIRExtensions_Order": {
+        "type": "object",
+        "description": "Extension used to hold the order of questionnaire items and answer options",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Identifier for the extension"
+          },
+          "valuePositiveInt": {
+            "type": "integer",
+            "description": "The order that the item or answer option should be processed"
+          }
+        },
+        "required": [
+          "url",
+          "valuePositiveInt"
+        ]
+      },
+      "FHIRExtensions_AlertLevel": {
+        "type": "object",
+        "description": "Extension used to hold the alert level of a questionnaire response item",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Identifier for the extension"
+          },
+          "valueDecimal": {
+            "type": "integer",
+            "description": "The alert level of the questionnaire response item"
+          }
+        },
+        "required": [
+          "url",
+          "valueDecimal"
+        ]
+      },
       "FHIR_QuestionnaireResponse": {
         "type": "object",
         "description": "FHIR representation of a questionnaire response",
@@ -1696,7 +1735,7 @@
           "item": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItemWithExtension"
+              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItemWithAlertLevel"
             }
           }
         },
@@ -1808,7 +1847,7 @@
           "linkId"
         ]
       },
-      "FHIR_QuestionnaireResponseItemWithExtension": {
+      "FHIR_QuestionnaireResponseItemWithAlertLevel": {
         "type": "object",
         "description": "FHIR representation of an answer in a questionnaire response",
         "properties": {
@@ -1819,7 +1858,7 @@
           "item": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItemWithExtension"
+              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItemWithAlertLevel"
             }
           },
           "answer": {
@@ -1833,24 +1872,7 @@
                   "type": "object",
                   "properties": {
                     "extension": {
-                      "type": "array",
-                      "description": "General-purpose object for extending the definition of a FHIR model. For Ronin questionnaires, the primary (and possible only) use will be capturing the \"valueDecimal\", which will represent the alert level of an answer. Is not present in requests, but should be present in responses",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "url": {
-                            "type": "string",
-                            "description": "Identifier for the extension type"
-                          },
-                          "valueDecimal": {
-                            "type": "number",
-                            "description": "Used to capture the alert-level of the answer"
-                          }
-                        },
-                        "required": [
-                          "valueDecimal"
-                        ]
-                      }
+                      "$ref": "#/components/schemas/FHIRExtensions_AlertLevel"
                     }
                   }
                 }
@@ -1870,9 +1892,15 @@
             "type": "string",
             "description": "Globally unique ID of the question"
           },
-          "prefix": {
-            "type": "string",
-            "description": "Determines order of questionnaire items"
+          "extension": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/FHIRExtensions_Order"
+                }
+              ]
+            }
           },
           "text": {
             "type": "string",
@@ -2034,6 +2062,16 @@
                 "type": "string",
                 "description": "Human-friendly representation of the answer option"
               }
+            }
+          },
+          "extension": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/FHIRExtensions_Order"
+                }
+              ]
             }
           }
         }
@@ -2500,45 +2538,72 @@
             "item": [
               {
                 "linkId": "Q1",
-                "prefix": "000",
                 "text": "Are you nauseous?",
                 "type": "choice",
                 "repeats": false,
+                "extension": [
+                  {
+                    "url": "http://projectronin.i0/fhir/StructureDefinition/Extension/displayOrder",
+                    "valuePositiveInt": 1
+                  }
+                ],
                 "answerOption": [
                   {
                     "valueCoding": {
                       "code": "LA6568-5",
                       "display": "Not at all"
-                    }
+                    },
+                    "extension": [
+                      {
+                        "url": "http://projectronin.i0/fhir/StructureDefinition/Extension/displayOrder",
+                        "valuePositiveInt": 1
+                      }
+                    ]
                   },
                   {
                     "valueCoding": {
                       "code": "LA6569-3",
                       "display": "Sometimes"
-                    }
+                    },
+                    "extension": [
+                      {
+                        "url": "http://projectronin.i0/fhir/StructureDefinition/Extension/displayOrder",
+                        "valuePositiveInt": 2
+                      }
+                    ]
                   },
                   {
                     "valueCoding": {
                       "code": "LA6569-2",
                       "display": "Always"
-                    }
+                    },
+                    "extension": [
+                      {
+                        "url": "http://projectronin.i0/fhir/StructureDefinition/Extension/displayOrder",
+                        "valuePositiveInt": 3
+                      }
+                    ]
                   }
                 ]
               },
               {
                 "linkId": "Q2",
-                "prefix": "001",
                 "text": "Are you dehydrated?",
                 "type": "choice",
                 "repeats": false,
+                "extension": [
+                  {
+                    "url": "http://projectronin.i0/fhir/StructureDefinition/Extension/displayOrder",
+                    "valuePositiveInt": 2
+                  }
+                ],
                 "enableWhen": [
                   {
-                    "question": "e0673ad3-e023-4a46-82e1-5dfb1acb2d3d",
+                    "question": "Q1",
                     "operator": "=",
                     "answerCoding": {
                       "valueCoding": {
-                        "code": "LA6569-2",
-                        "display": "Always"
+                        "code": "LA6569-2"
                       }
                     }
                   }
@@ -2549,19 +2614,37 @@
                     "valueCoding": {
                       "code": "LA6568-5",
                       "display": "Not at all"
-                    }
+                    },
+                    "extension": [
+                      {
+                        "url": "http://projectronin.i0/fhir/StructureDefinition/Extension/displayOrder",
+                        "valuePositiveInt": 1
+                      }
+                    ]
                   },
                   {
                     "valueCoding": {
                       "code": "LA6569-3",
                       "display": "Sometimes"
-                    }
+                    },
+                    "extension": [
+                      {
+                        "url": "http://projectronin.i0/fhir/StructureDefinition/Extension/displayOrder",
+                        "valuePositiveInt": 2
+                      }
+                    ]
                   },
                   {
                     "valueCoding": {
                       "code": "LA6569-2",
                       "display": "Always"
-                    }
+                    },
+                    "extension": [
+                      {
+                        "url": "http://projectronin.i0/fhir/StructureDefinition/Extension/displayOrder",
+                        "valuePositiveInt": 3
+                      }
+                    ]
                   }
                 ]
               }
@@ -2584,7 +2667,7 @@
               "status": "in-progress",
               "item": [
                 {
-                  "linkId": "0",
+                  "linkId": "Q1",
                   "answer": [
                     {
                       "valueBoolean": true,
@@ -2598,7 +2681,7 @@
                   ]
                 },
                 {
-                  "linkId": "1",
+                  "linkId": "Q2",
                   "answer": [
                     {
                       "valueString": "Sometimes",
@@ -2612,7 +2695,7 @@
                   ]
                 },
                 {
-                  "linkId": "2",
+                  "linkId": "Q3",
                   "answer": [
                     {
                       "valueCoding": {
@@ -2644,7 +2727,7 @@
             "status": "in-progress",
             "item": [
               {
-                "linkId": "0",
+                "linkId": "Q1",
                 "answer": [
                   {
                     "valueBoolean": true,
@@ -2658,21 +2741,15 @@
                 ]
               },
               {
-                "linkId": "1",
+                "linkId": "2",
                 "answer": [
                   {
-                    "valueString": "Sometimes",
-                    "extension": [
-                      {
-                        "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                        "valueDecimal": 2
-                      }
-                    ]
+                    "valueString": "Sometimes"
                   }
                 ]
               },
               {
-                "linkId": "2",
+                "linkId": "Q3",
                 "item": [
                   {
                     "linkId": "3",
@@ -2705,7 +2782,7 @@
           "version": "1.0",
           "item": [
             {
-              "linkId": "0",
+              "linkId": "Q1",
               "answer": [
                 {
                   "valueString": "None"
@@ -2713,10 +2790,10 @@
               ]
             },
             {
-              "linkId": "1",
+              "linkId": "Q2",
               "item": [
                 {
-                  "linkId": "3",
+                  "linkId": "Q2-1",
                   "answer": [
                     {
                       "valueCoding": {
@@ -2735,7 +2812,7 @@
               ]
             },
             {
-              "linkId": "2",
+              "linkId": "Q3",
               "answer": [
                 {
                   "valueBoolean": true
@@ -2753,7 +2830,7 @@
           "version": "1.0",
           "item": [
             {
-              "linkId": "0",
+              "linkId": "Q1",
               "answer": [
                 {
                   "valueString": "All"
@@ -2761,10 +2838,10 @@
               ]
             },
             {
-              "linkId": "1",
+              "linkId": "Q2",
               "item": [
                 {
-                  "linkId": "3",
+                  "linkId": "Q2-1",
                   "answer": [
                     {
                       "valueCoding": {
@@ -2777,7 +2854,7 @@
               ]
             },
             {
-              "linkId": "2",
+              "linkId": "Q3",
               "answer": [
                 {
                   "valueBoolean": false
