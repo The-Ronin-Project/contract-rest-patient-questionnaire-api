@@ -858,7 +858,7 @@
         ],
         "summary": "Fetch Questionnaire Responses",
         "description": "Fetch a patient's questionnaire responses",
-        "operationId": "fetchQuestionnaireResponse",
+        "operationId": "fetchQuestionnaireResponses",
         "security": [
           {
             "bearerAuth": []
@@ -1989,6 +1989,12 @@
         "type": "object",
         "description": "Possible values to be used based on the type of answer being provided",
         "properties": {
+          "extension": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FHIRExtensions_Order"
+            }
+          },
           "valueInteger": {
             "type": "integer"
           },
@@ -2061,16 +2067,6 @@
                 "type": "string",
                 "description": "Human-friendly representation of the answer option"
               }
-            }
-          },
-          "extension": {
-            "type": "array",
-            "items": {
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/FHIRExtensions_Order"
-                }
-              ]
             }
           }
         }
@@ -2541,11 +2537,11 @@
                 "type": "choice",
                 "repeats": false,
                 "extension": [
-                  {
-                    "url": "http://projectronin.i0/fhir/StructureDefinition/Extension/displayOrder",
-                    "valuePositiveInt": 1
-                  }
-                ],
+                {
+                  "url": "http://projectronin.i0/fhir/StructureDefinition/Extension/displayOrder",
+                  "valuePositiveInt": 1
+                }
+              ],
                 "answerOption": [
                   {
                     "valueCoding": {
