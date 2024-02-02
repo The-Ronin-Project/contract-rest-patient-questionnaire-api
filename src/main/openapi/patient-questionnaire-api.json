@@ -1225,6 +1225,218 @@
   },
   "components": {
     "schemas": {
+      "Questionnaire": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionnaireItem"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "title",
+          "items"
+        ]
+      },
+      "QuestionnaireItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/QuestionnaireItemType"
+          },
+          "enableWhen": {
+            "$ref": "#/components/schemas/EnableWhen"
+          },
+          "allowMultipleSelections": {
+            "type": "boolean"
+          },
+          "displayOrder": {
+            "type": "integer"
+          },
+          "answerOptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AnswerOption"
+            }
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionnaireItem"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "text",
+          "type",
+          "displayOrder"
+        ]
+      },
+      "AnswerOption": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "display": {
+            "type": "string"
+          },
+          "alertLevel": {
+            "type": "number"
+          },
+          "displayOrder": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "code",
+          "display",
+          "alertLevel",
+          "displayOrder"
+        ]
+      },
+      "EnableWhen": {
+        "type": "object",
+        "properties": {
+          "behavior": {
+            "type": "string",
+            "enum": [
+              "ANY",
+              "ALL"
+            ]
+          },
+          "predicates": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "questionnaireItemId": {
+                  "type": "string"
+                },
+                "operator": {
+                  "type": "string",
+                  "enum": [
+                    "EQUALS",
+                    "GREATER_THAN",
+                    "LESSER_THAN"
+                  ]
+                },
+                "answer": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "$ref": "#/components/schemas/QuestionnaireItemType"
+                    },
+                    "value": {
+                      "$ref": "#/components/schemas/AnswerValueTypes"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "value"
+                  ]
+                }
+              },
+              "required": [
+                "questionnaireItemId",
+                "operator",
+                "answer"
+              ]
+            }
+          }
+        },
+        "required": [
+          "behavior",
+          "predicates"
+        ]
+      },
+      "AnswerValueTypes": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "$ref": "#/components/schemas/AnswerOption"
+          }
+        ]
+      },
+      "QuestionnaireResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "questionnaireId": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "IN_PROGRESS",
+              "COMPLETED"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionnaireResponseItem"
+            }
+          }
+        },
+        "required": [
+          "questionnaireId",
+          "version",
+          "items"
+        ]
+      },
+      "QuestionnaireResponseItem": {
+        "type": "object",
+        "properties": {
+          "questionnaireItemId": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/QuestionnaireItemType"
+          },
+          "answer": {
+            "$ref": "#/components/schemas/AnswerValueTypes"
+          }
+        }
+      },
+      "QuestionnaireItemType": {
+        "type": "string",
+        "enum": [
+          "CHOICE",
+          "GROUP",
+          "STRING"
+        ]
+      },
       "Paging": {
         "type": "object",
         "properties": {
@@ -1476,7 +1688,7 @@
         "type": "object",
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/FHIR_QuestionnaireResponse"
+            "$ref": "#/components/schemas/QuestionnaireResponse"
           }
         },
         "required": [
@@ -1528,7 +1740,7 @@
         "type": "object",
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/FHIR_Questionnaire"
+            "$ref": "#/components/schemas/Questionnaire"
           }
         },
         "required": [
@@ -1582,7 +1794,7 @@
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireResponse"
+              "$ref": "#/components/schemas/QuestionnaireResponse"
             }
           }
         },
@@ -1590,494 +1802,6 @@
           "paging",
           "data"
         ]
-      },
-      "Error": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Unique ID for this error"
-          },
-          "source": {
-            "type": "string",
-            "description": "Service where the error originated"
-          },
-          "httpStatus": {
-            "type": "string",
-            "enum": [
-              "NOT_FOUND",
-              "FORBIDDEN",
-              "BAD_REQUEST"
-            ],
-            "description": "String representation of HTTP status"
-          },
-          "timestamp": {
-            "type": "string"
-          },
-          "status": {
-            "type": "integer",
-            "description": "HTTP status"
-          },
-          "error": {
-            "type": "string",
-            "description": "Human readable form of the exception or httpStatus. This MUST be included"
-          },
-          "exception": {
-            "type": "string",
-            "description": "The exception class"
-          },
-          "message": {
-            "type": "string",
-            "description": "Human readable message"
-          },
-          "detail": {
-            "type": "string",
-            "description": "A human readable message that describes the specific failure"
-          }
-        }
-      },
-      "FHIR_Questionnaire": {
-        "type": "object",
-        "description": "FHIR representation of a questionnaire",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "UUID with the tenant ID as a prefix"
-          },
-          "version": {
-            "type": "string",
-            "description": "The version of the questionnaire"
-          },
-          "title": {
-            "type": "string",
-            "description": "Human-friendly name for the questionnaire"
-          },
-          "status": {
-            "$ref": "#/components/schemas/FHIR_QuestionnaireStatus"
-          },
-          "item": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireItem"
-            }
-          }
-        },
-        "required": [
-          "id",
-          "version",
-          "title",
-          "status",
-          "item"
-        ]
-      },
-      "FHIRExtensions_Order": {
-        "type": "object",
-        "description": "Extension used to hold the order of questionnaire items and answer options",
-        "properties": {
-          "url": {
-            "type": "string",
-            "description": "Identifier for the extension"
-          },
-          "valuePositiveInt": {
-            "type": "integer",
-            "description": "The order that the item or answer option should be processed"
-          }
-        },
-        "required": [
-          "url"
-        ]
-      },
-      "FHIRExtensions_AlertLevel": {
-        "type": "object",
-        "description": "Extension used to hold the alert level of a questionnaire response item",
-        "properties": {
-          "url": {
-            "type": "string",
-            "description": "Identifier for the extension"
-          },
-          "valueDecimal": {
-            "type": "integer",
-            "description": "The alert level of the questionnaire response item"
-          }
-        },
-        "required": [
-          "url"
-        ]
-      },
-      "FHIR_QuestionnaireResponse": {
-        "type": "object",
-        "description": "FHIR representation of a questionnaire response",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "UUID with the tenant ID as a prefix"
-          },
-          "questionnaire": {
-            "type": "string",
-            "description": "The ID associated Questionnaire"
-          },
-          "version": {
-            "type": "string",
-            "description": "The version of the questionnaire"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "in-progress",
-              "completed",
-              "amended",
-              "entered-in-error",
-              "stopped"
-            ]
-          },
-          "item": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItemWithAlertLevel"
-            }
-          }
-        },
-        "required": [
-          "id",
-          "questionnaire",
-          "version",
-          "item"
-        ]
-      },
-      "UpsertQuestionnaireResponse_RequestBody": {
-        "type": "object",
-        "description": "FHIR representation of a questionnaire response",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "UUID with the tenant ID as a prefix"
-          },
-          "questionnaire": {
-            "type": "string",
-            "description": "The ID associated Questionnaire"
-          },
-          "version": {
-            "type": "string",
-            "description": "The version of the questionnaire"
-          },
-          "item": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItem"
-            }
-          }
-        },
-        "required": [
-          "questionnaire",
-          "version",
-          "item"
-        ]
-      },
-      "CreateQuestionnaireResponse_RequestBody": {
-        "type": "object",
-        "description": "FHIR representation of a questionnaire response",
-        "properties": {
-          "questionnaire": {
-            "type": "string",
-            "description": "The ID associated Questionnaire"
-          },
-          "version": {
-            "type": "string",
-            "description": "The version of the questionnaire"
-          },
-          "item": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItem"
-            }
-          }
-        },
-        "required": [
-          "questionnaire",
-          "version",
-          "item"
-        ]
-      },
-      "FHIR_QuestionnaireIdentifier": {
-        "type": "object",
-        "properties": {
-          "system": {
-            "type": "string",
-            "description": "Identifier for the identifier type. Eg, whether this is a tenant, provider, patient, etc"
-          },
-          "value": {
-            "type": "string",
-            "description": "Value of the identity. Eg, the tenant ID"
-          }
-        }
-      },
-      "FHIR_QuestionnaireStatus": {
-        "type": "string",
-        "enum": [
-          "draft",
-          "active",
-          "retired",
-          "unknown"
-        ]
-      },
-      "FHIR_QuestionnaireResponseItem": {
-        "type": "object",
-        "description": "FHIR representation of an answer in a questionnaire response",
-        "properties": {
-          "linkId": {
-            "type": "string",
-            "description": "Globally unique ID of the question"
-          },
-          "item": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItem"
-            }
-          },
-          "answer": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FHIR_TypedValues"
-            }
-          }
-        },
-        "required": [
-          "linkId"
-        ]
-      },
-      "FHIR_QuestionnaireResponseItemWithAlertLevel": {
-        "type": "object",
-        "description": "FHIR representation of an answer in a questionnaire response",
-        "properties": {
-          "linkId": {
-            "type": "string",
-            "description": "Globally unique ID of the question"
-          },
-          "item": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItemWithAlertLevel"
-            }
-          },
-          "answer": {
-            "type": "array",
-            "items": {
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/FHIR_TypedValues"
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "extension": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/FHIRExtensions_AlertLevel"
-                      }
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        },
-        "required": [
-          "linkId"
-        ]
-      },
-      "FHIR_QuestionnaireItem": {
-        "type": "object",
-        "description": "FHIR representation of a question in a questionnaire",
-        "properties": {
-          "linkId": {
-            "type": "string",
-            "description": "Globally unique ID of the question"
-          },
-          "extension": {
-            "type": "array",
-            "items": {
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/FHIRExtensions_Order"
-                }
-              ]
-            }
-          },
-          "text": {
-            "type": "string",
-            "description": "Value to be displayed to the user"
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "group",
-              "boolean",
-              "decimal",
-              "integer",
-              "date",
-              "dateTime",
-              "choice",
-              "string"
-            ]
-          },
-          "repeats": {
-            "type": "boolean",
-            "description": "Whether multiple answers can be selected. Typical multiple-choice questions would have `type: choice` and `repeats: true`. Defaults to `false`"
-          },
-          "enableWhen": {
-            "type": "array",
-            "description": "Mechanism for enabling/disabling a question based on a predicate.\n Eg, given the the object `{ \"question\": 123, \"operator\": \"=\", \"Hello\" }`, this question would only be presented if the question with the ID `123` had the answer \"Hello\" ",
-            "items": {
-              "allOf": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "question": {
-                      "type": "string"
-                    },
-                    "operator": {
-                      "type": "string",
-                      "enum": [
-                        "exists",
-                        "=",
-                        "!=",
-                        ">",
-                        "<",
-                        ">=",
-                        "<="
-                      ]
-                    }
-                  },
-                  "required": [
-                    "question",
-                    "operator"
-                  ]
-                },
-                {
-                  "$ref": "#/components/schemas/FHIR_TypedAnswers"
-                }
-              ]
-            }
-          },
-          "enableBehavior": {
-            "type": "string",
-            "description": "How to handle multiple `enableWhen` predicates - whether all or any of them must be true. This value must be present if multiple `enableWhen` values are present",
-            "enum": [
-              "any",
-              "all"
-            ]
-          },
-          "answerOption": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FHIR_TypedValues"
-            }
-          },
-          "item": {
-            "type": "array",
-            "description": "Used to support nested items when `type == group`",
-            "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireItem"
-            }
-          }
-        },
-        "required": [
-          "linkId",
-          "type"
-        ]
-      },
-      "FHIR_TypedValues": {
-        "type": "object",
-        "description": "Possible values to be used based on the type of answer being provided",
-        "properties": {
-          "extension": {
-            "type": "array",
-            "items": {
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/FHIRExtensions_Order"
-                },
-                {
-                  "$ref": "#/components/schemas/FHIRExtensions_AlertLevel"
-                }
-              ]
-            }
-          },
-          "valueInteger": {
-            "type": "integer"
-          },
-          "valueDecimal": {
-            "type": "number"
-          },
-          "valueDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "valueDateTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "valueString": {
-            "type": "string"
-          },
-          "valueBoolean": {
-            "type": "boolean"
-          },
-          "valueCoding": {
-            "type": "object",
-            "description": "Used for single and multiple-choice questions",
-            "properties": {
-              "code": {
-                "type": "string",
-                "description": "Computer-friendly representation of the answer option"
-              },
-              "display": {
-                "type": "string",
-                "description": "Human-friendly representation of the answer option"
-              }
-            }
-          }
-        }
-      },
-      "FHIR_TypedAnswers": {
-        "type": "object",
-        "description": "Possible values to be used based on the type of answer being provided",
-        "properties": {
-          "answerInteger": {
-            "type": "integer"
-          },
-          "answerDecimal": {
-            "type": "number"
-          },
-          "answerDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "answerDateTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "answerString": {
-            "type": "string"
-          },
-          "answerBoolean": {
-            "type": "boolean"
-          },
-          "answerCoding": {
-            "type": "object",
-            "description": "Used for single and multiple-choice questions",
-            "properties": {
-              "code": {
-                "type": "string",
-                "description": "Computer-friendly representation of the answer option"
-              },
-              "display": {
-                "type": "string",
-                "description": "Human-friendly representation of the answer option"
-              }
-            }
-          }
-        }
       },
       "FHIR_Timing": {
         "type": "object",
@@ -2133,6 +1857,51 @@
         "required": [
           "repeat"
         ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique ID for this error"
+          },
+          "source": {
+            "type": "string",
+            "description": "Service where the error originated"
+          },
+          "httpStatus": {
+            "type": "string",
+            "enum": [
+              "NOT_FOUND",
+              "FORBIDDEN",
+              "BAD_REQUEST"
+            ],
+            "description": "String representation of HTTP status"
+          },
+          "timestamp": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "description": "HTTP status"
+          },
+          "error": {
+            "type": "string",
+            "description": "Human readable form of the exception or httpStatus. This MUST be included"
+          },
+          "exception": {
+            "type": "string",
+            "description": "The exception class"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human readable message"
+          },
+          "detail": {
+            "type": "string",
+            "description": "A human readable message that describes the specific failure"
+          }
+        }
       }
     },
     "examples": {
@@ -2526,338 +2295,6 @@
                 }
               },
               "isAssigned": false
-            }
-          ]
-        }
-      },
-      "FetchQuestionnaire_ResponseBody": {
-        "summary": "Questionnaire Response Body",
-        "value": {
-          "data": {
-            "id": "d78f8706-6e68-49b0-a57c-4a0f3aedb128",
-            "version": "1.0",
-            "title": "PSJ - Daily Breast Cancer Survey",
-            "status": "active",
-            "item": [
-              {
-                "linkId": "Q1",
-                "text": "Are you nauseous?",
-                "type": "choice",
-                "repeats": false,
-                "extension": [
-                {
-                  "url": "http://projectronin.i0/fhir/StructureDefinition/Extension/displayOrder",
-                  "valuePositiveInt": 1
-                }
-              ],
-                "answerOption": [
-                  {
-                    "valueCoding": {
-                      "code": "LA6568-5",
-                      "display": "Not at all"
-                    },
-                    "extension": [
-                      {
-                        "url": "http://projectronin.i0/fhir/StructureDefinition/Extension/displayOrder",
-                        "valuePositiveInt": 1
-                      }
-                    ]
-                  },
-                  {
-                    "valueCoding": {
-                      "code": "LA6569-3",
-                      "display": "Sometimes"
-                    },
-                    "extension": [
-                      {
-                        "url": "http://projectronin.i0/fhir/StructureDefinition/Extension/displayOrder",
-                        "valuePositiveInt": 2
-                      }
-                    ]
-                  },
-                  {
-                    "valueCoding": {
-                      "code": "LA6569-2",
-                      "display": "Always"
-                    },
-                    "extension": [
-                      {
-                        "url": "http://projectronin.i0/fhir/StructureDefinition/Extension/displayOrder",
-                        "valuePositiveInt": 3
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "linkId": "Q2",
-                "text": "Are you dehydrated?",
-                "type": "choice",
-                "repeats": false,
-                "extension": [
-                  {
-                    "url": "http://projectronin.i0/fhir/StructureDefinition/Extension/displayOrder",
-                    "valuePositiveInt": 2
-                  }
-                ],
-                "enableWhen": [
-                  {
-                    "question": "Q1",
-                    "operator": "=",
-                    "answerCoding": {
-                      "valueCoding": {
-                        "code": "LA6569-2"
-                      }
-                    }
-                  }
-                ],
-                "enableBehavior": "all",
-                "answerOption": [
-                  {
-                    "valueCoding": {
-                      "code": "LA6568-5",
-                      "display": "Not at all"
-                    },
-                    "extension": [
-                      {
-                        "url": "http://projectronin.i0/fhir/StructureDefinition/Extension/displayOrder",
-                        "valuePositiveInt": 1
-                      }
-                    ]
-                  },
-                  {
-                    "valueCoding": {
-                      "code": "LA6569-3",
-                      "display": "Sometimes"
-                    },
-                    "extension": [
-                      {
-                        "url": "http://projectronin.i0/fhir/StructureDefinition/Extension/displayOrder",
-                        "valuePositiveInt": 2
-                      }
-                    ]
-                  },
-                  {
-                    "valueCoding": {
-                      "code": "LA6569-2",
-                      "display": "Always"
-                    },
-                    "extension": [
-                      {
-                        "url": "http://projectronin.i0/fhir/StructureDefinition/Extension/displayOrder",
-                        "valuePositiveInt": 3
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        }
-      },
-      "FetchQuestionnaireResponses_ResponseBody": {
-        "summary": "Response body when fetching a patient questionnaire responses",
-        "value": {
-          "paging": {
-            "page": 0,
-            "limit": 1
-          },
-          "data": [
-            {
-              "id": "9d81ae65-00be-4243-aace-c23915d923d9",
-              "questionnaire": "d78f8706-6e68-49b0-a57c-4a0f3aedb128",
-              "version": "1.0",
-              "status": "in-progress",
-              "item": [
-                {
-                  "linkId": "Q1",
-                  "answer": [
-                    {
-                      "valueBoolean": true,
-                      "extension": [
-                        {
-                          "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                          "valueDecimal": 1
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "linkId": "Q2",
-                  "answer": [
-                    {
-                      "valueString": "Sometimes",
-                      "extension": [
-                        {
-                          "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                          "valueDecimal": 2
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "linkId": "Q3",
-                  "answer": [
-                    {
-                      "valueCoding": {
-                        "code": "LA6568-5",
-                        "display": "Not at all"
-                      },
-                      "extension": [
-                        {
-                          "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                          "valueDecimal": 2
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "UpsertQuestionnaireResponse_ResponseBody": {
-        "summary": "Response body from creating or updating a questionnaire response",
-        "value": {
-          "data": {
-            "id": "9d81ae65-00be-4243-aace-c23915d923d9",
-            "questionnaire": "d78f8706-6e68-49b0-a57c-4a0f3aedb128",
-            "version": "1.0",
-            "status": "in-progress",
-            "item": [
-              {
-                "linkId": "Q1",
-                "answer": [
-                  {
-                    "valueBoolean": true,
-                    "extension": [
-                      {
-                        "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                        "valueDecimal": 1
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "linkId": "2",
-                "answer": [
-                  {
-                    "valueString": "Sometimes"
-                  }
-                ]
-              },
-              {
-                "linkId": "Q3",
-                "item": [
-                  {
-                    "linkId": "3",
-                    "answer": [
-                      {
-                        "valueCoding": {
-                          "code": "LA6568-5",
-                          "display": "Not at all"
-                        },
-                        "extension": [
-                          {
-                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                            "valueDecimal": 2
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        }
-      },
-      "CreateQuestionnaireResponse_RequestBody": {
-        "description": "Request body used to create a questionnaire response",
-        "value": {
-          "questionnaire": "9b93f927-b4ec-45c1-9d02-97a9f838b871",
-          "version": "1.0",
-          "item": [
-            {
-              "linkId": "Q1",
-              "answer": [
-                {
-                  "valueString": "None"
-                }
-              ]
-            },
-            {
-              "linkId": "Q2",
-              "item": [
-                {
-                  "linkId": "Q2-1",
-                  "answer": [
-                    {
-                      "valueCoding": {
-                        "code": "LA6568-5"
-                      }
-                    },
-                    {
-                      "valueCoding": {
-                        "code": "LA6563-8"
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "linkId": "Q3",
-              "answer": [
-                {
-                  "valueBoolean": true
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "UpdateQuestionnaireResponse_RequestBody": {
-        "description": "Request body used to update a questionnaire response",
-        "value": {
-          "id": "e94b25aa-1ff6-42e2-b252-a50227336c8f",
-          "questionnaire": "9b93f927-b4ec-45c1-9d02-97a9f838b871",
-          "version": "1.0",
-          "item": [
-            {
-              "linkId": "Q1",
-              "answer": [
-                {
-                  "valueString": "All"
-                }
-              ]
-            },
-            {
-              "linkId": "Q2",
-              "item": [
-                {
-                  "linkId": "Q2-1",
-                  "answer": [
-                    {
-                      "valueCoding": {
-                        "code": "LA6568-5"
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "linkId": "Q3",
-              "answer": [
-                {
-                  "valueBoolean": false
-                }
-              ]
             }
           ]
         }
