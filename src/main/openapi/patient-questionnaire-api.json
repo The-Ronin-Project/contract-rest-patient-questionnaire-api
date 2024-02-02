@@ -1229,13 +1229,16 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "description": "Globally unique ID"
           },
           "version": {
-            "type": "string"
+            "type": "string",
+            "description": "Unique list of versions per questionnaire ID"
           },
           "title": {
-            "type": "string"
+            "type": "string",
+            "description": "Human-friendly title"
           },
           "items": {
             "type": "array",
@@ -1255,10 +1258,12 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "description": "Non-globally unique - only unique within a group"
           },
           "text": {
-            "type": "string"
+            "type": "string",
+            "description": "Human-friendly representation of item text"
           },
           "type": {
             "$ref": "#/components/schemas/QuestionnaireItemType"
@@ -1275,7 +1280,7 @@
           "answerOptions": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/AnswerOption"
+              "$ref": "#/components/schemas/AnswerChoice"
             }
           },
           "items": {
@@ -1290,14 +1295,16 @@
           "type"
         ]
       },
-      "AnswerOption": {
+      "AnswerChoice": {
         "type": "object",
         "properties": {
           "code": {
-            "type": "string"
+            "type": "string",
+            "description": "Computer-friendly representation of the answer choice"
           },
           "display": {
-            "type": "string"
+            "type": "string",
+            "description": "Human-friendly representation of the answer choice"
           },
           "alertLevel": {
             "type": "number"
@@ -1312,9 +1319,11 @@
       },
       "EnableWhen": {
         "type": "object",
+        "description": "Predicates that determine whether a questionnaire item should be processed",
         "properties": {
           "behavior": {
             "type": "string",
+            "description": "`ANY` means at least one of the predicates must be true - `ALL` means all predicates must be true",
             "enum": [
               "ANY",
               "ALL"
@@ -1326,7 +1335,8 @@
               "type": "object",
               "properties": {
                 "questionnaireItemId": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "`id` value from a questionnaire item"
                 },
                 "operator": {
                   "type": "string",
@@ -1340,10 +1350,10 @@
                   "type": "object",
                   "properties": {
                     "type": {
-                      "$ref": "#/components/schemas/QuestionnaireItemType"
+                      "$ref": "#/components/schemas/AnswerValueTypes"
                     },
                     "value": {
-                      "$ref": "#/components/schemas/AnswerValueTypes"
+                      "$ref": "#/components/schemas/AnswerValue"
                     }
                   },
                   "required": [
@@ -1366,6 +1376,15 @@
         ]
       },
       "AnswerValueTypes": {
+        "type": "string",
+        "enum": [
+          "STRING",
+          "BOOLEAN",
+          "CODE"
+        ]
+      },
+      "AnswerValue": {
+        "description": "Polymorphic answer",
         "oneOf": [
           {
             "type": "string"
@@ -1374,7 +1393,7 @@
             "type": "boolean"
           },
           {
-            "$ref": "#/components/schemas/AnswerOption"
+            "$ref": "#/components/schemas/AnswerChoice"
           }
         ]
       },
@@ -1382,13 +1401,16 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "description": "Globally unique ID"
           },
           "questionnaireId": {
-            "type": "string"
+            "type": "string",
+            "description": "ID of the questionnaire that is being responded to"
           },
           "version": {
-            "type": "string"
+            "type": "string",
+            "description": "Version of the questionnaire that is being responded to"
           },
           "status": {
             "type": "string",
@@ -1398,7 +1420,8 @@
             ]
           },
           "alertLevel": {
-            "type": "integer"
+            "type": "integer",
+            "description": "Rollup of the alert level of all `item`s. Should only be populated in the HTTP response - not part of a request to upsert a questionnaire response"
           },
           "items": {
             "type": "array",
@@ -1417,13 +1440,15 @@
         "type": "object",
         "properties": {
           "questionnaireItemId": {
-            "type": "string"
+            "type": "string",
+            "description": "`id` of the questionnaire item that is being processed/answered"
           },
           "type": {
             "$ref": "#/components/schemas/QuestionnaireItemType"
           },
           "text": {
-            "type": "string"
+            "type": "string",
+            "description": "Equal to the `text` value of the associated questionnaire. Should only be populated in the HTTP response - not part of a request to upsert a questionnaire response"
           },
           "displayOrder": {
             "type": "integer"
@@ -1434,13 +1459,20 @@
           "answers": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/AnswerValueTypes"
+              "type": "object",
+              "properties": {
+                "type": {
+                  "$ref": "#/components/schemas/AnswerValueTypes"
+                },
+                "value": {
+                  "$ref": "#/components/schemas/AnswerValue"
+                }
+              }
             }
           }
         },
         "required": [
-          "questionnaireItemId",
-          "answer"
+          "questionnaireItemId"
         ]
       },
       "QuestionnaireItemType": {
@@ -1448,8 +1480,10 @@
         "enum": [
           "CHOICE",
           "GROUP",
-          "STRING"
-        ]
+          "STRING",
+          "BOOLEAN"
+        ],
+        "description": "Represents if/how the answer should be answered. For `GROUP` questions, there should be no answer, but there must be child questionnaire items"
       },
       "Paging": {
         "type": "object",
@@ -1496,7 +1530,7 @@
             "$ref": "#/components/schemas/ManagementApi_TriageConfiguration"
           },
           "timing": {
-            "$ref": "#/components/schemas/FHIR_Timing"
+            "$ref": "#/components/schemas/Timing"
           }
         },
         "required": [
@@ -1734,7 +1768,7 @@
             "$ref": "#/components/schemas/ManagementApi_TriageConfiguration"
           },
           "timing": {
-            "$ref": "#/components/schemas/FHIR_Timing"
+            "$ref": "#/components/schemas/Timing"
           },
           "isAssigned": {
             "type": "boolean",
@@ -1776,7 +1810,7 @@
                   "description": "ID of the questionnaire"
                 },
                 "timing": {
-                  "$ref": "#/components/schemas/FHIR_Timing"
+                  "$ref": "#/components/schemas/Timing"
                 }
               },
               "required": [
@@ -1817,7 +1851,7 @@
           "data"
         ]
       },
-      "FHIR_Timing": {
+      "Timing": {
         "type": "object",
         "properties": {
           "repeat": {
@@ -2419,6 +2453,7 @@
             {
               "id": "Q2",
               "type": "GROUP",
+              "displayOrder": 2,
               "enableWhen": {
                 "behavior": "ALL",
                 "predicates": [
@@ -2471,7 +2506,7 @@
                 {
                   "id": "Q2-2",
                   "text": "How frequently are you experiencing nausea?",
-                  "displayOrder": 1,
+                  "displayOrder": 2,
                   "type": "CHOICE",
                   "answerOptions": [
                     {
@@ -2505,6 +2540,7 @@
             {
               "id": "Q3",
               "type": "GROUP",
+              "displayOrder": 3,
               "enableWhen": {
                 "behavior": "ALL",
                 "predicates": [
@@ -2512,7 +2548,7 @@
                     "questionnaireItemId": "Q1",
                     "operator": "EQUALS",
                     "answer": {
-                      "type": "CHOICE",
+                      "type": "CODE",
                       "value": {
                         "code": "stomach-pain"
                       }
@@ -2556,7 +2592,7 @@
                 {
                   "id": "Q2-2",
                   "text": "How frequently are you experiencing stomach pain?",
-                  "displayOrder": 1,
+                  "displayOrder": 2,
                   "type": "CHOICE",
                   "answerOptions": [
                     {
@@ -2653,6 +2689,8 @@
                 "questionnaireItemId": "Q2",
                 "type": "GROUP",
                 "alertLevel": 3,
+                "displayOrder": 2,
+                "text": "Nausea",
                 "items": [
                   {
                     "questionnaireItemId": "Q2-1",
@@ -2716,6 +2754,7 @@
                   "questionnaireItemId": "Q2",
                   "type": "GROUP",
                   "alertLevel": 3,
+                  "text": "Nausea",
                   "items": [
                     {
                       "questionnaireItemId": "Q2-1",
@@ -2726,7 +2765,7 @@
                       "answers": [
                         {
                           "code": "mild",
-                          "display": "Mild",
+                          "display": "Mild"
                         }
                       ]
                     },
@@ -2739,7 +2778,7 @@
                       "answers": [
                         {
                           "code": "frequently",
-                          "display": "Frequently",
+                          "display": "Frequently"
                         }
                       ]
                     }
