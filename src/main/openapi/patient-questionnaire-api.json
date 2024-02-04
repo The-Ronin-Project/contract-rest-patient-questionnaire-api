@@ -1234,7 +1234,7 @@
           },
           "version": {
             "type": "string",
-            "description": "Unique list of versions per questionnaire ID"
+            "description": "Unique version per questionnaire ID"
           },
           "title": {
             "type": "string",
@@ -1280,7 +1280,7 @@
           "answerOptions": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/AnswerChoice"
+              "$ref": "#/components/schemas/ChoiceAnswer"
             }
           },
           "items": {
@@ -1292,10 +1292,19 @@
         },
         "required": [
           "id",
-          "type"
+          "type",
+          "displayOrder"
         ]
       },
-      "AnswerChoice": {
+      "AnswerType": {
+        "type": "string",
+        "enum": [
+          "CHOICE",
+          "STRING",
+          "BOOLEAN"
+        ]
+      },
+      "ChoiceAnswer": {
         "type": "object",
         "properties": {
           "code": {
@@ -1315,6 +1324,36 @@
         },
         "required": [
           "code"
+        ]
+      },
+      "AnswerValue": {
+        "description": "Polymorphic answer",
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "$ref": "#/components/schemas/ChoiceAnswer"
+          }
+        ]
+      },
+      "Answer": {
+        "type": "object",
+        "description": "Object containing a polymorphic answer, along with the type of answer",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/AnswerType"
+          },
+          "value": {
+            "$ref": "#/components/schemas/AnswerValue"
+          }
+        },
+        "required": [
+          "type",
+          "value"
         ]
       },
       "EnableWhen": {
@@ -1347,19 +1386,7 @@
                   ]
                 },
                 "answer": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "$ref": "#/components/schemas/AnswerValueTypes"
-                    },
-                    "value": {
-                      "$ref": "#/components/schemas/AnswerValue"
-                    }
-                  },
-                  "required": [
-                    "type",
-                    "value"
-                  ]
+                  "$ref": "#/components/schemas/Answer"
                 }
               },
               "required": [
@@ -1373,28 +1400,6 @@
         "required": [
           "behavior",
           "predicates"
-        ]
-      },
-      "AnswerValueTypes": {
-        "type": "string",
-        "enum": [
-          "STRING",
-          "BOOLEAN",
-          "CODE"
-        ]
-      },
-      "AnswerValue": {
-        "description": "Polymorphic answer",
-        "oneOf": [
-          {
-            "type": "string"
-          },
-          {
-            "type": "boolean"
-          },
-          {
-            "$ref": "#/components/schemas/AnswerChoice"
-          }
         ]
       },
       "QuestionnaireResponse": {
@@ -1459,15 +1464,7 @@
           "answers": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "$ref": "#/components/schemas/AnswerValueTypes"
-                },
-                "value": {
-                  "$ref": "#/components/schemas/AnswerValue"
-                }
-              }
+              "$ref": "#/components/schemas/Answer"
             }
           }
         },
@@ -2454,6 +2451,7 @@
               "id": "Q2",
               "type": "GROUP",
               "displayOrder": 2,
+              "text": "Nausea",
               "enableWhen": {
                 "behavior": "ALL",
                 "predicates": [
@@ -2541,6 +2539,7 @@
               "id": "Q3",
               "type": "GROUP",
               "displayOrder": 3,
+              "text": "Stomach Pain",
               "enableWhen": {
                 "behavior": "ALL",
                 "predicates": [
@@ -2622,6 +2621,12 @@
                   ]
                 }
               ]
+            },
+            {
+              "id": "Q4",
+              "type": "STRING",
+              "displayOrder": 4,
+              "text": "Anything Else?"
             }
           ]
         }
@@ -2636,7 +2641,10 @@
               "questionnaireItemId": "Q1",
               "answers": [
                 {
-                  "code": "nausea"
+                  "type": "CHOICE",
+                  "value": {
+                    "code": "nausea"
+                  }
                 }
               ]
             },
@@ -2647,7 +2655,10 @@
                   "questionnaireItemId": "Q2-1",
                   "answers": [
                     {
-                      "code": "mild"
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "mild"
+                      }
                     }
                   ]
                 },
@@ -2655,9 +2666,21 @@
                   "questionnaireItemId": "Q2-2",
                   "answers": [
                     {
-                      "code": "occasionally"
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "occasionally"
+                      }
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "questionnaireItemId": "Q4",
+              "answers": [
+                {
+                  "type": "STRING",
+                  "value": "Feeling better since my last appointment"
                 }
               ]
             }
@@ -2680,8 +2703,11 @@
                 "displayOrder": 1,
                 "answers": [
                   {
-                    "code": "nausea",
-                    "display": "Nausea"
+                    "type": "CHOICE",
+                    "value": {
+                      "code": "nausea",
+                      "display": "Nausea"
+                    }
                   }
                 ]
               },
@@ -2700,8 +2726,11 @@
                     "displayOrder": 1,
                     "answers": [
                       {
-                        "code": "mild",
-                        "display": "Mild"
+                        "type": "CHOICE",
+                        "value": {
+                          "code": "mild",
+                          "display": "Mild"
+                        }
                       }
                     ]
                   },
@@ -2713,10 +2742,25 @@
                     "displayOrder": 2,
                     "answers": [
                       {
-                        "code": "frequently",
-                        "display": "Frequently"
+                        "type": "CHOICE",
+                        "value": {
+                          "code": "frequently",
+                          "display": "Frequently"
+                        }
                       }
                     ]
+                  }
+                ]
+              },
+              {
+                "questionnaireItemId": "Q4",
+                "type": "STRING",
+                "displayOrder": 4,
+                "text": "Anything Else?",
+                "answers": [
+                  {
+                    "type": "STRING",
+                    "value": "Feeling better since my last appointment"
                   }
                 ]
               }
@@ -2745,8 +2789,11 @@
                   "displayOrder": 1,
                   "answers": [
                     {
-                      "code": "nausea",
-                      "display": "Nausea"
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "nausea",
+                        "display": "Nausea"
+                      }
                     }
                   ]
                 },
@@ -2764,8 +2811,11 @@
                       "alertLevel": 1,
                       "answers": [
                         {
-                          "code": "mild",
-                          "display": "Mild"
+                          "type": "CHOICE",
+                          "value": {
+                            "code": "mild",
+                            "display": "Mild"
+                          }
                         }
                       ]
                     },
@@ -2777,10 +2827,25 @@
                       "alertLevel": 3,
                       "answers": [
                         {
-                          "code": "frequently",
-                          "display": "Frequently"
+                          "type": "CHOICE",
+                          "value": {
+                            "code": "frequently",
+                            "display": "Frequently"
+                          }
                         }
                       ]
+                    }
+                  ]
+                },
+                {
+                  "questionnaireItemId": "Q4",
+                  "type": "STRING",
+                  "displayOrder": 4,
+                  "text": "Anything Else?",
+                  "answers": [
+                    {
+                      "type": "STRING",
+                      "value": "Feeling better since my last appointment"
                     }
                   ]
                 }
