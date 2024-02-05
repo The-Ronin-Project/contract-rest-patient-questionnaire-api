@@ -1280,7 +1280,7 @@
           "answerOptions": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ChoiceAnswer"
+              "$ref": "#/components/schemas/Answer"
             }
           },
           "items": {
@@ -1381,8 +1381,10 @@
                   "type": "string",
                   "enum": [
                     "EQUALS",
+                    "NOT_EQUALS",
                     "GREATER_THAN",
-                    "LESSER_THAN"
+                    "LESSER_THAN",
+                    "EXISTS"
                   ]
                 },
                 "answer": {
@@ -2436,14 +2438,20 @@
               "displayOrder": 1,
               "answerOptions": [
                 {
-                  "code": "nausea",
-                  "display": "Nausea",
-                  "displayOrder": 1
+                  "type": "CHOICE",
+                  "value": {
+                    "code": "nausea",
+                    "display": "Nausea",
+                    "displayOrder": 1
+                  }
                 },
                 {
-                  "code": "stomach-pain",
-                  "display": "Stomach Pain",
-                  "displayOrder": 2
+                  "type": "CHOICE",
+                  "value": {
+                    "code": "stomach-pain",
+                    "display": "Stomach Pain",
+                    "displayOrder": 2
+                  }
                 }
               ]
             },
@@ -2476,28 +2484,40 @@
                   "allowMultipleSelections": false,
                   "answerOptions": [
                     {
-                      "code": "mild",
-                      "display": "Mild",
-                      "alertLevel": 1,
-                      "displayOrder": 1
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "mild",
+                        "display": "Mild",
+                        "alertLevel": 1,
+                        "displayOrder": 1
+                      }
                     },
                     {
-                      "code": "moderate",
-                      "display": "Moderate",
-                      "alertLevel": 2,
-                      "displayOrder": 2
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "moderate",
+                        "display": "Moderate",
+                        "alertLevel": 2,
+                        "displayOrder": 2
+                      }
                     },
                     {
-                      "code": "severe",
-                      "display": "Severe",
-                      "alertLevel": 3,
-                      "displayOrder": 3
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "severe",
+                        "display": "Severe",
+                        "alertLevel": 3,
+                        "displayOrder": 3
+                      }
                     },
                     {
-                      "code": "very-severe",
-                      "display": "Very Sever",
-                      "alertLevel": 4,
-                      "displayOrder": 4
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "very-severe",
+                        "display": "Very Sever",
+                        "alertLevel": 4,
+                        "displayOrder": 4
+                      }
                     }
                   ]
                 },
@@ -2508,28 +2528,40 @@
                   "type": "CHOICE",
                   "answerOptions": [
                     {
-                      "code": "rarely",
-                      "display": "Rarely",
-                      "alertLevel": 1,
-                      "displayOrder": 1
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "rarely",
+                        "display": "Rarely",
+                        "alertLevel": 1,
+                        "displayOrder": 1
+                      }
                     },
                     {
-                      "code": "occasionally",
-                      "display": "Occasionally",
-                      "alertLevel": 2,
-                      "displayOrder": 2
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "occasionally",
+                        "display": "Occasionally",
+                        "alertLevel": 2,
+                        "displayOrder": 2
+                      }
                     },
                     {
-                      "code": "frequently",
-                      "display": "Frequently",
-                      "alertLevel": 3,
-                      "displayOrder": 3
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "frequently",
+                        "display": "Frequently",
+                        "alertLevel": 3,
+                        "displayOrder": 3
+                      }
                     },
                     {
-                      "code": "almost-constant",
-                      "display": "Almost Constant",
-                      "alertLevel": 4,
-                      "displayOrder": 4
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "almost-constant",
+                        "display": "Almost Constant",
+                        "alertLevel": 4,
+                        "displayOrder": 4
+                      }
                     }
                   ]
                 }
@@ -2563,28 +2595,40 @@
                   "type": "CHOICE",
                   "answerOptions": [
                     {
-                      "code": "mild",
-                      "display": "Mild",
-                      "alertLevel": 1,
-                      "displayOrder": 1
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "mild",
+                        "display": "Mild",
+                        "alertLevel": 1,
+                        "displayOrder": 1
+                      }
                     },
                     {
-                      "code": "moderate",
-                      "display": "Moderate",
-                      "alertLevel": 2,
-                      "displayOrder": 2
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "moderate",
+                        "display": "Moderate",
+                        "alertLevel": 2,
+                        "displayOrder": 2
+                      }
                     },
                     {
-                      "code": "severe",
-                      "display": "Severe",
-                      "alertLevel": 3,
-                      "displayOrder": 3
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "severe",
+                        "display": "Severe",
+                        "alertLevel": 3,
+                        "displayOrder": 3
+                      }
                     },
                     {
-                      "code": "very-severe",
-                      "display": "Very Sever",
-                      "alertLevel": 4,
-                      "displayOrder": 4
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "very-severe",
+                        "display": "Very Sever",
+                        "alertLevel": 4,
+                        "displayOrder": 4
+                      }
                     }
                   ]
                 },
@@ -2595,28 +2639,40 @@
                   "type": "CHOICE",
                   "answerOptions": [
                     {
-                      "code": "rarely",
-                      "display": "Rarely",
-                      "alertLevel": 1,
-                      "displayOrder": 1
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "rarely",
+                        "display": "Rarely",
+                        "alertLevel": 1,
+                        "displayOrder": 1
+                      }
                     },
                     {
-                      "code": "occasionally",
-                      "display": "Occasionally",
-                      "alertLevel": 2,
-                      "displayOrder": 2
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "occasionally",
+                        "display": "Occasionally",
+                        "alertLevel": 2,
+                        "displayOrder": 2
+                      }
                     },
                     {
-                      "code": "frequently",
-                      "display": "Frequently",
-                      "alertLevel": 3,
-                      "displayOrder": 3
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "frequently",
+                        "display": "Frequently",
+                        "alertLevel": 3,
+                        "displayOrder": 3
+                      }
                     },
                     {
-                      "code": "almost-constant",
-                      "display": "Almost Constant",
-                      "alertLevel": 4,
-                      "displayOrder": 4
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "almost-constant",
+                        "display": "Almost Constant",
+                        "alertLevel": 4,
+                        "displayOrder": 4
+                      }
                     }
                   ]
                 }
