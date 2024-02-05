@@ -778,11 +778,11 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateQuestionnaireResponse_RequestBody"
+                "$ref": "#/components/schemas/QuestionnaireResponse"
               },
               "examples": {
                 "UpsertQuestionnaireResponse_RequestBody": {
-                  "$ref": "#/components/examples/CreateQuestionnaireResponse_RequestBody"
+                  "$ref": "#/components/examples/UpsertQuestionnaireResponse_RequestBody"
                 }
               }
             }
@@ -858,7 +858,7 @@
         ],
         "summary": "Fetch Questionnaire Responses",
         "description": "Fetch a patient's questionnaire responses",
-        "operationId": "fetchQuestionnaireResponse",
+        "operationId": "fetchQuestionnaireResponses",
         "security": [
           {
             "bearerAuth": []
@@ -1021,11 +1021,11 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpsertQuestionnaireResponse_RequestBody"
+                "$ref": "#/components/schemas/QuestionnaireResponse"
               },
               "examples": {
                 "UpsertQuestionnaireResponse_RequestBody": {
-                  "$ref": "#/components/examples/UpdateQuestionnaireResponse_RequestBody"
+                  "$ref": "#/components/examples/UpsertQuestionnaireResponse_RequestBody"
                 }
               }
             }
@@ -1225,6 +1225,265 @@
   },
   "components": {
     "schemas": {
+      "Questionnaire": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Globally unique ID"
+          },
+          "version": {
+            "type": "string",
+            "description": "Unique version per questionnaire ID"
+          },
+          "title": {
+            "type": "string",
+            "description": "Human-friendly title"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionnaireItem"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "title",
+          "items"
+        ]
+      },
+      "QuestionnaireItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Non-globally unique - only unique within a group"
+          },
+          "text": {
+            "type": "string",
+            "description": "Human-friendly representation of item text"
+          },
+          "type": {
+            "$ref": "#/components/schemas/QuestionnaireItemType"
+          },
+          "enableWhen": {
+            "$ref": "#/components/schemas/EnableWhen"
+          },
+          "allowMultipleSelections": {
+            "type": "boolean"
+          },
+          "displayOrder": {
+            "type": "integer"
+          },
+          "answerOptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Answer"
+            }
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionnaireItem"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "displayOrder"
+        ]
+      },
+      "AnswerType": {
+        "type": "string",
+        "enum": [
+          "CHOICE",
+          "STRING",
+          "BOOLEAN"
+        ]
+      },
+      "ChoiceAnswer": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Computer-friendly representation of the answer choice"
+          },
+          "display": {
+            "type": "string",
+            "description": "Human-friendly representation of the answer choice"
+          },
+          "alertLevel": {
+            "type": "number"
+          },
+          "displayOrder": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "AnswerValue": {
+        "description": "Polymorphic answer",
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "$ref": "#/components/schemas/ChoiceAnswer"
+          }
+        ]
+      },
+      "Answer": {
+        "type": "object",
+        "description": "Object containing a polymorphic answer, along with the type of answer",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/AnswerType"
+          },
+          "value": {
+            "$ref": "#/components/schemas/AnswerValue"
+          }
+        },
+        "required": [
+          "type",
+          "value"
+        ]
+      },
+      "EnableWhen": {
+        "type": "object",
+        "description": "Predicates that determine whether a questionnaire item should be processed",
+        "properties": {
+          "behavior": {
+            "type": "string",
+            "description": "`ANY` means at least one of the predicates must be true - `ALL` means all predicates must be true",
+            "enum": [
+              "ANY",
+              "ALL"
+            ]
+          },
+          "predicates": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "questionnaireItemId": {
+                  "type": "string",
+                  "description": "`id` value from a questionnaire item"
+                },
+                "operator": {
+                  "type": "string",
+                  "enum": [
+                    "EQUALS",
+                    "NOT_EQUALS",
+                    "GREATER_THAN",
+                    "LESSER_THAN",
+                    "EXISTS"
+                  ]
+                },
+                "answer": {
+                  "$ref": "#/components/schemas/Answer"
+                }
+              },
+              "required": [
+                "questionnaireItemId",
+                "operator",
+                "answer"
+              ]
+            }
+          }
+        },
+        "required": [
+          "behavior",
+          "predicates"
+        ]
+      },
+      "QuestionnaireResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Globally unique ID"
+          },
+          "questionnaireId": {
+            "type": "string",
+            "description": "ID of the questionnaire that is being responded to"
+          },
+          "version": {
+            "type": "string",
+            "description": "Version of the questionnaire that is being responded to"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "IN_PROGRESS",
+              "COMPLETED"
+            ]
+          },
+          "alertLevel": {
+            "type": "integer",
+            "description": "Rollup of the alert level of all `item`s. Should only be populated in the HTTP response - not part of a request to upsert a questionnaire response"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionnaireResponseItem"
+            }
+          }
+        },
+        "required": [
+          "questionnaireId",
+          "version",
+          "items"
+        ]
+      },
+      "QuestionnaireResponseItem": {
+        "type": "object",
+        "properties": {
+          "questionnaireItemId": {
+            "type": "string",
+            "description": "`id` of the questionnaire item that is being processed/answered"
+          },
+          "type": {
+            "$ref": "#/components/schemas/QuestionnaireItemType"
+          },
+          "text": {
+            "type": "string",
+            "description": "Equal to the `text` value of the associated questionnaire. Should only be populated in the HTTP response - not part of a request to upsert a questionnaire response"
+          },
+          "displayOrder": {
+            "type": "integer"
+          },
+          "alertLevel": {
+            "type": "integer"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Answer"
+            }
+          }
+        },
+        "required": [
+          "questionnaireItemId"
+        ]
+      },
+      "QuestionnaireItemType": {
+        "type": "string",
+        "enum": [
+          "CHOICE",
+          "GROUP",
+          "STRING",
+          "BOOLEAN"
+        ],
+        "description": "Represents if/how the answer should be answered. For `GROUP` questions, there should be no answer, but there must be child questionnaire items"
+      },
       "Paging": {
         "type": "object",
         "properties": {
@@ -1270,7 +1529,7 @@
             "$ref": "#/components/schemas/ManagementApi_TriageConfiguration"
           },
           "timing": {
-            "$ref": "#/components/schemas/FHIR_Timing"
+            "$ref": "#/components/schemas/Timing"
           }
         },
         "required": [
@@ -1476,7 +1735,7 @@
         "type": "object",
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/FHIR_QuestionnaireResponse"
+            "$ref": "#/components/schemas/QuestionnaireResponse"
           }
         },
         "required": [
@@ -1508,7 +1767,7 @@
             "$ref": "#/components/schemas/ManagementApi_TriageConfiguration"
           },
           "timing": {
-            "$ref": "#/components/schemas/FHIR_Timing"
+            "$ref": "#/components/schemas/Timing"
           },
           "isAssigned": {
             "type": "boolean",
@@ -1528,7 +1787,7 @@
         "type": "object",
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/FHIR_Questionnaire"
+            "$ref": "#/components/schemas/Questionnaire"
           }
         },
         "required": [
@@ -1550,10 +1809,13 @@
                   "description": "ID of the questionnaire"
                 },
                 "timing": {
-                  "$ref": "#/components/schemas/FHIR_Timing"
+                  "$ref": "#/components/schemas/Timing"
                 }
               },
-              "required": ["id", "timing"]
+              "required": [
+                "id",
+                "timing"
+              ]
             }
           },
           "remove": {
@@ -1579,7 +1841,7 @@
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireResponse"
+              "$ref": "#/components/schemas/QuestionnaireResponse"
             }
           }
         },
@@ -1588,448 +1850,7 @@
           "data"
         ]
       },
-      "Error": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Unique ID for this error"
-          },
-          "source": {
-            "type": "string",
-            "description": "Service where the error originated"
-          },
-          "httpStatus": {
-            "type": "string",
-            "enum": [
-              "NOT_FOUND",
-              "FORBIDDEN",
-              "BAD_REQUEST"
-            ],
-            "description": "String representation of HTTP status"
-          },
-          "timestamp": {
-            "type": "string"
-          },
-          "status": {
-            "type": "integer",
-            "description": "HTTP status"
-          },
-          "error": {
-            "type": "string",
-            "description": "Human readable form of the exception or httpStatus. This MUST be included"
-          },
-          "exception": {
-            "type": "string",
-            "description": "The exception class"
-          },
-          "message": {
-            "type": "string",
-            "description": "Human readable message"
-          },
-          "detail": {
-            "type": "string",
-            "description": "A human readable message that describes the specific failure"
-          }
-        }
-      },
-      "FHIR_Questionnaire": {
-        "type": "object",
-        "description": "FHIR representation of a questionnaire",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "UUID with the tenant ID as a prefix"
-          },
-          "version": {
-            "type": "string",
-            "description": "The version of the questionnaire"
-          },
-          "title": {
-            "type": "string",
-            "description": "Human-friendly name for the questionnaire"
-          },
-          "status": {
-            "$ref": "#/components/schemas/FHIR_QuestionnaireStatus"
-          },
-          "item": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireItem"
-            }
-          }
-        },
-        "required": [
-          "id",
-          "version",
-          "title",
-          "status",
-          "item"
-        ]
-      },
-      "FHIR_QuestionnaireResponse": {
-        "type": "object",
-        "description": "FHIR representation of a questionnaire response",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "UUID with the tenant ID as a prefix"
-          },
-          "questionnaire": {
-            "type": "string",
-            "description": "The ID associated Questionnaire"
-          },
-          "version": {
-            "type": "string",
-            "description": "The version of the questionnaire"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "in-progress",
-              "completed",
-              "amended",
-              "entered-in-error",
-              "stopped"
-            ]
-          },
-          "item": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItemWithExtension"
-            }
-          }
-        },
-        "required": [
-          "id",
-          "questionnaire",
-          "version",
-          "item"
-        ]
-      },
-      "UpsertQuestionnaireResponse_RequestBody": {
-        "type": "object",
-        "description": "FHIR representation of a questionnaire response",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "UUID with the tenant ID as a prefix"
-          },
-          "questionnaire": {
-            "type": "string",
-            "description": "The ID associated Questionnaire"
-          },
-          "version": {
-            "type": "string",
-            "description": "The version of the questionnaire"
-          },
-          "item": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItem"
-            }
-          }
-        },
-        "required": [
-          "questionnaire",
-          "version",
-          "item"
-        ]
-      },
-      "CreateQuestionnaireResponse_RequestBody": {
-        "type": "object",
-        "description": "FHIR representation of a questionnaire response",
-        "properties": {
-          "questionnaire": {
-            "type": "string",
-            "description": "The ID associated Questionnaire"
-          },
-          "version": {
-            "type": "string",
-            "description": "The version of the questionnaire"
-          },
-          "item": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItem"
-            }
-          }
-        },
-        "required": [
-          "questionnaire",
-          "version",
-          "item"
-        ]
-      },
-      "FHIR_QuestionnaireIdentifier": {
-        "type": "object",
-        "properties": {
-          "system": {
-            "type": "string",
-            "description": "Identifier for the identifier type. Eg, whether this is a tenant, provider, patient, etc"
-          },
-          "value": {
-            "type": "string",
-            "description": "Value of the identity. Eg, the tenant ID"
-          }
-        }
-      },
-      "FHIR_QuestionnaireStatus": {
-        "type": "string",
-        "enum": [
-          "draft",
-          "active",
-          "retired",
-          "unknown"
-        ]
-      },
-      "FHIR_QuestionnaireResponseItem": {
-        "type": "object",
-        "description": "FHIR representation of an answer in a questionnaire response",
-        "properties": {
-          "linkId": {
-            "type": "string",
-            "description": "Globally unique ID of the question"
-          },
-          "item": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItem"
-            }
-          },
-          "answer": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FHIR_TypedValues"
-            }
-          }
-        },
-        "required": [
-          "linkId"
-        ]
-      },
-      "FHIR_QuestionnaireResponseItemWithExtension": {
-        "type": "object",
-        "description": "FHIR representation of an answer in a questionnaire response",
-        "properties": {
-          "linkId": {
-            "type": "string",
-            "description": "Globally unique ID of the question"
-          },
-          "item": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireResponseItemWithExtension"
-            }
-          },
-          "answer": {
-            "type": "array",
-            "items": {
-                "$ref": "#/components/schemas/FHIR_TypedValues"
-            }
-          },
-          "extension": {
-            "type": "array",
-            "description": "General-purpose object for extending the definition of a FHIR model. For Ronin questionnaires, the primary (and possible only) use will be capturing the \"valueDecimal\", which will represent the alert level of an answer. Is not present in requests, but should be present in responses",
-            "items": {
-              "type": "object",
-              "properties": {
-                "url": {
-                  "type": "string",
-                  "description": "Identifier for the extension type"
-                },
-                "valueDecimal": {
-                  "type": "number",
-                  "description": "Used to capture the alert-level of the answer"
-                }
-              },
-              "required": [
-                "valueDecimal"
-              ]
-            }
-          }
-        },
-        "required": [
-          "linkId"
-        ]
-      },
-      "FHIR_QuestionnaireItem": {
-        "type": "object",
-        "description": "FHIR representation of a question in a questionnaire",
-        "properties": {
-          "linkId": {
-            "type": "string",
-            "description": "Globally unique ID of the question"
-          },
-          "prefix": {
-            "type": "string",
-            "description": "Determines order of questionnaire items"
-          },
-          "text": {
-            "type": "string",
-            "description": "Value to be displayed to the user"
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "group",
-              "boolean",
-              "decimal",
-              "integer",
-              "date",
-              "dateTime",
-              "choice",
-              "string"
-            ]
-          },
-          "repeats": {
-            "type": "boolean",
-            "description": "Whether multiple answers can be selected. Typical multiple-choice questions would have `type: choice` and `repeats: true`. Defaults to `false`"
-          },
-          "enableWhen": {
-            "type": "array",
-            "description": "Mechanism for enabling/disabling a question based on a predicate.\n Eg, given the the object `{ \"question\": 123, \"operator\": \"=\", \"Hello\" }`, this question would only be presented if the question with the ID `123` had the answer \"Hello\" ",
-            "items": {
-              "allOf": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "question": {
-                      "type": "string"
-                    },
-                    "operator": {
-                      "type": "string",
-                      "enum": [
-                        "exists",
-                        "=",
-                        "!=",
-                        ">",
-                        "<",
-                        ">=",
-                        "<="
-                      ]
-                    }
-                  },
-                  "required": [
-                    "question",
-                    "operator"
-                  ]
-                },
-                {
-                  "$ref": "#/components/schemas/FHIR_TypedAnswers"
-                }
-              ]
-            }
-          },
-          "enableBehavior": {
-            "type": "string",
-            "description": "How to handle multiple `enableWhen` predicates - whether all or any of them must be true. This value must be present if multiple `enableWhen` values are present",
-            "enum": [
-              "any",
-              "all"
-            ]
-          },
-          "answerOption": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FHIR_TypedValues"
-            }
-          },
-          "item": {
-            "type": "array",
-            "description": "Used to support nested items when `type == group`",
-            "items": {
-              "$ref": "#/components/schemas/FHIR_QuestionnaireItem"
-            }
-          }
-        },
-        "required": [
-          "linkId",
-          "prefix",
-          "type"
-        ]
-      },
-      "FHIR_TypedValues": {
-        "type": "object",
-        "description": "Possible values to be used based on the type of answer being provided",
-        "properties": {
-          "valueInteger": {
-            "type": "integer"
-          },
-          "valueDecimal": {
-            "type": "number"
-          },
-          "valueDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "valueDateTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "valueString": {
-            "type": "string"
-          },
-          "valueBoolean": {
-            "type": "boolean"
-          },
-          "valueCoding": {
-            "type": "object",
-            "description": "Used for single and multiple-choice questions, as we can use the `system` and `code` values to find the correct value set, and value within the value set",
-            "properties": {
-              "code": {
-                "type": "string",
-                "description": "Computer-friendly representation of the answer option"
-              },
-              "display": {
-                "type": "string",
-                "description": "Human-friendly representation of the answer option"
-              }
-            }
-          }
-        }
-      },
-      "FHIR_TypedAnswers": {
-        "type": "object",
-        "description": "Possible values to be used based on the type of answer being provided",
-        "properties": {
-          "answerInteger": {
-            "type": "integer"
-          },
-          "answerDecimal": {
-            "type": "number"
-          },
-          "answerDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "answerDateTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "answerString": {
-            "type": "string"
-          },
-          "answerBoolean": {
-            "type": "boolean"
-          },
-          "answerCoding": {
-            "type": "object",
-            "description": "Used for single and multiple-choice questions, as we can use the `system` and `code` values to find the correct value set, and value within the value set",
-            "properties": {
-              "code": {
-                "type": "string",
-                "description": "Computer-friendly representation of the answer option"
-              },
-              "display": {
-                "type": "string",
-                "description": "Human-friendly representation of the answer option"
-              }
-            }
-          }
-        }
-      },
-      "FHIR_Timing": {
+      "Timing": {
         "type": "object",
         "properties": {
           "repeat": {
@@ -2083,6 +1904,51 @@
         "required": [
           "repeat"
         ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique ID for this error"
+          },
+          "source": {
+            "type": "string",
+            "description": "Service where the error originated"
+          },
+          "httpStatus": {
+            "type": "string",
+            "enum": [
+              "NOT_FOUND",
+              "FORBIDDEN",
+              "BAD_REQUEST"
+            ],
+            "description": "String representation of HTTP status"
+          },
+          "timestamp": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "description": "HTTP status"
+          },
+          "error": {
+            "type": "string",
+            "description": "Human readable form of the exception or httpStatus. This MUST be included"
+          },
+          "exception": {
+            "type": "string",
+            "description": "The exception class"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human readable message"
+          },
+          "detail": {
+            "type": "string",
+            "description": "A human readable message that describes the specific failure"
+          }
+        }
       }
     },
     "examples": {
@@ -2480,304 +2346,6 @@
           ]
         }
       },
-      "FetchQuestionnaire_ResponseBody": {
-        "summary": "Questionnaire Response Body",
-        "value": {
-          "data": {
-            "id": "d78f8706-6e68-49b0-a57c-4a0f3aedb128",
-            "version": "1.0",
-            "title": "PSJ - Daily Breast Cancer Survey",
-            "status": "active",
-            "item": [
-              {
-                "linkId": "Q1",
-                "prefix": "000",
-                "text": "Are you nauseous?",
-                "type": "choice",
-                "repeats": false,
-                "answerOption": [
-                  {
-                    "valueCoding": {
-                      "code": "LA6568-5",
-                      "display": "Not at all"
-                    }
-                  },
-                  {
-                    "valueCoding": {
-                      "code": "LA6569-3",
-                      "display": "Sometimes"
-                    }
-                  },
-                  {
-                    "valueCoding": {
-                      "code": "LA6569-2",
-                      "display": "Always"
-                    }
-                  }
-                ]
-              },
-              {
-                "linkId": "Q2",
-                "prefix": "001",
-                "text": "Are you dehydrated?",
-                "type": "choice",
-                "repeats": false,
-                "enableWhen": [
-                  {
-                    "question": "e0673ad3-e023-4a46-82e1-5dfb1acb2d3d",
-                    "operator": "=",
-                    "answerCoding": {
-                      "valueCoding": {
-                        "code": "LA6569-2",
-                        "display": "Always"
-                      }
-                    }
-                  }
-                ],
-                "enableBehavior": "all",
-                "answerOption": [
-                  {
-                    "valueCoding": {
-                      "code": "LA6568-5",
-                      "display": "Not at all"
-                    }
-                  },
-                  {
-                    "valueCoding": {
-                      "code": "LA6569-3",
-                      "display": "Sometimes"
-                    }
-                  },
-                  {
-                    "valueCoding": {
-                      "code": "LA6569-2",
-                      "display": "Always"
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        }
-      },
-      "FetchQuestionnaireResponses_ResponseBody": {
-        "summary": "Response body when fetching a patient questionnaire responses",
-        "value": {
-          "paging": {
-            "page": 0,
-            "limit": 1
-          },
-          "data": [
-            {
-              "id": "9d81ae65-00be-4243-aace-c23915d923d9",
-              "questionnaire": "d78f8706-6e68-49b0-a57c-4a0f3aedb128",
-              "version": "1.0",
-              "status": "in-progress",
-              "item": [
-                {
-                  "linkId": "0",
-                  "answer": [
-                    {
-                      "valueBoolean": true
-                    }
-                  ],
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                      "valueDecimal": 1
-                    }
-                  ]
-                },
-                {
-                  "linkId": "1",
-                  "answer": [
-                    {
-                      "valueString": "Sometimes"
-                    }
-                  ],
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                      "valueDecimal": 2
-                    }
-                  ]
-                },
-                {
-                  "linkId": "2",
-                  "answer": [
-                    {
-                      "valueCoding": {
-                        "system": "http://loinc.org",
-                        "code": "LA6568-5",
-                        "display": "Not at all"
-                      }
-                    }
-                  ],
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                      "valueDecimal": 2
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "UpsertQuestionnaireResponse_ResponseBody": {
-        "summary": "Response body from creating or updating a questionnaire response",
-        "value": {
-          "data": {
-            "id": "9d81ae65-00be-4243-aace-c23915d923d9",
-            "questionnaire": "d78f8706-6e68-49b0-a57c-4a0f3aedb128",
-            "version": "1.0",
-            "status": "in-progress",
-            "item": [
-              {
-                "linkId": "0",
-                "answer": [
-                  {
-                    "valueBoolean": true
-                  }
-                ],
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                    "valueDecimal": 1
-                  }
-                ]
-              },
-              {
-                "linkId": "1",
-                "answer": [
-                  {
-                    "valueString": "Sometimes"
-                  }
-                ],
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                    "valueDecimal": 2
-                  }
-                ]
-              },
-              {
-                "linkId": "2",
-                "item": [
-                  {
-                    "linkId": "3",
-                    "answer": [
-                      {
-                        "valueCoding": {
-                          "system": "http://loinc.org",
-                          "code": "LA6568-5",
-                          "display": "Not at all"
-                        }
-                      }
-                    ],
-                    "extension": [
-                      {
-                        "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
-                        "valueDecimal": 2
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        }
-      },
-      "CreateQuestionnaireResponse_RequestBody": {
-        "description": "Request body used to create a questionnaire response",
-        "value": {
-          "questionnaire": "9b93f927-b4ec-45c1-9d02-97a9f838b871",
-          "version": "1.0",
-          "item": [
-            {
-              "linkId": "0",
-              "answer": [
-                {
-                  "valueString": "None"
-                }
-              ]
-            },
-            {
-              "linkId": "1",
-              "item": [
-                {
-                  "linkId": "3",
-                  "answer": [
-                    {
-                      "valueCoding": {
-                        "system": "https://loinc.com",
-                        "code": "LA6568-5"
-                      }
-                    },
-                    {
-                      "valueCoding": {
-                        "system": "https://loinc.com",
-                        "code": "LA6563-8"
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "linkId": "2",
-              "answer": [
-                {
-                  "valueBoolean": true
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "UpdateQuestionnaireResponse_RequestBody": {
-        "description": "Request body used to update a questionnaire response",
-        "value": {
-          "id": "e94b25aa-1ff6-42e2-b252-a50227336c8f",
-          "questionnaire": "9b93f927-b4ec-45c1-9d02-97a9f838b871",
-          "version": "1.0",
-          "item": [
-            {
-              "linkId": "0",
-              "answer": [
-                {
-                  "valueString": "All"
-                }
-              ]
-            },
-            {
-              "linkId": "1",
-              "item": [
-                {
-                  "linkId": "3",
-                  "answer": [
-                    {
-                      "valueCoding": {
-                        "system": "https://loinc.com",
-                        "code": "LA6568-5"
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "linkId": "2",
-              "answer": [
-                {
-                  "valueBoolean": false
-                }
-              ]
-            }
-          ]
-        }
-      },
       "QuestionnaireAssignment_RequestBody": {
         "summary": "Questionnaire Assignment - Once per week with a start and end date",
         "value": {
@@ -2851,6 +2419,493 @@
               "exception": "com.projectronin.produce.common.exception.ForbiddenException",
               "message": "Forbidden",
               "detail": "No"
+            }
+          ]
+        }
+      },
+      "FetchQuestionnaire_ResponseBody": {
+        "description": "Response body when fetching a questionnaire",
+        "value": {
+          "id": "c5e4a3f5-6594-4856-8f37-7778ca96bc11",
+          "version": "1.0",
+          "title": "Daily Breast Cancer Questionnaire",
+          "items": [
+            {
+              "id": "Q1",
+              "text": "What are your symptoms",
+              "type:": "CHOICE",
+              "allowMultipleSelections": false,
+              "displayOrder": 1,
+              "answerOptions": [
+                {
+                  "type": "CHOICE",
+                  "value": {
+                    "code": "nausea",
+                    "display": "Nausea",
+                    "displayOrder": 1
+                  }
+                },
+                {
+                  "type": "CHOICE",
+                  "value": {
+                    "code": "stomach-pain",
+                    "display": "Stomach Pain",
+                    "displayOrder": 2
+                  }
+                }
+              ]
+            },
+            {
+              "id": "Q2",
+              "type": "GROUP",
+              "displayOrder": 2,
+              "text": "Nausea",
+              "enableWhen": {
+                "behavior": "ALL",
+                "predicates": [
+                  {
+                    "questionnaireItemId": "Q1",
+                    "operator": "EQUALS",
+                    "answer": {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "nausea"
+                      }
+                    }
+                  }
+                ]
+              },
+              "items": [
+                {
+                  "id": "Q2-1",
+                  "text": "What is the severity of your nausea?",
+                  "displayOrder": 1,
+                  "type": "CHOICE",
+                  "allowMultipleSelections": false,
+                  "answerOptions": [
+                    {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "mild",
+                        "display": "Mild",
+                        "alertLevel": 1,
+                        "displayOrder": 1
+                      }
+                    },
+                    {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "moderate",
+                        "display": "Moderate",
+                        "alertLevel": 2,
+                        "displayOrder": 2
+                      }
+                    },
+                    {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "severe",
+                        "display": "Severe",
+                        "alertLevel": 3,
+                        "displayOrder": 3
+                      }
+                    },
+                    {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "very-severe",
+                        "display": "Very Sever",
+                        "alertLevel": 4,
+                        "displayOrder": 4
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "Q2-2",
+                  "text": "How frequently are you experiencing nausea?",
+                  "displayOrder": 2,
+                  "type": "CHOICE",
+                  "answerOptions": [
+                    {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "rarely",
+                        "display": "Rarely",
+                        "alertLevel": 1,
+                        "displayOrder": 1
+                      }
+                    },
+                    {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "occasionally",
+                        "display": "Occasionally",
+                        "alertLevel": 2,
+                        "displayOrder": 2
+                      }
+                    },
+                    {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "frequently",
+                        "display": "Frequently",
+                        "alertLevel": 3,
+                        "displayOrder": 3
+                      }
+                    },
+                    {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "almost-constant",
+                        "display": "Almost Constant",
+                        "alertLevel": 4,
+                        "displayOrder": 4
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "Q3",
+              "type": "GROUP",
+              "displayOrder": 3,
+              "text": "Stomach Pain",
+              "enableWhen": {
+                "behavior": "ALL",
+                "predicates": [
+                  {
+                    "questionnaireItemId": "Q1",
+                    "operator": "EQUALS",
+                    "answer": {
+                      "type": "CODE",
+                      "value": {
+                        "code": "stomach-pain"
+                      }
+                    }
+                  }
+                ]
+              },
+              "items": [
+                {
+                  "id": "Q2-1",
+                  "text": "What is the severity of your stomach pain?",
+                  "displayOrder": 1,
+                  "type": "CHOICE",
+                  "answerOptions": [
+                    {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "mild",
+                        "display": "Mild",
+                        "alertLevel": 1,
+                        "displayOrder": 1
+                      }
+                    },
+                    {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "moderate",
+                        "display": "Moderate",
+                        "alertLevel": 2,
+                        "displayOrder": 2
+                      }
+                    },
+                    {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "severe",
+                        "display": "Severe",
+                        "alertLevel": 3,
+                        "displayOrder": 3
+                      }
+                    },
+                    {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "very-severe",
+                        "display": "Very Sever",
+                        "alertLevel": 4,
+                        "displayOrder": 4
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "Q2-2",
+                  "text": "How frequently are you experiencing stomach pain?",
+                  "displayOrder": 2,
+                  "type": "CHOICE",
+                  "answerOptions": [
+                    {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "rarely",
+                        "display": "Rarely",
+                        "alertLevel": 1,
+                        "displayOrder": 1
+                      }
+                    },
+                    {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "occasionally",
+                        "display": "Occasionally",
+                        "alertLevel": 2,
+                        "displayOrder": 2
+                      }
+                    },
+                    {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "frequently",
+                        "display": "Frequently",
+                        "alertLevel": 3,
+                        "displayOrder": 3
+                      }
+                    },
+                    {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "almost-constant",
+                        "display": "Almost Constant",
+                        "alertLevel": 4,
+                        "displayOrder": 4
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "Q4",
+              "type": "STRING",
+              "displayOrder": 4,
+              "text": "Anything Else?"
+            }
+          ]
+        }
+      },
+      "UpsertQuestionnaireResponse_RequestBody": {
+        "description": "Request body when creating a questionnaire response",
+        "value": {
+          "questionnaireId": "c5e4a3f5-6594-4856-8f37-7778ca96bc11,",
+          "version": "1.0",
+          "items": [
+            {
+              "questionnaireItemId": "Q1",
+              "answers": [
+                {
+                  "type": "CHOICE",
+                  "value": {
+                    "code": "nausea"
+                  }
+                }
+              ]
+            },
+            {
+              "questionnaireItemId": "Q2",
+              "items": [
+                {
+                  "questionnaireItemId": "Q2-1",
+                  "answers": [
+                    {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "mild"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "questionnaireItemId": "Q2-2",
+                  "answers": [
+                    {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "occasionally"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "questionnaireItemId": "Q4",
+              "answers": [
+                {
+                  "type": "STRING",
+                  "value": "Feeling better since my last appointment"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "UpsertQuestionnaireResponse_ResponseBody": {
+        "description": "Response body when creating/updating a questionnaire response",
+        "value": {
+          "data": {
+            "id": "c9115251-cb52-4fec-9ea2-474414ec71ee",
+            "questionnaireId": "c5e4a3f5-6594-4856-8f37-7778ca96bc11,",
+            "version": "1.0",
+            "alertLevel": 3,
+            "items": [
+              {
+                "questionnaireItemId": "Q1",
+                "text": "What are your symptoms?",
+                "type": "CHOICE",
+                "displayOrder": 1,
+                "answers": [
+                  {
+                    "type": "CHOICE",
+                    "value": {
+                      "code": "nausea",
+                      "display": "Nausea"
+                    }
+                  }
+                ]
+              },
+              {
+                "questionnaireItemId": "Q2",
+                "type": "GROUP",
+                "alertLevel": 3,
+                "displayOrder": 2,
+                "text": "Nausea",
+                "items": [
+                  {
+                    "questionnaireItemId": "Q2-1",
+                    "type": "CHOICE",
+                    "text": "How severe is your nausea?",
+                    "alertLevel": 1,
+                    "displayOrder": 1,
+                    "answers": [
+                      {
+                        "type": "CHOICE",
+                        "value": {
+                          "code": "mild",
+                          "display": "Mild"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "questionnaireItemId": "Q2-2",
+                    "type": "CHOICE",
+                    "text": "How frequently are you experiencing nausea?",
+                    "alertLevel": 3,
+                    "displayOrder": 2,
+                    "answers": [
+                      {
+                        "type": "CHOICE",
+                        "value": {
+                          "code": "frequently",
+                          "display": "Frequently"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "questionnaireItemId": "Q4",
+                "type": "STRING",
+                "displayOrder": 4,
+                "text": "Anything Else?",
+                "answers": [
+                  {
+                    "type": "STRING",
+                    "value": "Feeling better since my last appointment"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "FetchQuestionnaireResponses_ResponseBody": {
+        "description": "Response body when creating/updating a questionnaire response",
+        "value": {
+          "paging": {
+            "page": 0,
+            "limit": 20
+          },
+          "data": [
+            {
+              "id": "c9115251-cb52-4fec-9ea2-474414ec71ee",
+              "questionnaireId": "c5e4a3f5-6594-4856-8f37-7778ca96bc11,",
+              "version": "1.0",
+              "alertLevel": 3,
+              "items": [
+                {
+                  "questionnaireItemId": "Q1",
+                  "type": "CHOICE",
+                  "text": "What are your symptoms?",
+                  "displayOrder": 1,
+                  "answers": [
+                    {
+                      "type": "CHOICE",
+                      "value": {
+                        "code": "nausea",
+                        "display": "Nausea"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "questionnaireItemId": "Q2",
+                  "type": "GROUP",
+                  "alertLevel": 3,
+                  "text": "Nausea",
+                  "items": [
+                    {
+                      "questionnaireItemId": "Q2-1",
+                      "type": "CHOICE",
+                      "text": "How severe is your nausea?",
+                      "displayOrder": 1,
+                      "alertLevel": 1,
+                      "answers": [
+                        {
+                          "type": "CHOICE",
+                          "value": {
+                            "code": "mild",
+                            "display": "Mild"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "questionnaireItemId": "Q2-2",
+                      "type": "CHOICE",
+                      "text": "How frequently are you experiencing nausea?",
+                      "displayOrder": 2,
+                      "alertLevel": 3,
+                      "answers": [
+                        {
+                          "type": "CHOICE",
+                          "value": {
+                            "code": "frequently",
+                            "display": "Frequently"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "questionnaireItemId": "Q4",
+                  "type": "STRING",
+                  "displayOrder": 4,
+                  "text": "Anything Else?",
+                  "answers": [
+                    {
+                      "type": "STRING",
+                      "value": "Feeling better since my last appointment"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }
