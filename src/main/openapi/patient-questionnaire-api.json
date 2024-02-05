@@ -858,7 +858,7 @@
         ],
         "summary": "Fetch Questionnaire Responses",
         "description": "Fetch a patient's questionnaire responses",
-        "operationId": "fetchQuestionnaireResponse",
+        "operationId": "fetchQuestionnaireResponses",
         "security": [
           {
             "bearerAuth": []
@@ -887,6 +887,20 @@
           },
           {
             "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "in-progress",
+                "completed"
+              ]
+            },
+            "description": "Filter responses by status",
+            "example": "completed",
+            "required": false
+          },
+          {
+            "in": "query",
             "name": "limit",
             "schema": {
               "type": "integer"
@@ -908,7 +922,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully Created",
+            "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
