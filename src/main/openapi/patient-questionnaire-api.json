@@ -1318,41 +1318,34 @@
           "BOOLEAN"
         ]
       },
-      "ChoiceAnswer": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string",
-            "description": "Computer-friendly representation of the answer choice"
-          },
-          "display": {
-            "type": "string",
-            "description": "Human-friendly representation of the answer choice"
-          },
-          "alertLevel": {
-            "type": "number"
-          },
-          "displayOrder": {
-            "type": "integer"
-          }
-        },
-        "required": [
-          "code"
-        ]
-      },
       "AnswerValue": {
-        "description": "Polymorphic answer",
-        "oneOf": [
-          {
+        "type": "object",
+        "description": "Possible values to be used based on the type of answer being provided",
+        "properties": {
+          "valueString": {
             "type": "string"
           },
-          {
+          "valueBoolean": {
             "type": "boolean"
           },
-          {
-            "$ref": "#/components/schemas/ChoiceAnswer"
+          "valueCoding": {
+            "type": "object",
+            "description": "Used for single and multiple-choice questions, as we can use the `system` and `code` values to find the correct value set, and value within the value set",
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "Computer-friendly representation of the answer option"
+              },
+              "display": {
+                "type": "string",
+                "description": "Human-friendly representation of the answer option"
+              },
+              "displayOrder": {
+                "type": "integer"
+              }
+            }
           }
-        ]
+        }
       },
       "Answer": {
         "type": "object",
@@ -1363,6 +1356,9 @@
           },
           "value": {
             "$ref": "#/components/schemas/AnswerValue"
+          },
+          "alertLevel": {
+            "type": "integer"
           }
         },
         "required": [
@@ -1481,6 +1477,12 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Answer"
+            }
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionnaireResponseItem"
             }
           }
         },
