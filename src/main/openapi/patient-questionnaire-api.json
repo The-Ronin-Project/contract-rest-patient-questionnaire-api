@@ -1343,7 +1343,10 @@
               "displayOrder": {
                 "type": "integer"
               }
-            }
+            },
+            "required": [
+              "code"
+            ]
           }
         }
       },
@@ -2456,18 +2459,24 @@
                 {
                   "type": "CHOICE",
                   "value": {
-                    "code": "nausea",
-                    "display": "Nausea",
-                    "displayOrder": 1
-                  }
+                    "valueCoding": {
+                      "code": "nausea",
+                      "display": "Nausea",
+                      "displayOrder": 1
+                    }
+                  },
+                  "alertLevel": 1
                 },
                 {
                   "type": "CHOICE",
                   "value": {
-                    "code": "stomach-pain",
-                    "display": "Stomach Pain",
-                    "displayOrder": 2
-                  }
+                    "valueCoding": {
+                      "code": "stomach-pain",
+                      "display": "Stomach Pain",
+                      "displayOrder": 2
+                    }
+                  },
+                  "alertLevel": 2
                 }
               ]
             },
@@ -2485,7 +2494,9 @@
                     "answer": {
                       "type": "CHOICE",
                       "value": {
-                        "code": "nausea"
+                        "valueCoding": {
+                          "code": "nausea"
+                        }
                       }
                     }
                   }
@@ -2502,38 +2513,46 @@
                     {
                       "type": "CHOICE",
                       "value": {
-                        "code": "mild",
-                        "display": "Mild",
-                        "alertLevel": 1,
-                        "displayOrder": 1
-                      }
+                        "valueCoding": {
+                          "code": "mild",
+                          "display": "Mild",
+                          "displayOrder": 1
+                        }
+                      },
+                      "alertLevel": 1
                     },
                     {
                       "type": "CHOICE",
                       "value": {
-                        "code": "moderate",
-                        "display": "Moderate",
-                        "alertLevel": 2,
-                        "displayOrder": 2
-                      }
+                        "valueCoding": {
+                          "code": "moderate",
+                          "display": "Moderate",
+                          "displayOrder": 2
+                        }
+                      },
+                      "alertLevel": 2
                     },
                     {
                       "type": "CHOICE",
                       "value": {
-                        "code": "severe",
-                        "display": "Severe",
-                        "alertLevel": 3,
-                        "displayOrder": 3
-                      }
+                        "valueCoding": {
+                          "code": "severe",
+                          "display": "Severe",
+                          "displayOrder": 3
+                        }
+                      },
+                      "alertLevel": 3
                     },
                     {
                       "type": "CHOICE",
                       "value": {
-                        "code": "very-severe",
-                        "display": "Very Sever",
-                        "alertLevel": 4,
-                        "displayOrder": 4
-                      }
+                        "valueCoding": {
+                          "code": "very-severe",
+                          "display": "Very Sever",
+                          "displayOrder": 4
+                        }
+                      },
+                      "alertLevel": 4
                     }
                   ]
                 },
@@ -2546,38 +2565,46 @@
                     {
                       "type": "CHOICE",
                       "value": {
-                        "code": "rarely",
-                        "display": "Rarely",
-                        "alertLevel": 1,
-                        "displayOrder": 1
-                      }
+                        "valueCoding": {
+                          "code": "rarely",
+                          "display": "Rarely",
+                          "displayOrder": 1
+                        }
+                      },
+                      "alertLevel": 1
                     },
                     {
                       "type": "CHOICE",
                       "value": {
-                        "code": "occasionally",
-                        "display": "Occasionally",
-                        "alertLevel": 2,
-                        "displayOrder": 2
-                      }
+                        "valueCoding": {
+                          "code": "occasionally",
+                          "display": "Occasionally",
+                          "displayOrder": 2
+                        }
+                      },
+                      "alertLevel": 2
                     },
                     {
                       "type": "CHOICE",
                       "value": {
-                        "code": "frequently",
-                        "display": "Frequently",
-                        "alertLevel": 3,
-                        "displayOrder": 3
-                      }
+                        "valueCoding": {
+                          "code": "frequently",
+                          "display": "Frequently",
+                          "displayOrder": 3
+                        }
+                      },
+                      "alertLevel": 3
                     },
                     {
                       "type": "CHOICE",
                       "value": {
-                        "code": "almost-constant",
-                        "display": "Almost Constant",
-                        "alertLevel": 4,
-                        "displayOrder": 4
-                      }
+                        "valueCoding": {
+                          "code": "almost-constant",
+                          "display": "Almost Constant",
+                          "displayOrder": 4
+                        }
+                      },
+                      "alertLevel": 4
                     }
                   ]
                 }
@@ -2597,7 +2624,9 @@
                     "answer": {
                       "type": "CODE",
                       "value": {
-                        "code": "stomach-pain"
+                        "valueCoding": {
+                          "code": "stomach-pain"
+                        }
                       }
                     }
                   }
@@ -2613,38 +2642,46 @@
                     {
                       "type": "CHOICE",
                       "value": {
-                        "code": "mild",
-                        "display": "Mild",
-                        "alertLevel": 1,
-                        "displayOrder": 1
-                      }
+                        "valueCoding": {
+                          "code": "mild",
+                          "display": "Mild",
+                          "displayOrder": 1
+                        }
+                      },
+                      "alertLevel": 1
                     },
                     {
                       "type": "CHOICE",
                       "value": {
-                        "code": "moderate",
-                        "display": "Moderate",
-                        "alertLevel": 2,
-                        "displayOrder": 2
-                      }
+                        "valueCoding": {
+                          "code": "moderate",
+                          "display": "Moderate",
+                          "displayOrder": 2
+                        }
+                      },
+                      "alertLevel": 2
                     },
                     {
                       "type": "CHOICE",
                       "value": {
-                        "code": "severe",
-                        "display": "Severe",
-                        "alertLevel": 3,
-                        "displayOrder": 3
-                      }
+                        "valueCoding": {
+                          "code": "severe",
+                          "display": "Severe",
+                          "displayOrder": 3
+                        }
+                      },
+                      "alertLevel": 3
                     },
                     {
                       "type": "CHOICE",
                       "value": {
-                        "code": "very-severe",
-                        "display": "Very Sever",
-                        "alertLevel": 4,
-                        "displayOrder": 4
-                      }
+                        "valueCoding": {
+                          "code": "very-severe",
+                          "display": "Very Sever",
+                          "displayOrder": 4
+                        }
+                      },
+                      "alertLevel": 4
                     }
                   ]
                 },
@@ -2657,38 +2694,46 @@
                     {
                       "type": "CHOICE",
                       "value": {
-                        "code": "rarely",
-                        "display": "Rarely",
-                        "alertLevel": 1,
-                        "displayOrder": 1
-                      }
+                        "valueCoding": {
+                          "code": "rarely",
+                          "display": "Rarely",
+                          "displayOrder": 1
+                        }
+                      },
+                      "alertLevel": 1
                     },
                     {
                       "type": "CHOICE",
                       "value": {
-                        "code": "occasionally",
-                        "display": "Occasionally",
-                        "alertLevel": 2,
-                        "displayOrder": 2
-                      }
+                        "valueCoding": {
+                          "code": "occasionally",
+                          "display": "Occasionally",
+                          "displayOrder": 2
+                        }
+                      },
+                      "alertLevel": 2
                     },
                     {
                       "type": "CHOICE",
                       "value": {
-                        "code": "frequently",
-                        "display": "Frequently",
-                        "alertLevel": 3,
-                        "displayOrder": 3
-                      }
+                        "valueCoding": {
+                          "code": "frequently",
+                          "display": "Frequently",
+                          "displayOrder": 3
+                        }
+                      },
+                      "alertLevel": 3
                     },
                     {
                       "type": "CHOICE",
                       "value": {
-                        "code": "almost-constant",
-                        "display": "Almost Constant",
-                        "alertLevel": 4,
-                        "displayOrder": 4
-                      }
+                        "valueCoding": {
+                          "code": "almost-constant",
+                          "display": "Almost Constant",
+                          "displayOrder": 4
+                        }
+                      },
+                      "alertLevel": 4
                     }
                   ]
                 }
@@ -2729,7 +2774,9 @@
                     {
                       "type": "CHOICE",
                       "value": {
-                        "code": "mild"
+                        "valueCoding": {
+                          "code": "mild"
+                        }
                       }
                     }
                   ]
@@ -2740,7 +2787,9 @@
                     {
                       "type": "CHOICE",
                       "value": {
-                        "code": "occasionally"
+                        "valueCoding": {
+                          "code": "occasionally"
+                        }
                       }
                     }
                   ]
@@ -2752,7 +2801,9 @@
               "answers": [
                 {
                   "type": "STRING",
-                  "value": "Feeling better since my last appointment"
+                  "value": {
+                    "valueString": "Feeling better since my last appointment"
+                  }
                 }
               ]
             }
@@ -2777,8 +2828,10 @@
                   {
                     "type": "CHOICE",
                     "value": {
-                      "code": "nausea",
-                      "display": "Nausea"
+                      "valueCoding": {
+                        "code": "nausea",
+                        "display": "Nausea"
+                      }
                     }
                   }
                 ]
@@ -2800,8 +2853,10 @@
                       {
                         "type": "CHOICE",
                         "value": {
-                          "code": "mild",
-                          "display": "Mild"
+                          "valueCoding": {
+                            "code": "mild",
+                            "display": "Mild"
+                          }
                         }
                       }
                     ]
@@ -2816,8 +2871,10 @@
                       {
                         "type": "CHOICE",
                         "value": {
-                          "code": "frequently",
-                          "display": "Frequently"
+                          "valueCoding": {
+                            "code": "frequently",
+                            "display": "Frequently"
+                          }
                         }
                       }
                     ]
@@ -2832,7 +2889,9 @@
                 "answers": [
                   {
                     "type": "STRING",
-                    "value": "Feeling better since my last appointment"
+                    "value": {
+                      "valueString": "Feeling better since my last appointment"
+                    }
                   }
                 ]
               }
@@ -2863,8 +2922,10 @@
                     {
                       "type": "CHOICE",
                       "value": {
-                        "code": "nausea",
-                        "display": "Nausea"
+                        "valueCoding": {
+                          "code": "nausea",
+                          "display": "Nausea"
+                        }
                       }
                     }
                   ]
@@ -2885,8 +2946,10 @@
                         {
                           "type": "CHOICE",
                           "value": {
-                            "code": "mild",
-                            "display": "Mild"
+                            "valueCoding": {
+                              "code": "mild",
+                              "display": "Mild"
+                            }
                           }
                         }
                       ]
@@ -2901,8 +2964,10 @@
                         {
                           "type": "CHOICE",
                           "value": {
-                            "code": "frequently",
-                            "display": "Frequently"
+                            "valueCoding": {
+                              "code": "frequently",
+                              "display": "Frequently"
+                            }
                           }
                         }
                       ]
@@ -2917,7 +2982,9 @@
                   "answers": [
                     {
                       "type": "STRING",
-                      "value": "Feeling better since my last appointment"
+                      "value": {
+                        "valueString": "Feeling better since my last appointment"
+                      }
                     }
                   ]
                 }
