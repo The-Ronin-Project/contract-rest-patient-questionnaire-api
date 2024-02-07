@@ -891,8 +891,8 @@
             "schema": {
               "type": "string",
               "enum": [
-                "in-progress",
-                "completed"
+                "IN_PROGRESS",
+                "COMPLETED"
               ]
             },
             "description": "Filter responses by status",
