@@ -1306,8 +1306,7 @@
         },
         "required": [
           "id",
-          "type",
-          "displayOrder"
+          "type"
         ]
       },
       "AnswerType": {
