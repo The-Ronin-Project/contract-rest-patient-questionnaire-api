@@ -1164,7 +1164,7 @@
                 "CompleteQuestionnaireResponse_RequestBody": {
                   "description": "Request Body For Completing a Questionnaire Response",
                   "value": {
-                    "status": "completed"
+                    "status": "COMPLETED"
                   }
                 }
               }
