@@ -1361,7 +1361,7 @@
             "$ref": "#/components/schemas/AnswerValue"
           },
           "alertLevel": {
-            "type": "integer"
+            "type": "number"
           }
         },
         "required": [
@@ -1440,7 +1440,7 @@
             ]
           },
           "alertLevel": {
-            "type": "integer",
+            "type": "number",
             "description": "Rollup of the alert level of all `item`s. Should only be populated in the HTTP response - not part of a request to upsert a questionnaire response"
           },
           "items": {
@@ -1474,7 +1474,7 @@
             "type": "integer"
           },
           "alertLevel": {
-            "type": "integer"
+            "type": "number"
           },
           "answers": {
             "type": "array",
