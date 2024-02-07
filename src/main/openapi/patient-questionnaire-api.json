@@ -1393,8 +1393,8 @@
                 "operator": {
                   "type": "string",
                   "enum": [
-                    "EQUALS",
-                    "NOT_EQUALS",
+                    "EQUAL",
+                    "NOT_EQUAL",
                     "GREATER_THAN",
                     "LESSER_THAN",
                     "EXISTS"
@@ -2490,7 +2490,7 @@
                 "predicates": [
                   {
                     "questionnaireItemId": "Q1",
-                    "operator": "EQUALS",
+                    "operator": "EQUAL",
                     "answer": {
                       "type": "CHOICE",
                       "value": {
@@ -2620,7 +2620,7 @@
                 "predicates": [
                   {
                     "questionnaireItemId": "Q1",
-                    "operator": "EQUALS",
+                    "operator": "EQUAL",
                     "answer": {
                       "type": "CODE",
                       "value": {
