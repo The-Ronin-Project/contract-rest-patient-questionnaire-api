@@ -891,12 +891,12 @@
             "schema": {
               "type": "string",
               "enum": [
-                "in-progress",
-                "completed"
+                "IN_PROGRESS",
+                "COMPLETED"
               ]
             },
             "description": "Filter responses by status",
-            "example": "completed",
+            "example": "COMPLETED",
             "required": false
           },
           {
@@ -1164,7 +1164,7 @@
                 "CompleteQuestionnaireResponse_RequestBody": {
                   "description": "Request Body For Completing a Questionnaire Response",
                   "value": {
-                    "status": "completed"
+                    "status": "COMPLETED"
                   }
                 }
               }
@@ -1742,7 +1742,7 @@
           "status": {
             "type": "string",
             "enum": [
-              "completed"
+              "COMPLETED"
             ]
           }
         },
@@ -2817,6 +2817,7 @@
             "id": "c9115251-cb52-4fec-9ea2-474414ec71ee",
             "questionnaireId": "c5e4a3f5-6594-4856-8f37-7778ca96bc11,",
             "version": "1.0",
+            "status": "IN_PROGRESS",
             "alertLevel": 3,
             "items": [
               {
@@ -2911,6 +2912,7 @@
               "id": "c9115251-cb52-4fec-9ea2-474414ec71ee",
               "questionnaireId": "c5e4a3f5-6594-4856-8f37-7778ca96bc11,",
               "version": "1.0",
+              "status": "COMPLETED",
               "alertLevel": 3,
               "items": [
                 {
