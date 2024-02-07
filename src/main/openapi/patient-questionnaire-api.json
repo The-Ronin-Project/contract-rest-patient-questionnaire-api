@@ -1742,7 +1742,7 @@
           "status": {
             "type": "string",
             "enum": [
-              "completed"
+              "COMPLETED"
             ]
           }
         },
