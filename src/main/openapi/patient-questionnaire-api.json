@@ -1487,6 +1487,9 @@
             "required": [
               "code"
             ]
+          },
+          "valueInteger": {
+            "type": "integer"
           }
         }
       },
