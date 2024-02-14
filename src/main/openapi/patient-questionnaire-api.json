@@ -1235,6 +1235,148 @@
           }
         }
       }
+    },
+    "/tenants/{tenantId}/patients/{patientId}/questionnaire-responses/{questionnaireResponseId}/alert": {
+      "get": {
+        "tags": [
+          "Common"
+        ],
+        "description": "Fetch alert for a questionnaire response",
+        "summary": "Fetch Questionnaire Response Alert",
+        "operationId": "fetchQuestionnaireResponseAlert",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tenantId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the tenant for the current tenant",
+            "example": "1xrekpx5"
+          },
+          {
+            "in": "path",
+            "name": "patientId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The UDP ID of the current patient",
+            "example": "018c275e-c378-7c4a-a112-157e4c0e4cb5"
+          },
+          {
+            "in": "path",
+            "name": "questionnaireResponseId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the questionnaire response",
+            "example": "7f574040-e8b4-4c70-b2e5-dfa48d0b5455"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FetchAlert_ResponseBody"
+                },
+                "examples": {
+                  "FetchAlert_NoSymptoms_ResponseBody": {
+                    "$ref": "#/components/examples/FetchAlert_NoSymptoms_ResponseBody"
+                  },
+                  "FetchAlert_NonAlert_ResponseBody": {
+                    "$ref": "#/components/examples/FetchAlert_NonAlert_ResponseBody"
+                  },
+                  "FetchAlert_Alert_ResponseBody": {
+                    "$ref": "#/components/examples/FetchAlert_Alert_ResponseBody"
+                  },
+                  "FetchAlert_HighAlert_ResponseBody": {
+                    "$ref": "#/components/examples/FetchAlert_HighAlert_ResponseBody"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "BadRequestExample": {
+                    "$ref": "#/components/examples/BadRequestException_ResponseBody"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "ForbiddenExample": {
+                    "$ref": "#/components/examples/ForbiddenException_ResponseBody"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "NotFoundExample": {
+                    "$ref": "#/components/examples/NotFoundException_ResponseBody"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1448,12 +1590,17 @@
             "items": {
               "$ref": "#/components/schemas/QuestionnaireResponseItem"
             }
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "required": [
           "questionnaireId",
           "version",
-          "items"
+          "items",
+          "completedAt"
         ]
       },
       "QuestionnaireResponseItem": {
@@ -1869,6 +2016,13 @@
           "data"
         ]
       },
+      "FetchAlert_ResponseBody": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/Alert"
+          }
+        }
+      },
       "Timing": {
         "type": "object",
         "properties": {
@@ -1922,6 +2076,314 @@
         },
         "required": [
           "repeat"
+        ]
+      },
+      "Alert": {
+        "type": "object",
+        "properties": {
+          "level": {
+            "description": "`null` if no symptoms were reported",
+            "type": "number"
+          },
+          "content": {
+            "type": "object",
+            "properties": {
+              "clinicianDashboard": {
+                "type": "object",
+                "properties": {
+                  "additionalInfo": {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "text"
+                    ]
+                  }
+                },
+                "required": [
+                  "additionalInfo"
+                ]
+              },
+              "patientApp": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "object",
+                    "properties": {
+                      "header": {
+                        "type": "object",
+                        "properties": {
+                          "icon": {
+                            "type": "string",
+                            "description": "Eg, The red triangle with exclamation mark in the images above; this is a string used to identify the icon the client should use",
+                            "enum": [
+                              "GREEN_THUMBS_UP",
+                              "PURPLE_HEX_QUESTION_MARK",
+                              "RED_TRIANGLE_EXCLAMATION_MARK",
+                              "RED_TRIANGLE_EXCLAMATION_MARK_WHITE_BOARDER",
+                              "SYMPTOM_FREE",
+                              "BLUE_CIRCLE_CHECK",
+                              "GREEN_CIRCLE_CHECK"
+                            ]
+                          },
+                          "backgroundColor": {
+                            "type": "string",
+                            "description": "The tan color behind the header icon and other surrounding text"
+                          },
+                          "text": {
+                            "type": "string",
+                            "description": "The text to show in the header on successfully sending a message (Send to Care Team  in the first image)"
+                          },
+                          "color": {
+                            "type": "string",
+                            "description": "The color of the header title - Should be a hex string (e.g. #FFFFFF for white)"
+                          },
+                          "subtitle": {
+                            "type": "object",
+                            "properties": {
+                              "text": {
+                                "type": "string",
+                                "description": "The subtitle text that appears above the symptoms list (Your care team will be notified due to your respones for: in the first image)"
+                              },
+                              "color": {
+                                "type": "string",
+                                "description": "The color of the symptoms subtitle"
+                              }
+                            },
+                            "required": [
+                              "text",
+                              "color"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "icon",
+                          "backgroundColor",
+                          "text",
+                          "color",
+                          "subtitle"
+                        ]
+                      },
+                      "body": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "description": "The text to show in the body when message delivery is successful (You should expect a response within 24 hours, during clinic hours. in the second image)"
+                          },
+                          "color": {
+                            "type": "string",
+                            "description": "The color of the text in the body title"
+                          }
+                        },
+                        "required": [
+                          "text",
+                          "color"
+                        ]
+                      },
+                      "writeIn": {
+                        "type": "object",
+                        "description": "Copy to show above the write-in text field",
+                        "properties": {
+                          "text": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "footer": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "description": "The text to show in the footer at the bottom of each image"
+                          }
+                        },
+                        "required": [
+                          "text"
+                        ]
+                      },
+                      "actions": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/AlertAction"
+                        }
+                      }
+                    },
+                    "required": [
+                      "header",
+                      "footer",
+                      "actions"
+                    ]
+                  },
+                  "error": {
+                    "type": "object",
+                    "properties": {
+                      "header": {
+                        "type": "object",
+                        "properties": {
+                          "icon": {
+                            "type": "string",
+                            "description": "Eg, The red triangle with exclamation mark in the images above; this is a string used to identify the icon the client should use",
+                            "enum": [
+                              "GREEN_THUMBS_UP",
+                              "PURPLE_HEX_QUESTION_MARK",
+                              "RED_TRIANGLE_EXCLAMATION_MARK",
+                              "RED_TRIANGLE_EXCLAMATION_MARK_WHITE_BOARDER",
+                              "SYMPTOM_FREE",
+                              "BLUE_CIRCLE_CHECK",
+                              "GREEN_CIRCLE_CHECK"
+                            ]
+                          },
+                          "backgroundColor": {
+                            "type": "string",
+                            "description": "The tan color behind the header icon and other surrounding text"
+                          },
+                          "text": {
+                            "type": "string",
+                            "description": "The text to show in the header on successfully sending a message (Send to Care Team  in the first image)"
+                          },
+                          "color": {
+                            "type": "string",
+                            "description": "The color of the header title - Should be a hex string (e.g. #FFFFFF for white)"
+                          },
+                          "subtitle": {
+                            "type": "object",
+                            "properties": {
+                              "text": {
+                                "type": "string",
+                                "description": "The subtitle text that appears above the symptoms list (Your care team will be notified due to your respones for: in the first image)"
+                              },
+                              "color": {
+                                "type": "string",
+                                "description": "The color of the symptoms subtitle"
+                              }
+                            },
+                            "required": [
+                              "text",
+                              "color"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "icon",
+                          "backgroundColor",
+                          "text",
+                          "color",
+                          "subtitle"
+                        ]
+                      },
+                      "body": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "description": "The text to show in the body when message delivery is successful (You should expect a response within 24 hours, during clinic hours. in the second image)"
+                          },
+                          "color": {
+                            "type": "string",
+                            "description": "The color of the text in the body title"
+                          }
+                        },
+                        "required": [
+                          "text",
+                          "color"
+                        ]
+                      },
+                      "failureAlert": {
+                        "type": "object",
+                        "description": "UI element to show when an error has occurred",
+                        "properties": {
+                          "text": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "footer": {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string",
+                            "description": "The text to show in the footer at the bottom of each image"
+                          }
+                        },
+                        "required": [
+                          "text"
+                        ]
+                      },
+                      "actions": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/AlertAction"
+                        }
+                      }
+                    },
+                    "required": [
+                      "header",
+                      "body",
+                      "footer",
+                      "actions"
+                    ]
+                  }
+                },
+                "required": [
+                  "success"
+                ]
+              }
+            },
+            "required": [
+              "clinicianDashboard",
+              "patientApp"
+            ]
+          }
+        },
+        "required": [
+          "content"
+        ]
+      },
+      "AlertAction": {
+        "type": "object",
+        "properties": {
+          "actionKey": {
+            "$ref": "#/components/schemas/ActionKey"
+          },
+          "color": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "Required if `actionKey` is `CALL`"
+          },
+          "style": {
+            "$ref": "#/components/schemas/ActionStyle"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "actionKey",
+          "color",
+          "style",
+          "text"
+        ]
+      },
+      "ActionKey": {
+        "type": "string",
+        "enum": [
+          "SEND_FOR_REVIEW",
+          "DISMISS_CONFIRM",
+          "CALL",
+          "DISMISS"
+        ]
+      },
+      "ActionStyle": {
+        "type": "string",
+        "enum": [
+          "BUTTON",
+          "TEXT"
         ]
       },
       "Error": {
@@ -2387,6 +2849,239 @@
           "remove": [
             "a5251e20-8b35-4104-b640-aca57ec4c4c4"
           ]
+        }
+      },
+      "FetchAlert_NoSymptoms_ResponseBody": {
+        "description": "Alert object for a no symptoms questionnaire response",
+        "value": {
+          "level": null,
+          "content": {
+            "clinicianDashboard": {
+              "additionalInfo": null
+            },
+            "patientApp": {
+              "success": {
+                "header": {
+                  "icon": "SYMPTOM_FREE",
+                  "backgroundColor": "#ebf2ff",
+                  "text": "No Symptoms",
+                  "color": "#ffffff",
+                  "subtitle": {
+                    "text": "Here's to a symptom free day!",
+                    "color": "#ffffff"
+                  }
+                },
+                "body": null,
+                "footer": {
+                  "text": "Responses are not reviewed immediatly. If this is an emergency call 911"
+                },
+                "actions": [
+                  {
+                    "actionKey": "DISMISS",
+                    "color": "#116bff",
+                    "style": "BUTTON",
+                    "text": "Done"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "FetchAlert_NonAlert_ResponseBody": {
+        "description": "Alert object for a non-alerted questionnaire response",
+        "value": {
+          "level": 1,
+          "content": {
+            "clinicianDashboard": {
+              "additionalInfo": {
+                "text": "Mild, Non-Alerted Symptom"
+              }
+            },
+            "patientApp": {
+              "success": {
+                "header": {
+                  "icon": "GREEN_THUMBS_UP",
+                  "backgroundColor": "#f4fff5",
+                  "text": "Thank you! Reporting helps us monitor and manage your symptoms.",
+                  "color": "#00830e",
+                  "subtitle": {
+                    "text": "We have received your symptom report",
+                    "color": "#000000"
+                  }
+                },
+                "footer": {
+                  "text": "If you have new or worsening symptoms, or an emergency, please report them through this app, call your care team or 911."
+                },
+                "actions": [
+                  {
+                    "actionKey": "DISMISS",
+                    "color": "#116bff",
+                    "style": "BUTTON",
+                    "text": "Done"
+                  }
+                ]
+              },
+              "error": {
+                "header": {
+                  "icon": "GREEN_THUMBS_UP",
+                  "backgroundColor": "#f4fff5",
+                  "text": "Continue to Manage at Home",
+                  "color": "#00830e",
+                  "subtitle": {
+                    "text": "You can safely manage these symptoms at home. We have saved your responses to Dr. Rosalind Franklin’s records.",
+                    "color": "#000000"
+                  }
+                },
+                "body": {
+                  "text": "Resources for symptom management",
+                  "color": "#116bff"
+                },
+                "footer": {
+                  "text": "Responses are not reviewed immediately. If you are experiencing an emergency, please call 911."
+                },
+                "actions": [
+                  {
+                    "actionKey": "DISMISS",
+                    "color": "#116bff",
+                    "style": "BUTTON",
+                    "text": "Done"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "FetchAlert_Alert_ResponseBody": {
+        "description": "Alert object for an alert-level questionnaire response",
+        "value": {
+          "level": 2,
+          "content": {
+            "clinicianDashboard": {
+              "additionalInfo": {
+                "text": "Patient has been told to call triage line"
+              }
+            },
+            "patientApp": {
+              "success": {
+                "header": {
+                  "icon": "RED_TRIANGLE_EXCLAMATION_MARK",
+                  "backgroundColor": "#f4fff5",
+                  "text": "Pending Care Team Review",
+                  "color": "#fffbf6",
+                  "subtitle": {
+                    "text": "We’ve sent your survey results to Dr. Rosalind Franklin’s team!",
+                    "color": "#000000"
+                  }
+                },
+                "writeIn": {
+                  "text": "Add an extra note about your symptoms for Dr. Rosalind Franklin’s team (optional)"
+                },
+                "footer": {
+                  "text": "Responses are not reviewed immediately. If you are experiencing an emergency, please call 911."
+                },
+                "actions": [
+                  {
+                    "actionKey": "DISMISS",
+                    "color": "#116bff",
+                    "style": "BUTTON",
+                    "text": "Done"
+                  }
+                ]
+              },
+              "error": {
+                "header": {
+                  "icon": "RED_TRIANGLE_EXCLAMATION_MARK",
+                  "backgroundColor": "#f4fff5",
+                  "text": "Send to Care Team",
+                  "color": "#fffbf6",
+                  "subtitle": {
+                    "text": "Your care team will be notified due to your responses for:",
+                    "color": "#000000"
+                  }
+                },
+                "writeIn": {
+                  "text": "Add an extra note about your symptoms for Dr. Rosalind Franklin’s team (optional)"
+                },
+                "footer": {
+                  "text": "Responses are not reviewed immediately. If you are experiencing an emergency, please call 911."
+                },
+                "actions": [
+                  {
+                    "actionKey": "DISMISS",
+                    "color": "#116bff",
+                    "style": "BUTTON",
+                    "text": "Done"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "FetchAlert_HighAlert_ResponseBody": {
+        "description": "Alert object for a high alert questionnaire response",
+        "value": {
+          "level": 3,
+          "content": {
+            "clinicianDashboard": {
+              "additionalInfo": {
+                "text": "Patient advised to ED"
+              }
+            },
+            "patientApp": {
+              "success": {
+                "header": {
+                  "icon": "RED_TRIANGLE_EXCLAMATION_MARK_WHITE_BOARDER",
+                  "backgroundColor": "#fff6f7",
+                  "text": "Get Medical Care Now",
+                  "color": "#fffbf6",
+                  "subtitle": {
+                    "text": "Call 911 or got to an emergency room",
+                    "color": "#323232"
+                  }
+                },
+                "footer": {
+                  "text": "Responses are not reviewed immediately. If you are experiencing an emergency, please call 911."
+                },
+                "actions": [
+                  {
+                    "actionKey": "DISMISS",
+                    "color": "#116bff",
+                    "style": "BUTTON",
+                    "text": "Done"
+                  }
+                ]
+              },
+              "error": {
+                "header": {
+                  "icon": "RED_TRIANGLE_EXCLAMATION_MARK",
+                  "backgroundColor": "#f4fff5",
+                  "text": "Send to Care Team",
+                  "color": "#fffbf6",
+                  "subtitle": {
+                    "text": "Your care team will be notified due to your responses for:",
+                    "color": "#000000"
+                  }
+                },
+                "failureAlert": {
+                  "text": "Please contact your care team to report your symptoms."
+                },
+                "footer": {
+                  "text": "Responses are not reviewed immediately. If you are experiencing an emergency, please call 911."
+                },
+                "actions": [
+                  {
+                    "actionKey": "DISMISS",
+                    "color": "#116bff",
+                    "style": "BUTTON",
+                    "text": "Done"
+                  }
+                ]
+              }
+            }
+          }
         }
       },
       "NotFoundException_ResponseBody": {
