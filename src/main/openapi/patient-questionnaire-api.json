@@ -1599,8 +1599,7 @@
         "required": [
           "questionnaireId",
           "version",
-          "items",
-          "completedAt"
+          "items"
         ]
       },
       "QuestionnaireResponseItem": {
