@@ -1236,14 +1236,14 @@
         }
       }
     },
-    "/tenants/{tenantId}/patients/{patientId}/questionnaire-responses/{questionnaireResponseId}/alert": {
+    "/tenants/{tenantId}/patients/{patientId}/questionnaires/{questionnaireId}/alerts": {
       "get": {
         "tags": [
           "Common"
         ],
-        "description": "Fetch alert for a questionnaire response",
-        "summary": "Fetch Questionnaire Response Alert",
-        "operationId": "fetchQuestionnaireResponseAlert",
+        "description": "Fetch alerts for a questionnaire",
+        "summary": "Fetch Questionnaire Alerts",
+        "operationId": "fetchQuestionnaireAlerts",
         "security": [
           {
             "bearerAuth": []
@@ -1272,12 +1272,12 @@
           },
           {
             "in": "path",
-            "name": "questionnaireResponseId",
+            "name": "questionnaireId",
             "schema": {
               "type": "string"
             },
             "required": true,
-            "description": "The ID of the questionnaire response",
+            "description": "The ID of the questionnaire",
             "example": "7f574040-e8b4-4c70-b2e5-dfa48d0b5455"
           }
         ],
@@ -1287,20 +1287,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FetchAlert_ResponseBody"
+                  "$ref": "#/components/schemas/FetchAlerts_ResponseBody"
                 },
                 "examples": {
-                  "FetchAlert_NoSymptoms_ResponseBody": {
-                    "$ref": "#/components/examples/FetchAlert_NoSymptoms_ResponseBody"
-                  },
-                  "FetchAlert_NonAlert_ResponseBody": {
-                    "$ref": "#/components/examples/FetchAlert_NonAlert_ResponseBody"
-                  },
-                  "FetchAlert_Alert_ResponseBody": {
-                    "$ref": "#/components/examples/FetchAlert_Alert_ResponseBody"
-                  },
-                  "FetchAlert_HighAlert_ResponseBody": {
-                    "$ref": "#/components/examples/FetchAlert_HighAlert_ResponseBody"
+                  "FetchAlerts_ResponseBody": {
+                    "$ref": "#/components/examples/FetchAlerts_ResponseBody"
                   }
                 }
               }
@@ -2015,10 +2006,15 @@
           "data"
         ]
       },
-      "FetchAlert_ResponseBody": {
+      "FetchAlerts_ResponseBody": {
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/Alert"
+            "type": "array",
+            "items": {
+              "items": {
+                "$ref": "#/components/schemas/Alert"
+              }
+            }
           }
         }
       },
@@ -2850,238 +2846,231 @@
           ]
         }
       },
-      "FetchAlert_NoSymptoms_ResponseBody": {
-        "description": "Alert object for a no symptoms questionnaire response",
-        "value": {
-          "level": null,
-          "content": {
-            "clinicianDashboard": {
-              "additionalInfo": null
-            },
-            "patientApp": {
-              "success": {
-                "header": {
-                  "icon": "SYMPTOM_FREE",
-                  "backgroundColor": "#ebf2ff",
-                  "text": "No Symptoms",
-                  "color": "#ffffff",
-                  "subtitle": {
-                    "text": "Here's to a symptom free day!",
-                    "color": "#ffffff"
-                  }
-                },
-                "body": null,
-                "footer": {
-                  "text": "Responses are not reviewed immediatly. If this is an emergency call 911"
-                },
-                "actions": [
-                  {
-                    "actionKey": "DISMISS",
-                    "color": "#116bff",
-                    "style": "BUTTON",
-                    "text": "Done"
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
-      "FetchAlert_NonAlert_ResponseBody": {
-        "description": "Alert object for a non-alerted questionnaire response",
-        "value": {
-          "level": 1,
-          "content": {
-            "clinicianDashboard": {
-              "additionalInfo": {
-                "text": "Mild, Non-Alerted Symptom"
-              }
-            },
-            "patientApp": {
-              "success": {
-                "header": {
-                  "icon": "GREEN_THUMBS_UP",
-                  "backgroundColor": "#f4fff5",
-                  "text": "Thank you! Reporting helps us monitor and manage your symptoms.",
-                  "color": "#00830e",
-                  "subtitle": {
-                    "text": "We have received your symptom report",
-                    "color": "#000000"
-                  }
-                },
-                "footer": {
-                  "text": "If you have new or worsening symptoms, or an emergency, please report them through this app, call your care team or 911."
-                },
-                "actions": [
-                  {
-                    "actionKey": "DISMISS",
-                    "color": "#116bff",
-                    "style": "BUTTON",
-                    "text": "Done"
-                  }
-                ]
+      "FetchAlerts_ResponseBody": {
+        "summary": "Response when fetching alerts for a questionnaire",
+        "value": [
+          {
+            "level": null,
+            "content": {
+              "clinicianDashboard": {
+                "additionalInfo": null
               },
-              "error": {
-                "header": {
-                  "icon": "GREEN_THUMBS_UP",
-                  "backgroundColor": "#f4fff5",
-                  "text": "Continue to Manage at Home",
-                  "color": "#00830e",
-                  "subtitle": {
-                    "text": "You can safely manage these symptoms at home. We have saved your responses to Dr. Rosalind Franklin’s records.",
-                    "color": "#000000"
-                  }
-                },
-                "body": {
-                  "text": "Resources for symptom management",
-                  "color": "#116bff"
-                },
-                "footer": {
-                  "text": "Responses are not reviewed immediately. If you are experiencing an emergency, please call 911."
-                },
-                "actions": [
-                  {
-                    "actionKey": "DISMISS",
-                    "color": "#116bff",
-                    "style": "BUTTON",
-                    "text": "Done"
-                  }
-                ]
+              "patientApp": {
+                "success": {
+                  "header": {
+                    "icon": "SYMPTOM_FREE",
+                    "backgroundColor": "#ebf2ff",
+                    "text": "No Symptoms",
+                    "color": "#ffffff",
+                    "subtitle": {
+                      "text": "Here's to a symptom free day!",
+                      "color": "#ffffff"
+                    }
+                  },
+                  "body": null,
+                  "footer": {
+                    "text": "Responses are not reviewed immediatly. If this is an emergency call 911"
+                  },
+                  "actions": [
+                    {
+                      "actionKey": "DISMISS",
+                      "color": "#116bff",
+                      "style": "BUTTON",
+                      "text": "Done"
+                    }
+                  ]
+                }
               }
             }
-          }
-        }
-      },
-      "FetchAlert_Alert_ResponseBody": {
-        "description": "Alert object for an alert-level questionnaire response",
-        "value": {
-          "level": 2,
-          "content": {
-            "clinicianDashboard": {
-              "additionalInfo": {
-                "text": "Patient has been told to call triage line"
-              }
-            },
-            "patientApp": {
-              "success": {
-                "header": {
-                  "icon": "RED_TRIANGLE_EXCLAMATION_MARK",
-                  "backgroundColor": "#f4fff5",
-                  "text": "Pending Care Team Review",
-                  "color": "#fffbf6",
-                  "subtitle": {
-                    "text": "We’ve sent your survey results to Dr. Rosalind Franklin’s team!",
-                    "color": "#000000"
-                  }
-                },
-                "writeIn": {
-                  "text": "Add an extra note about your symptoms for Dr. Rosalind Franklin’s team (optional)"
-                },
-                "footer": {
-                  "text": "Responses are not reviewed immediately. If you are experiencing an emergency, please call 911."
-                },
-                "actions": [
-                  {
-                    "actionKey": "DISMISS",
-                    "color": "#116bff",
-                    "style": "BUTTON",
-                    "text": "Done"
-                  }
-                ]
+          },
+          {
+            "level": 1,
+            "content": {
+              "clinicianDashboard": {
+                "additionalInfo": {
+                  "text": "Mild, Non-Alerted Symptom"
+                }
               },
-              "error": {
-                "header": {
-                  "icon": "RED_TRIANGLE_EXCLAMATION_MARK",
-                  "backgroundColor": "#f4fff5",
-                  "text": "Send to Care Team",
-                  "color": "#fffbf6",
-                  "subtitle": {
-                    "text": "Your care team will be notified due to your responses for:",
-                    "color": "#000000"
-                  }
+              "patientApp": {
+                "success": {
+                  "header": {
+                    "icon": "GREEN_THUMBS_UP",
+                    "backgroundColor": "#f4fff5",
+                    "text": "Thank you! Reporting helps us monitor and manage your symptoms.",
+                    "color": "#00830e",
+                    "subtitle": {
+                      "text": "We have received your symptom report",
+                      "color": "#000000"
+                    }
+                  },
+                  "footer": {
+                    "text": "If you have new or worsening symptoms, or an emergency, please report them through this app, call your care team or 911."
+                  },
+                  "actions": [
+                    {
+                      "actionKey": "DISMISS",
+                      "color": "#116bff",
+                      "style": "BUTTON",
+                      "text": "Done"
+                    }
+                  ]
                 },
-                "writeIn": {
-                  "text": "Add an extra note about your symptoms for Dr. Rosalind Franklin’s team (optional)"
-                },
-                "footer": {
-                  "text": "Responses are not reviewed immediately. If you are experiencing an emergency, please call 911."
-                },
-                "actions": [
-                  {
-                    "actionKey": "DISMISS",
-                    "color": "#116bff",
-                    "style": "BUTTON",
-                    "text": "Done"
-                  }
-                ]
+                "error": {
+                  "header": {
+                    "icon": "GREEN_THUMBS_UP",
+                    "backgroundColor": "#f4fff5",
+                    "text": "Continue to Manage at Home",
+                    "color": "#00830e",
+                    "subtitle": {
+                      "text": "You can safely manage these symptoms at home. We have saved your responses to Dr. Rosalind Franklin’s records.",
+                      "color": "#000000"
+                    }
+                  },
+                  "body": {
+                    "text": "Resources for symptom management",
+                    "color": "#116bff"
+                  },
+                  "footer": {
+                    "text": "Responses are not reviewed immediately. If you are experiencing an emergency, please call 911."
+                  },
+                  "actions": [
+                    {
+                      "actionKey": "DISMISS",
+                      "color": "#116bff",
+                      "style": "BUTTON",
+                      "text": "Done"
+                    }
+                  ]
+                }
               }
             }
-          }
-        }
-      },
-      "FetchAlert_HighAlert_ResponseBody": {
-        "description": "Alert object for a high alert questionnaire response",
-        "value": {
-          "level": 3,
-          "content": {
-            "clinicianDashboard": {
-              "additionalInfo": {
-                "text": "Patient advised to ED"
-              }
-            },
-            "patientApp": {
-              "success": {
-                "header": {
-                  "icon": "RED_TRIANGLE_EXCLAMATION_MARK_WHITE_BOARDER",
-                  "backgroundColor": "#fff6f7",
-                  "text": "Get Medical Care Now",
-                  "color": "#fffbf6",
-                  "subtitle": {
-                    "text": "Call 911 or got to an emergency room",
-                    "color": "#323232"
-                  }
-                },
-                "footer": {
-                  "text": "Responses are not reviewed immediately. If you are experiencing an emergency, please call 911."
-                },
-                "actions": [
-                  {
-                    "actionKey": "DISMISS",
-                    "color": "#116bff",
-                    "style": "BUTTON",
-                    "text": "Done"
-                  }
-                ]
+          },
+          {
+            "level": 2,
+            "content": {
+              "clinicianDashboard": {
+                "additionalInfo": {
+                  "text": "Patient has been told to call triage line"
+                }
               },
-              "error": {
-                "header": {
-                  "icon": "RED_TRIANGLE_EXCLAMATION_MARK",
-                  "backgroundColor": "#f4fff5",
-                  "text": "Send to Care Team",
-                  "color": "#fffbf6",
-                  "subtitle": {
-                    "text": "Your care team will be notified due to your responses for:",
-                    "color": "#000000"
-                  }
+              "patientApp": {
+                "success": {
+                  "header": {
+                    "icon": "RED_TRIANGLE_EXCLAMATION_MARK",
+                    "backgroundColor": "#f4fff5",
+                    "text": "Pending Care Team Review",
+                    "color": "#fffbf6",
+                    "subtitle": {
+                      "text": "We’ve sent your survey results to Dr. Rosalind Franklin’s team!",
+                      "color": "#000000"
+                    }
+                  },
+                  "writeIn": {
+                    "text": "Add an extra note about your symptoms for Dr. Rosalind Franklin’s team (optional)"
+                  },
+                  "footer": {
+                    "text": "Responses are not reviewed immediately. If you are experiencing an emergency, please call 911."
+                  },
+                  "actions": [
+                    {
+                      "actionKey": "DISMISS",
+                      "color": "#116bff",
+                      "style": "BUTTON",
+                      "text": "Done"
+                    }
+                  ]
                 },
-                "failureAlert": {
-                  "text": "Please contact your care team to report your symptoms."
+                "error": {
+                  "header": {
+                    "icon": "RED_TRIANGLE_EXCLAMATION_MARK",
+                    "backgroundColor": "#f4fff5",
+                    "text": "Send to Care Team",
+                    "color": "#fffbf6",
+                    "subtitle": {
+                      "text": "Your care team will be notified due to your responses for:",
+                      "color": "#000000"
+                    }
+                  },
+                  "writeIn": {
+                    "text": "Add an extra note about your symptoms for Dr. Rosalind Franklin’s team (optional)"
+                  },
+                  "footer": {
+                    "text": "Responses are not reviewed immediately. If you are experiencing an emergency, please call 911."
+                  },
+                  "actions": [
+                    {
+                      "actionKey": "DISMISS",
+                      "color": "#116bff",
+                      "style": "BUTTON",
+                      "text": "Done"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "level": 3,
+            "content": {
+              "clinicianDashboard": {
+                "additionalInfo": {
+                  "text": "Patient advised to ED"
+                }
+              },
+              "patientApp": {
+                "success": {
+                  "header": {
+                    "icon": "RED_TRIANGLE_EXCLAMATION_MARK_WHITE_BOARDER",
+                    "backgroundColor": "#fff6f7",
+                    "text": "Get Medical Care Now",
+                    "color": "#fffbf6",
+                    "subtitle": {
+                      "text": "Call 911 or got to an emergency room",
+                      "color": "#323232"
+                    }
+                  },
+                  "footer": {
+                    "text": "Responses are not reviewed immediately. If you are experiencing an emergency, please call 911."
+                  },
+                  "actions": [
+                    {
+                      "actionKey": "DISMISS",
+                      "color": "#116bff",
+                      "style": "BUTTON",
+                      "text": "Done"
+                    }
+                  ]
                 },
-                "footer": {
-                  "text": "Responses are not reviewed immediately. If you are experiencing an emergency, please call 911."
-                },
-                "actions": [
-                  {
-                    "actionKey": "DISMISS",
-                    "color": "#116bff",
-                    "style": "BUTTON",
-                    "text": "Done"
-                  }
-                ]
+                "error": {
+                  "header": {
+                    "icon": "RED_TRIANGLE_EXCLAMATION_MARK",
+                    "backgroundColor": "#f4fff5",
+                    "text": "Send to Care Team",
+                    "color": "#fffbf6",
+                    "subtitle": {
+                      "text": "Your care team will be notified due to your responses for:",
+                      "color": "#000000"
+                    }
+                  },
+                  "failureAlert": {
+                    "text": "Please contact your care team to report your symptoms."
+                  },
+                  "footer": {
+                    "text": "Responses are not reviewed immediately. If you are experiencing an emergency, please call 911."
+                  },
+                  "actions": [
+                    {
+                      "actionKey": "DISMISS",
+                      "color": "#116bff",
+                      "style": "BUTTON",
+                      "text": "Done"
+                    }
+                  ]
+                }
               }
             }
           }
-        }
+        ]
       },
       "NotFoundException_ResponseBody": {
         "summary": "Resource Not Found",
