@@ -1415,6 +1415,12 @@
           "type": {
             "$ref": "#/components/schemas/QuestionnaireItemType"
           },
+          "behaviorTags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BehaviorTag"
+            }
+          },
           "enableWhen": {
             "$ref": "#/components/schemas/EnableWhen"
           },
@@ -1448,7 +1454,8 @@
         "enum": [
           "CHOICE",
           "STRING",
-          "BOOLEAN"
+          "BOOLEAN",
+          "INTEGER"
         ]
       },
       "AnswerValue": {
@@ -1480,6 +1487,9 @@
             "required": [
               "code"
             ]
+          },
+          "valueInteger": {
+            "type": "integer"
           }
         }
       },
@@ -1548,6 +1558,15 @@
         "required": [
           "behavior",
           "predicates"
+        ]
+      },
+      "BehaviorTag": {
+        "type": "string",
+        "enum": [
+          "ROOT_ITEM",
+          "SYMPTOM_SELECTION",
+          "SUBMIT_BEFORE",
+          "WRITE_IN"
         ]
       },
       "QuestionnaireResponse": {
@@ -3133,72 +3152,30 @@
           "title": "Daily Breast Cancer Questionnaire",
           "items": [
             {
-              "id": "Q1",
-              "text": "What are your symptoms",
-              "type:": "CHOICE",
-              "allowMultipleSelections": false,
+              "id": "Q0",
+              "text": "Root Item",
+              "behaviorTags": [
+                "ROOT_ITEM"
+              ],
+              "type:": "GROUP",
               "displayOrder": 1,
-              "answerOptions": [
-                {
-                  "type": "CHOICE",
-                  "value": {
-                    "valueCoding": {
-                      "code": "nausea",
-                      "display": "Nausea",
-                      "displayOrder": 1
-                    }
-                  },
-                  "alertLevel": 1
-                },
-                {
-                  "type": "CHOICE",
-                  "value": {
-                    "valueCoding": {
-                      "code": "stomach-pain",
-                      "display": "Stomach Pain",
-                      "displayOrder": 2
-                    }
-                  },
-                  "alertLevel": 2
-                }
-              ]
-            },
-            {
-              "id": "Q2",
-              "type": "GROUP",
-              "displayOrder": 2,
-              "text": "Nausea",
-              "enableWhen": {
-                "behavior": "ALL",
-                "predicates": [
-                  {
-                    "questionnaireItemId": "Q1",
-                    "operator": "EQUAL",
-                    "answer": {
-                      "type": "CHOICE",
-                      "value": {
-                        "valueCoding": {
-                          "code": "nausea"
-                        }
-                      }
-                    }
-                  }
-                ]
-              },
               "items": [
                 {
-                  "id": "Q2-1",
-                  "text": "What is the severity of your nausea?",
-                  "displayOrder": 1,
-                  "type": "CHOICE",
+                  "id": "Q1",
+                  "text": "What are your symptoms",
+                  "type:": "CHOICE",
+                  "behaviorTags": [
+                    "SYMPTOM_SELECTION"
+                  ],
                   "allowMultipleSelections": false,
+                  "displayOrder": 1,
                   "answerOptions": [
                     {
                       "type": "CHOICE",
                       "value": {
                         "valueCoding": {
-                          "code": "mild",
-                          "display": "Mild",
+                          "code": "nausea",
+                          "display": "Nausea",
                           "displayOrder": 1
                         }
                       },
@@ -3208,225 +3185,300 @@
                       "type": "CHOICE",
                       "value": {
                         "valueCoding": {
-                          "code": "moderate",
-                          "display": "Moderate",
+                          "code": "stomach-pain",
+                          "display": "Stomach Pain",
                           "displayOrder": 2
                         }
                       },
                       "alertLevel": 2
-                    },
-                    {
-                      "type": "CHOICE",
-                      "value": {
-                        "valueCoding": {
-                          "code": "severe",
-                          "display": "Severe",
-                          "displayOrder": 3
-                        }
-                      },
-                      "alertLevel": 3
-                    },
-                    {
-                      "type": "CHOICE",
-                      "value": {
-                        "valueCoding": {
-                          "code": "very-severe",
-                          "display": "Very Sever",
-                          "displayOrder": 4
-                        }
-                      },
-                      "alertLevel": 4
                     }
                   ]
                 },
                 {
-                  "id": "Q2-2",
-                  "text": "How frequently are you experiencing nausea?",
+                  "id": "Q2",
+                  "type": "GROUP",
                   "displayOrder": 2,
-                  "type": "CHOICE",
-                  "answerOptions": [
-                    {
-                      "type": "CHOICE",
-                      "value": {
-                        "valueCoding": {
-                          "code": "rarely",
-                          "display": "Rarely",
-                          "displayOrder": 1
-                        }
-                      },
-                      "alertLevel": 1
-                    },
-                    {
-                      "type": "CHOICE",
-                      "value": {
-                        "valueCoding": {
-                          "code": "occasionally",
-                          "display": "Occasionally",
-                          "displayOrder": 2
-                        }
-                      },
-                      "alertLevel": 2
-                    },
-                    {
-                      "type": "CHOICE",
-                      "value": {
-                        "valueCoding": {
-                          "code": "frequently",
-                          "display": "Frequently",
-                          "displayOrder": 3
-                        }
-                      },
-                      "alertLevel": 3
-                    },
-                    {
-                      "type": "CHOICE",
-                      "value": {
-                        "valueCoding": {
-                          "code": "almost-constant",
-                          "display": "Almost Constant",
-                          "displayOrder": 4
-                        }
-                      },
-                      "alertLevel": 4
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "Q3",
-              "type": "GROUP",
-              "displayOrder": 3,
-              "text": "Stomach Pain",
-              "enableWhen": {
-                "behavior": "ALL",
-                "predicates": [
-                  {
-                    "questionnaireItemId": "Q1",
-                    "operator": "EQUAL",
-                    "answer": {
-                      "type": "CODE",
-                      "value": {
-                        "valueCoding": {
-                          "code": "stomach-pain"
+                  "text": "Nausea",
+                  "enableWhen": {
+                    "behavior": "ALL",
+                    "predicates": [
+                      {
+                        "questionnaireItemId": "Q1",
+                        "operator": "EQUAL",
+                        "answer": {
+                          "type": "CHOICE",
+                          "value": {
+                            "valueCoding": {
+                              "code": "nausea"
+                            }
+                          }
                         }
                       }
-                    }
-                  }
-                ]
-              },
-              "items": [
-                {
-                  "id": "Q2-1",
-                  "text": "What is the severity of your stomach pain?",
-                  "displayOrder": 1,
-                  "type": "CHOICE",
-                  "answerOptions": [
+                    ]
+                  },
+                  "items": [
                     {
+                      "id": "Q2-1",
+                      "text": "What is the severity of your nausea?",
+                      "displayOrder": 1,
                       "type": "CHOICE",
-                      "value": {
-                        "valueCoding": {
-                          "code": "mild",
-                          "display": "Mild",
-                          "displayOrder": 1
+                      "allowMultipleSelections": false,
+                      "answerOptions": [
+                        {
+                          "type": "CHOICE",
+                          "value": {
+                            "valueCoding": {
+                              "code": "mild",
+                              "display": "Mild",
+                              "displayOrder": 1
+                            }
+                          },
+                          "alertLevel": 1
+                        },
+                        {
+                          "type": "CHOICE",
+                          "value": {
+                            "valueCoding": {
+                              "code": "moderate",
+                              "display": "Moderate",
+                              "displayOrder": 2
+                            }
+                          },
+                          "alertLevel": 2
+                        },
+                        {
+                          "type": "CHOICE",
+                          "value": {
+                            "valueCoding": {
+                              "code": "severe",
+                              "display": "Severe",
+                              "displayOrder": 3
+                            }
+                          },
+                          "alertLevel": 3
+                        },
+                        {
+                          "type": "CHOICE",
+                          "value": {
+                            "valueCoding": {
+                              "code": "very-severe",
+                              "display": "Very Sever",
+                              "displayOrder": 4
+                            }
+                          },
+                          "alertLevel": 4
                         }
-                      },
-                      "alertLevel": 1
+                      ]
                     },
                     {
+                      "id": "Q2-2",
+                      "text": "How frequently are you experiencing nausea?",
+                      "displayOrder": 2,
                       "type": "CHOICE",
-                      "value": {
-                        "valueCoding": {
-                          "code": "moderate",
-                          "display": "Moderate",
-                          "displayOrder": 2
+                      "answerOptions": [
+                        {
+                          "type": "CHOICE",
+                          "value": {
+                            "valueCoding": {
+                              "code": "rarely",
+                              "display": "Rarely",
+                              "displayOrder": 1
+                            }
+                          },
+                          "alertLevel": 1
+                        },
+                        {
+                          "type": "CHOICE",
+                          "value": {
+                            "valueCoding": {
+                              "code": "occasionally",
+                              "display": "Occasionally",
+                              "displayOrder": 2
+                            }
+                          },
+                          "alertLevel": 2
+                        },
+                        {
+                          "type": "CHOICE",
+                          "value": {
+                            "valueCoding": {
+                              "code": "frequently",
+                              "display": "Frequently",
+                              "displayOrder": 3
+                            }
+                          },
+                          "alertLevel": 3
+                        },
+                        {
+                          "type": "CHOICE",
+                          "value": {
+                            "valueCoding": {
+                              "code": "almost-constant",
+                              "display": "Almost Constant",
+                              "displayOrder": 4
+                            }
+                          },
+                          "alertLevel": 4
                         }
-                      },
-                      "alertLevel": 2
-                    },
-                    {
-                      "type": "CHOICE",
-                      "value": {
-                        "valueCoding": {
-                          "code": "severe",
-                          "display": "Severe",
-                          "displayOrder": 3
-                        }
-                      },
-                      "alertLevel": 3
-                    },
-                    {
-                      "type": "CHOICE",
-                      "value": {
-                        "valueCoding": {
-                          "code": "very-severe",
-                          "display": "Very Sever",
-                          "displayOrder": 4
-                        }
-                      },
-                      "alertLevel": 4
+                      ]
                     }
                   ]
                 },
                 {
-                  "id": "Q2-2",
-                  "text": "How frequently are you experiencing stomach pain?",
-                  "displayOrder": 2,
-                  "type": "CHOICE",
-                  "answerOptions": [
-                    {
-                      "type": "CHOICE",
-                      "value": {
-                        "valueCoding": {
-                          "code": "rarely",
-                          "display": "Rarely",
-                          "displayOrder": 1
+                  "id": "Q3",
+                  "type": "GROUP",
+                  "displayOrder": 3,
+                  "text": "Stomach Pain",
+                  "enableWhen": {
+                    "behavior": "ALL",
+                    "predicates": [
+                      {
+                        "questionnaireItemId": "Q1",
+                        "operator": "EQUAL",
+                        "answer": {
+                          "type": "CODE",
+                          "value": {
+                            "valueCoding": {
+                              "code": "stomach-pain"
+                            }
+                          }
                         }
-                      },
-                      "alertLevel": 1
+                      }
+                    ]
+                  },
+                  "items": [
+                    {
+                      "id": "Q2-1",
+                      "text": "What is the severity of your stomach pain?",
+                      "displayOrder": 1,
+                      "type": "CHOICE",
+                      "answerOptions": [
+                        {
+                          "type": "CHOICE",
+                          "value": {
+                            "valueCoding": {
+                              "code": "mild",
+                              "display": "Mild",
+                              "displayOrder": 1
+                            }
+                          },
+                          "alertLevel": 1
+                        },
+                        {
+                          "type": "CHOICE",
+                          "value": {
+                            "valueCoding": {
+                              "code": "moderate",
+                              "display": "Moderate",
+                              "displayOrder": 2
+                            }
+                          },
+                          "alertLevel": 2
+                        },
+                        {
+                          "type": "CHOICE",
+                          "value": {
+                            "valueCoding": {
+                              "code": "severe",
+                              "display": "Severe",
+                              "displayOrder": 3
+                            }
+                          },
+                          "alertLevel": 3
+                        },
+                        {
+                          "type": "CHOICE",
+                          "value": {
+                            "valueCoding": {
+                              "code": "very-severe",
+                              "display": "Very Sever",
+                              "displayOrder": 4
+                            }
+                          },
+                          "alertLevel": 4
+                        }
+                      ]
                     },
                     {
+                      "id": "Q2-2",
+                      "text": "How frequently are you experiencing stomach pain?",
+                      "displayOrder": 2,
                       "type": "CHOICE",
-                      "value": {
-                        "valueCoding": {
-                          "code": "occasionally",
-                          "display": "Occasionally",
-                          "displayOrder": 2
+                      "answerOptions": [
+                        {
+                          "type": "CHOICE",
+                          "value": {
+                            "valueCoding": {
+                              "code": "rarely",
+                              "display": "Rarely",
+                              "displayOrder": 1
+                            }
+                          },
+                          "alertLevel": 1
+                        },
+                        {
+                          "type": "CHOICE",
+                          "value": {
+                            "valueCoding": {
+                              "code": "occasionally",
+                              "display": "Occasionally",
+                              "displayOrder": 2
+                            }
+                          },
+                          "alertLevel": 2
+                        },
+                        {
+                          "type": "CHOICE",
+                          "value": {
+                            "valueCoding": {
+                              "code": "frequently",
+                              "display": "Frequently",
+                              "displayOrder": 3
+                            }
+                          },
+                          "alertLevel": 3
+                        },
+                        {
+                          "type": "CHOICE",
+                          "value": {
+                            "valueCoding": {
+                              "code": "almost-constant",
+                              "display": "Almost Constant",
+                              "displayOrder": 4
+                            }
+                          },
+                          "alertLevel": 4
                         }
-                      },
-                      "alertLevel": 2
-                    },
-                    {
-                      "type": "CHOICE",
-                      "value": {
-                        "valueCoding": {
-                          "code": "frequently",
-                          "display": "Frequently",
-                          "displayOrder": 3
-                        }
-                      },
-                      "alertLevel": 3
-                    },
-                    {
-                      "type": "CHOICE",
-                      "value": {
-                        "valueCoding": {
-                          "code": "almost-constant",
-                          "display": "Almost Constant",
-                          "displayOrder": 4
-                        }
-                      },
-                      "alertLevel": 4
+                      ]
                     }
                   ]
+                },
+                {
+                  "id": "Q4",
+                  "type": "STRING",
+                  "behaviorTags": [
+                    "SUBMIT_BEFORE",
+                    "WRITE_IN"
+                  ],
+                  "enableWhen": {
+                    "behavior": "ALL",
+                    "predicates": [
+                      {
+                        "questionnaireItemId": "Q0",
+                        "operator": "EQUAL",
+                        "answer": {
+                          "type": "INTEGER",
+                          "value": {
+                            "valueInteger": 2
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "displayOrder": 4,
+                  "text": "Anything Else?"
                 }
               ]
-            },
-            {
-              "id": "Q4",
-              "type": "STRING",
-              "displayOrder": 4,
-              "text": "Anything Else?"
             }
           ]
         }
@@ -3501,81 +3553,97 @@
             "questionnaireId": "c5e4a3f5-6594-4856-8f37-7778ca96bc11,",
             "version": "1.0",
             "status": "IN_PROGRESS",
-            "alertLevel": 3,
+            "alertLevel": 2,
             "items": [
               {
-                "questionnaireItemId": "Q1",
-                "text": "What are your symptoms?",
-                "type": "CHOICE",
+                "questionnaireItemId": "Q0",
+                "text": "Root Item",
+                "type": "GROUP",
                 "displayOrder": 1,
                 "answers": [
                   {
-                    "type": "CHOICE",
+                    "type": "INTEGER",
                     "value": {
-                      "valueCoding": {
-                        "code": "nausea",
-                        "display": "Nausea"
-                      }
+                      "valueInteger": 2
                     }
                   }
-                ]
-              },
-              {
-                "questionnaireItemId": "Q2",
-                "type": "GROUP",
-                "alertLevel": 3,
-                "displayOrder": 2,
-                "text": "Nausea",
+                ],
                 "items": [
                   {
-                    "questionnaireItemId": "Q2-1",
+                    "questionnaireItemId": "Q1",
+                    "text": "What are your symptoms?",
                     "type": "CHOICE",
-                    "text": "How severe is your nausea?",
-                    "alertLevel": 1,
                     "displayOrder": 1,
                     "answers": [
                       {
                         "type": "CHOICE",
                         "value": {
                           "valueCoding": {
-                            "code": "mild",
-                            "display": "Mild"
+                            "code": "nausea",
+                            "display": "Nausea"
                           }
                         }
                       }
                     ]
                   },
                   {
-                    "questionnaireItemId": "Q2-2",
-                    "type": "CHOICE",
-                    "text": "How frequently are you experiencing nausea?",
+                    "questionnaireItemId": "Q2",
+                    "type": "GROUP",
                     "alertLevel": 3,
                     "displayOrder": 2,
+                    "text": "Nausea",
+                    "items": [
+                      {
+                        "questionnaireItemId": "Q2-1",
+                        "type": "CHOICE",
+                        "text": "How severe is your nausea?",
+                        "alertLevel": 1,
+                        "displayOrder": 1,
+                        "answers": [
+                          {
+                            "type": "CHOICE",
+                            "value": {
+                              "valueCoding": {
+                                "code": "mild",
+                                "display": "Mild"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "questionnaireItemId": "Q2-2",
+                        "type": "CHOICE",
+                        "text": "How frequently are you experiencing nausea?",
+                        "alertLevel": 2,
+                        "displayOrder": 2,
+                        "answers": [
+                          {
+                            "type": "CHOICE",
+                            "value": {
+                              "valueCoding": {
+                                "code": "occasionally",
+                                "display": "Occasionally"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "questionnaireItemId": "Q4",
+                    "type": "STRING",
+                    "displayOrder": 4,
+                    "text": "Anything Else?",
                     "answers": [
                       {
-                        "type": "CHOICE",
+                        "type": "STRING",
                         "value": {
-                          "valueCoding": {
-                            "code": "frequently",
-                            "display": "Frequently"
-                          }
+                          "valueString": "Feeling better since my last appointment"
                         }
                       }
                     ]
-                  }
-                ]
-              },
-              {
-                "questionnaireItemId": "Q4",
-                "type": "STRING",
-                "displayOrder": 4,
-                "text": "Anything Else?",
-                "answers": [
-                  {
-                    "type": "STRING",
-                    "value": {
-                      "valueString": "Feeling better since my last appointment"
-                    }
                   }
                 ]
               }
@@ -3595,81 +3663,98 @@
               "id": "c9115251-cb52-4fec-9ea2-474414ec71ee",
               "questionnaireId": "c5e4a3f5-6594-4856-8f37-7778ca96bc11,",
               "version": "1.0",
-              "status": "COMPLETED",
-              "alertLevel": 3,
+              "status": "IN_PROGRESS",
+              "alertLevel": 2,
               "items": [
                 {
-                  "questionnaireItemId": "Q1",
-                  "type": "CHOICE",
-                  "text": "What are your symptoms?",
+                  "questionnaireItemId": "Q0",
+                  "text": "Root Item",
+                  "type": "GROUP",
                   "displayOrder": 1,
                   "answers": [
                     {
-                      "type": "CHOICE",
+                      "type": "INTEGER",
                       "value": {
-                        "valueCoding": {
-                          "code": "nausea",
-                          "display": "Nausea"
-                        }
+                        "valueInteger": 2
                       }
                     }
-                  ]
-                },
-                {
-                  "questionnaireItemId": "Q2",
-                  "type": "GROUP",
-                  "alertLevel": 3,
-                  "text": "Nausea",
+                  ],
                   "items": [
                     {
-                      "questionnaireItemId": "Q2-1",
+                      "questionnaireItemId": "Q1",
+                      "text": "What are your symptoms?",
                       "type": "CHOICE",
-                      "text": "How severe is your nausea?",
                       "displayOrder": 1,
-                      "alertLevel": 1,
                       "answers": [
                         {
                           "type": "CHOICE",
                           "value": {
                             "valueCoding": {
-                              "code": "mild",
-                              "display": "Mild"
+                              "code": "nausea",
+                              "display": "Nausea"
                             }
                           }
                         }
                       ]
                     },
                     {
-                      "questionnaireItemId": "Q2-2",
-                      "type": "CHOICE",
-                      "text": "How frequently are you experiencing nausea?",
-                      "displayOrder": 2,
+                      "questionnaireItemId": "Q2",
+                      "type": "GROUP",
                       "alertLevel": 3,
+                      "displayOrder": 2,
+                      "text": "Nausea",
+                      "items": [
+                        {
+                          "questionnaireItemId": "Q2-1",
+                          "type": "CHOICE",
+                          "text": "How severe is your nausea?",
+                          "alertLevel": 1,
+                          "displayOrder": 1,
+                          "answers": [
+                            {
+                              "type": "CHOICE",
+                              "value": {
+                                "valueCoding": {
+                                  "code": "mild",
+                                  "display": "Mild"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "questionnaireItemId": "Q2-2",
+                          "type": "CHOICE",
+                          "text": "How frequently are you experiencing nausea?",
+                          "alertLevel": 2,
+                          "displayOrder": 2,
+                          "answers": [
+                            {
+                              "type": "CHOICE",
+                              "value": {
+                                "valueCoding": {
+                                  "code": "occasionally",
+                                  "display": "Occasionally"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "questionnaireItemId": "Q4",
+                      "type": "STRING",
+                      "displayOrder": 4,
+                      "text": "Anything Else?",
                       "answers": [
                         {
-                          "type": "CHOICE",
+                          "type": "STRING",
                           "value": {
-                            "valueCoding": {
-                              "code": "frequently",
-                              "display": "Frequently"
-                            }
+                            "valueString": "Feeling better since my last appointment"
                           }
                         }
                       ]
-                    }
-                  ]
-                },
-                {
-                  "questionnaireItemId": "Q4",
-                  "type": "STRING",
-                  "displayOrder": 4,
-                  "text": "Anything Else?",
-                  "answers": [
-                    {
-                      "type": "STRING",
-                      "value": {
-                        "valueString": "Feeling better since my last appointment"
-                      }
                     }
                   ]
                 }
