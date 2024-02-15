@@ -1626,6 +1626,12 @@
             "type": "string",
             "description": "Equal to the `text` value of the associated questionnaire. Should only be populated in the HTTP response - not part of a request to upsert a questionnaire response"
           },
+          "behaviorTags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BehaviorTag"
+            }
+          },
           "displayOrder": {
             "type": "integer"
           },
