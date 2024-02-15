@@ -3028,21 +3028,23 @@
       },
       "FetchSymptomEducations_ResponseBody": {
         "summary": "Response body for fetching symptom educations",
-        "value": [
-          {
-            "category": {
-              "id": "nausea",
-              "display": "Nausea"
-            },
-            "body": "**Nausea is a common side effect of cancer treatment that may be associated with vomiting.**\r\n\r\n**Medication**\r\nIf your care team gave you medication for nausea (antiemetics), be sure to follow the instructions for how to take them and take them as scheduled\r\n\r\n**Food/Fluids**\r\n* Eat small, frequent meals to keep something in your stomach\r\n* Eat dry foods (such as crackers or toast) when you awaken, before moving around\r\n* It’s very important to keep your body hydrated by drinking 8 to 10 cups (64 to 80 ounces) of fluids per day. You can try clear soups, flavored gelatin, carbonated drinks, popsicles, tea, and ice chips made of any kind of liquids\r\n* Sip room temperature carbonated drinks such as cola or ginger ale\r\n* Try tart or sour flavored foods, hard candies or liquids\r\n\r\n**Other Tips**\r\nApply a cool wet cloth to your forehead or neck\r\nOpen a window or use a fan to feel fresh air movement",
-            "externalLinks": [
-              {
-                "url": "http://www.bccancer.bc.ca/nursing-site/documents/11.%20nausea%20and%20vomiting.pdf",
-                "display": "Patient Education Nausea"
-              }
-            ]
-          }
-        ]
+        "value": {
+          "data": [
+            {
+              "category": {
+                "id": "nausea",
+                "display": "Nausea"
+              },
+              "body": "**Nausea is a common side effect of cancer treatment that may be associated with vomiting.**\r\n\r\n**Medication**\r\nIf your care team gave you medication for nausea (antiemetics), be sure to follow the instructions for how to take them and take them as scheduled\r\n\r\n**Food/Fluids**\r\n* Eat small, frequent meals to keep something in your stomach\r\n* Eat dry foods (such as crackers or toast) when you awaken, before moving around\r\n* It’s very important to keep your body hydrated by drinking 8 to 10 cups (64 to 80 ounces) of fluids per day. You can try clear soups, flavored gelatin, carbonated drinks, popsicles, tea, and ice chips made of any kind of liquids\r\n* Sip room temperature carbonated drinks such as cola or ginger ale\r\n* Try tart or sour flavored foods, hard candies or liquids\r\n\r\n**Other Tips**\r\nApply a cool wet cloth to your forehead or neck\r\nOpen a window or use a fan to feel fresh air movement",
+              "externalLinks": [
+                {
+                  "url": "http://www.bccancer.bc.ca/nursing-site/documents/11.%20nausea%20and%20vomiting.pdf",
+                  "display": "Patient Education Nausea"
+                }
+              ]
+            }
+          ]
+        }
       },
       "QuestionnaireAssignment_RequestBody": {
         "summary": "Questionnaire Assignment - Once per week with a start and end date",
