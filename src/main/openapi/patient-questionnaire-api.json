@@ -1565,6 +1565,7 @@
         "enum": [
           "ROOT_ITEM",
           "SYMPTOM_SELECTION",
+          "SYMPTOM_CATEGORY",
           "SUBMIT_BEFORE",
           "WRITE_IN"
         ]
@@ -3205,6 +3206,9 @@
                   "type": "GROUP",
                   "displayOrder": 2,
                   "text": "Nausea",
+                  "behaviorTags": [
+                    "SYMPTOM_CATEGORY"
+                  ],
                   "enableWhen": {
                     "behavior": "ALL",
                     "predicates": [
@@ -3335,6 +3339,9 @@
                   "type": "GROUP",
                   "displayOrder": 3,
                   "text": "Stomach Pain",
+                  "behaviorTags": [
+                    "SYMPTOM_CATEGORY"
+                  ],
                   "enableWhen": {
                     "behavior": "ALL",
                     "predicates": [
@@ -3676,6 +3683,9 @@
                   "questionnaireItemId": "Q0",
                   "text": "Root Item",
                   "type": "GROUP",
+                  "behaviorTags": [
+                    "ROOT_ITEM"
+                  ],
                   "displayOrder": 1,
                   "answers": [
                     {
@@ -3691,6 +3701,9 @@
                       "text": "What are your symptoms?",
                       "type": "CHOICE",
                       "displayOrder": 1,
+                      "behaviorTags": [
+                        "SYMPTOM_SELECTION"
+                      ],
                       "answers": [
                         {
                           "type": "CHOICE",
@@ -3708,6 +3721,9 @@
                       "type": "GROUP",
                       "alertLevel": 3,
                       "displayOrder": 2,
+                      "behaviorTags": [
+                        "SYMPTOM_CATEGORY"
+                      ],
                       "text": "Nausea",
                       "items": [
                         {
