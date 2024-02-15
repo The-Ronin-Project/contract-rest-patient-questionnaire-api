@@ -38,6 +38,10 @@
     {
       "name": "Common",
       "description": "Endpoints used by both the clinician dashboard and the patient app"
+    },
+    {
+      "name": "Clinician Triage Service",
+      "description": "Endpoints used by the clinician-triage-service"
     }
   ],
   "paths": {
@@ -986,6 +990,68 @@
       }
     },
     "/tenants/{tenantId}/patients/{patientId}/questionnaire-responses/{questionnaireResponseId}": {
+      "get": {
+        "tags": [
+          "Clinician Triage Service"
+        ],
+        "summary": "Fetch Questionnaire Response",
+        "description": "Fetch a single questionnaire-response for a patient",
+        "operationId": "FetchQuestionnaireResponse",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tenantId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the tenant for the current tenant",
+            "example": "1xrekpx5"
+          },
+          {
+            "in": "path",
+            "name": "patientId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The UDP ID of the current patient",
+            "example": "018c275e-c378-7c4a-a112-157e4c0e4cb5"
+          },
+          {
+            "in": "path",
+            "name": "questionnaireResponseId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the questionnaire response",
+            "example": "272b6520-dc94-41a6-97ee-58e8baa6e267"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpsertQuestionnaireResponse_ResponseBody"
+                },
+                "examples": {
+                  "FetchQuestionnaireResponse_ResponseBody": {
+                    "$ref": "#/components/examples/UpsertQuestionnaireResponse_ResponseBody"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "put": {
         "tags": [
           "Patient"
