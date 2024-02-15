@@ -323,6 +323,119 @@
         }
       }
     },
+    "/tenants/{tenantId}/symptom-educations": {
+      "get": {
+        "tags": [
+          "Common"
+        ],
+        "description": "Fetch a list of symptom educations",
+        "summary": "Fetch Symptom Educations",
+        "operationId": "fetchSymptomEducations",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tenantId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the tenant for the current tenant",
+            "example": "1xrekpx5"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FetchSymptomEducations_ResponseBody"
+                },
+                "examples": {
+                  "FetchSymptomEducations_ResponseBody": {
+                    "$ref": "#/components/examples/FetchSymptomEducations_ResponseBody"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "BadRequestExample": {
+                    "$ref": "#/components/examples/BadRequestException_ResponseBody"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "ForbiddenExample": {
+                    "$ref": "#/components/examples/ForbiddenException_ResponseBody"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "NotFoundExample": {
+                    "$ref": "#/components/examples/NotFoundException_ResponseBody"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/tenants/{tenantId}/patients/{patientId}/questionnaires": {
       "get": {
         "tags": [
@@ -1570,6 +1683,56 @@
           "WRITE_IN"
         ]
       },
+      "SymptomEducation": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "display": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "display"
+            ]
+          },
+          "body": {
+            "type": "string",
+            "description": "Markdown text with symptom education copy"
+          },
+          "externalLinks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SymptomEducationLink"
+            }
+          }
+        },
+        "required": [
+          "category",
+          "body",
+          "externalLinks"
+        ]
+      },
+      "SymptomEducationLink": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "display": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url",
+          "display"
+        ]
+      },
       "QuestionnaireResponse": {
         "type": "object",
         "properties": {
@@ -1622,6 +1785,10 @@
           },
           "type": {
             "$ref": "#/components/schemas/QuestionnaireItemType"
+          },
+          "categoryId": {
+            "type": "string",
+            "description": "ID of the symptom category. Used for mapping to the correct symptom education"
           },
           "text": {
             "type": "string",
@@ -1963,6 +2130,17 @@
           "triage",
           "timing"
         ]
+      },
+      "FetchSymptomEducations_ResponseBody": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SymptomEducation"
+            }
+          }
+        }
       },
       "FetchQuestionnaire_ResponseBody": {
         "description": "Response body when fetching a single questionnaire by ID",
@@ -2848,6 +3026,24 @@
           ]
         }
       },
+      "FetchSymptomEducations_ResponseBody": {
+        "summary": "Response body for fetching symptom educations",
+        "value": [
+          {
+            "category": {
+              "id": "nausea",
+              "display": "Nausea"
+            },
+            "body": "**Nausea is a common side effect of cancer treatment that may be associated with vomiting.**\r\n\r\n**Medication**\r\nIf your care team gave you medication for nausea (antiemetics), be sure to follow the instructions for how to take them and take them as scheduled\r\n\r\n**Food/Fluids**\r\n* Eat small, frequent meals to keep something in your stomach\r\n* Eat dry foods (such as crackers or toast) when you awaken, before moving around\r\n* It’s very important to keep your body hydrated by drinking 8 to 10 cups (64 to 80 ounces) of fluids per day. You can try clear soups, flavored gelatin, carbonated drinks, popsicles, tea, and ice chips made of any kind of liquids\r\n* Sip room temperature carbonated drinks such as cola or ginger ale\r\n* Try tart or sour flavored foods, hard candies or liquids\r\n\r\n**Other Tips**\r\nApply a cool wet cloth to your forehead or neck\r\nOpen a window or use a fan to feel fresh air movement",
+            "externalLinks": [
+              {
+                "url": "http://www.bccancer.bc.ca/nursing-site/documents/11.%20nausea%20and%20vomiting.pdf",
+                "display": "Patient Education Nausea"
+              }
+            ]
+          }
+        ]
+      },
       "QuestionnaireAssignment_RequestBody": {
         "summary": "Questionnaire Assignment - Once per week with a start and end date",
         "value": {
@@ -3721,6 +3917,7 @@
                       "type": "GROUP",
                       "alertLevel": 3,
                       "displayOrder": 2,
+                      "categoryId": "nausea",
                       "behaviorTags": [
                         "SYMPTOM_CATEGORY"
                       ],
