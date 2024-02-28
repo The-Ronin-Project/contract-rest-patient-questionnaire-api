@@ -3374,6 +3374,10 @@
       "FetchQuestionnaires_WithAssignments_ResponseBody": {
         "summary": "Fetching Questionnaires With Assignments",
         "value": {
+          "paging": {
+            "page": 0,
+            "limit": 20
+          },
           "data": [
             {
               "id": "psj-breast-cancer-daily-survey",
@@ -3449,6 +3453,10 @@
       "FetchSymptomEducations_ResponseBody": {
         "summary": "Response body for fetching symptom educations",
         "value": {
+          "paging": {
+            "page": 0,
+            "limit": 20
+          },
           "data": [
             {
               "category": {
