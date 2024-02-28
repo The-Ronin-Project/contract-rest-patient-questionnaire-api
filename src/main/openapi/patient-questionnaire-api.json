@@ -1936,7 +1936,7 @@
             "type": "string",
             "description": "Identifier of the orderable in the EHR"
           },
-          "group": {
+          "groupId": {
             "type": "string",
             "description": "ID of the questionnaire group that the questionnaire belongs to"
           },
@@ -2175,7 +2175,7 @@
               }
             }
           },
-          "group": {
+          "groupId": {
             "type": "string"
           },
           "triage": {
@@ -2707,7 +2707,7 @@
               "patientFacing": "Breast Cancer Symptoms Questionnaire"
             },
             "ehrOrderableId": "BD: (Breast Daily) Symptoms",
-            "group": "9f20974e-eba4-4f6f-935b-061b8240577e",
+            "groupId": "9f20974e-eba4-4f6f-935b-061b8240577e",
             "triage": [
               {
                 "provider": {
@@ -2754,7 +2754,7 @@
                 "patientFacing": "Breast Cancer Symptoms Questionnaire"
               },
               "ehrOrderableId": "BD: (Breast Daily) Symptoms",
-              "group": "9f20974e-eba4-4f6f-935b-061b8240577e",
+              "groupId": "9f20974e-eba4-4f6f-935b-061b8240577e",
               "triage": [
                 {
                   "provider": {
@@ -2826,7 +2826,7 @@
                   "patientFacing": "Breast Cancer Symptoms Questionnaire"
                 },
                 "ehrOrderableId": "BD: (Breast Daily) Symptoms",
-                "group": "9f20974e-eba4-4f6f-935b-061b8240577e",
+                "groupId": "9f20974e-eba4-4f6f-935b-061b8240577e",
                 "triage": [
                   {
                     "provider": {
@@ -2888,7 +2888,7 @@
                   "patientFacing": "Lung Cancer Symptoms Questionnaire"
                 },
                 "ehrOrderableId": "LD: (Lung Daily) Symptoms",
-                "group": "24254073-8ca7-4a8c-a31c-fa9cd4e6a893",
+                "groupId": "24254073-8ca7-4a8c-a31c-fa9cd4e6a893",
                 "triage": [
                   {
                     "provider": {
@@ -2954,7 +2954,7 @@
                 "patientFacing": "Daily Breast Cancer Survey",
                 "providerFacing": "PSJ - Daily Breast Cancer Survey"
               },
-              "group": "Breast Chemotherapy Program",
+              "groupId": "9f20974e-eba4-4f6f-935b-061b8240577e",
               "triage": [
                 {
                   "provider": {
@@ -2992,7 +2992,7 @@
                 "patientFacing": "Daily Lung Cancer Survey",
                 "providerFacing": "PSJ - Daily Lung Cancer Survey"
               },
-              "group": "Lung Chemotherapy Program",
+              "groupId": "9f20974e-eba4-4f6f-935b-061b8240577e",
               "triage": [
                 {
                   "provider": {
@@ -3027,7 +3027,7 @@
                 "patientFacing": "Daily Breast Cancer Survey",
                 "providerFacing": "PSJ - Daily Breast Cancer Survey"
               },
-              "group": "Breast Chemotherapy Program",
+              "groupId": "9f20974e-eba4-4f6f-935b-061b8240577e",
               "triage": [
                 {
                   "provider": {
@@ -3066,7 +3066,7 @@
                 "patientFacing": "Daily Lung Cancer Survey",
                 "providerFacing": "PSJ - Daily Lung Cancer Survey"
               },
-              "group": "Lung Chemotherapy Program",
+              "groupId": "9f20974e-eba4-4f6f-935b-061b8240577e",
               "triage": [
                 {
                   "provider": {
