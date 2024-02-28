@@ -212,6 +212,265 @@
         }
       }
     },
+    "/management/tenants/{tenantId}/questionnaire-groups": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Fetch questionnaire groups for a single tenant",
+        "summary": "Fetch Questionnaire Groups",
+        "operationId": "managementApi_fetchQuestionnaireGroups",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tenantId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the tenant who will be using the questionnaire",
+            "example": "apposnd"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Paging param to control the number of questionnaires to get back",
+            "example": 20,
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Zero-indexed page number",
+            "example": 0,
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagementApi_FetchQuestionnaireGroups_ResponseBody"
+                },
+                "examples": {
+                  "ManagementApi_FetchQuestionnaireGroups_ResponseBody": {
+                    "$ref": "#/components/examples/ManagementApi_FetchQuestionnaireGroups_ResponseBody"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "NotFoundExample": {
+                    "$ref": "#/components/examples/NotFoundException_ResponseBody"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Create Questionnaire Group",
+        "description": "Create a questionnaire group for a tenant",
+        "operationId": "managementApi_createQuestionnaireGroup",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tenantId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the tenant who will be using the questionnaire",
+            "example": "apposnd"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManagementApi_UpsertQuestionnaireGroup_RequestBody"
+              },
+              "examples": {
+                "ManagementApi_UpsertQuestionnaireGroup_RequestBody": {
+                  "$ref": "#/components/examples/ManagementApi_UpsertQuestionnaireGroup_RequestBody"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagementApi_UpsertQuestionnaireGroup_ResponseBody"
+                },
+                "examples": {
+                  "CreateQuestionnaireResponse": {
+                    "$ref": "#/components/examples/ManagementApi_UpsertQuestionnaireGroup_ResponseBody"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "BadRequestExample": {
+                    "$ref": "#/components/examples/BadRequestException_ResponseBody"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/management/tenants/{tenantId}/questionnaire-groups/{questionnaireGroupId}": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Update Questionnaire Group",
+        "description": "Update a questionnaire group for a tenant",
+        "operationId": "managementApi_updateQuestionnaireGroup",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tenantId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the tenant who will be using the questionnaire",
+            "example": "apposnd"
+          },
+          {
+            "in": "path",
+            "name": "questionnaireGroupId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the questionnaire group being updated",
+            "example": "629b8e54-6d36-400b-b8d8-6c4614f3a945"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManagementApi_UpsertQuestionnaireGroup_RequestBody"
+              },
+              "examples": {
+                "ManagementApi_UpsertQuestionnaireGroup_RequestBody": {
+                  "$ref": "#/components/examples/ManagementApi_UpsertQuestionnaireGroup_RequestBody"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagementApi_UpsertQuestionnaireGroup_ResponseBody"
+                },
+                "examples": {
+                  "CreateQuestionnaireResponse": {
+                    "$ref": "#/components/examples/ManagementApi_UpsertQuestionnaireGroup_ResponseBody"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "BadRequestExample": {
+                    "$ref": "#/components/examples/BadRequestException_ResponseBody"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/management/tenants/{tenantId}/questionnaires/{questionnaireId}": {
       "put": {
         "tags": [
@@ -2013,6 +2272,21 @@
           "file"
         ]
       },
+      "ManagementApi_QuestionnaireGroup": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "display": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "display"
+        ]
+      },
       "DurationUnit": {
         "type": "string",
         "description": "Possible units of a duration",
@@ -2115,6 +2389,40 @@
           }
         ]
       },
+      "ManagementApi_UpsertQuestionnaireGroup_RequestBody": {
+        "type": "object",
+        "properties": {
+          "display": {
+            "type": "string"
+          }
+        }
+      },
+      "ManagementApi_UpsertQuestionnaireGroup_ResponseBody": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ManagementApi_QuestionnaireGroup"
+          }
+        }
+      },
+      "ManagementApi_FetchQuestionnaireGroups_ResponseBody": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Paging"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ManagementApi_QuestionnaireGroup"
+                }
+              }
+            }
+          }
+        ]
+      },
       "FetchQuestionnaires_ResponseBody": {
         "type": "object",
         "properties": {
@@ -2192,7 +2500,7 @@
         "required": [
           "id",
           "name",
-          "group",
+          "groupId",
           "triage",
           "timing"
         ]
@@ -2940,6 +3248,52 @@
                   "url": "https://ico.ronin.io/questionnaires/psj-lung-cancer-symptoms-questionnaire-v1.json"
                 }
               ]
+            }
+          ]
+        }
+      },
+      "ManagementApi_UpsertQuestionnaireGroup_RequestBody": {
+        "description": "Creating/Updating Questionnaire Group Request Body",
+        "value": {
+          "display": "Breast Chemotherapy Program"
+        }
+      },
+      "ManagementApi_UpsertQuestionnaireGroup_ResponseBody": {
+        "description": "Creating/Updating Questionnaire Group Response Body",
+        "value": {
+          "data": {
+            "id": "6c652648-788f-4fbb-b556-c08806ab7dfb",
+            "display": "Breast Chemotherapy Program"
+          }
+        }
+      },
+      "ManagementApi_FetchQuestionnaireGroups_ResponseBody": {
+        "description": "Fetching Questionnaire Groups",
+        "value": {
+          "paging": {
+            "page": 0,
+            "limit": 20
+          },
+          "data": [
+            {
+              "id": "6c652648-788f-4fbb-b556-c08806ab7dfb",
+              "display": "Breast Chemotherapy Program"
+            },
+            {
+              "id": "7cb3168e-e289-444d-930c-1aac42f44443",
+              "display": "Breast Surgery Program"
+            },
+            {
+              "id": "a13e9640-770e-4886-8d93-2d8a08196675",
+              "display": "General Wellbeing Program"
+            },
+            {
+              "id": "e41f766f-dde0-4160-a9ca-f682b571d579",
+              "display": "GU Chemotherapy Program"
+            },
+            {
+              "id": "22fcb5ba-07a1-44dd-846e-d91f8a49ee7c",
+              "display": "Thoracic Chemotherapy Program"
             }
           ]
         }
