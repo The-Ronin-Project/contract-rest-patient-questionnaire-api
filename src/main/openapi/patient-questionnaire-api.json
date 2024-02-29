@@ -2395,7 +2395,10 @@
           "display": {
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "display"
+        ]
       },
       "ManagementApi_UpsertQuestionnaireGroup_ResponseBody": {
         "type": "object",
