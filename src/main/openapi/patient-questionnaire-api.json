@@ -2408,7 +2408,15 @@
       "ManagementApi_FetchQuestionnaireGroups_ResponseBody": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Paging"
+            "type": "object",
+            "properties": {
+              "paging": {
+                "$ref": "#/components/schemas/Paging"
+              }
+            },
+            "required": [
+              "paging"
+            ]
           },
           {
             "type": "object",
