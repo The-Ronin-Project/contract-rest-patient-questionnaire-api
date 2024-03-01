@@ -2600,9 +2600,7 @@
           "data": {
             "type": "array",
             "items": {
-              "items": {
-                "$ref": "#/components/schemas/Alert"
-              }
+              "$ref": "#/components/schemas/Alert"
             }
           }
         }
